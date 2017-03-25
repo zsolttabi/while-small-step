@@ -1,13 +1,28 @@
 package ast;
 
-import ast.expression.Var;
-
-import java.util.Map;
+import ast.statement.Statement;
+import lombok.Getter;
+import utils.Pair;
 
 public class AST {
 
-    private Map<String, Var<?>> state;
+    @Getter
+    private final State state = new State();
+    @Getter
+    private final Statement stm;
 
+    public AST(Statement stm) {
+        this.stm = stm;
+    }
+
+    public void runConfiguration() {
+
+        Pair<Statement, State> newConfig = stm.run(state);
+        while (newConfig.getFirst() != null) {
+            newConfig = newConfig.getFirst().run(newConfig.getSecond());
+        }
+
+    }
 
 }
 

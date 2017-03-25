@@ -1,6 +1,6 @@
 package ast.expression;
 
-public class Addition extends BinaryOperationExpression<Integer> {
+public class Addition extends BinaryIntegerOperation<Integer> {
 
     public Addition(IntegerExpression lhs, IntegerExpression rhs) {
         super(lhs, rhs);

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public abstract class BinaryOperationExpression<T> extends Expression<T> {
+public abstract class BinaryIntegerOperation<T> extends Expression<T> {
 
     protected final IntegerExpression lhs;
     protected final IntegerExpression rhs;
