@@ -10,7 +10,11 @@ public class EvaluationException extends RuntimeException {
     private final List<Expression<?>> expressions;
 
     public EvaluationException(List<Expression<?>> expressions) {
-        super("Cannot evaluate expression");
+        this("Cannot evaluate expression", expressions);
+    }
+
+    public EvaluationException(String message, List<Expression<?>> expressions) {
+        super(message);
         this.expressions = expressions;
     }
 

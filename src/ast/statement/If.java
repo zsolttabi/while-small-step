@@ -1,10 +1,15 @@
 package ast.statement;
 
 import ast.State;
+import ast.expression.EvaluatedBooleanExpression;
+import ast.expression.EvaluationException;
 import ast.expression.Expression;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import utils.Pair;
+
+import java.util.Collections;
 
 @RequiredArgsConstructor
 public class If extends Statement {
@@ -19,6 +24,12 @@ public class If extends Statement {
 
     @Override
     public Pair<Statement, State> run(State state) {
-        return null;
+
+        val evalCond = condition.evaluate();
+        if (evalCond instanceof EvaluatedBooleanExpression) {
+            return Pair.of(((EvaluatedBooleanExpression) evalCond).getValue() ? s1 : s2, state);
+        }
+
+        throw new EvaluationException("Could not evaluate condition in If", Collections.singletonList(condition));
     }
 }

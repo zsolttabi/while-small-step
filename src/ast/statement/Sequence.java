@@ -15,7 +15,13 @@ public class Sequence extends Statement {
 
     @Override
     public Pair<Statement, State> run(State state) {
-        return null;
+
+        Pair<Statement, State> newConfig = s1.run(state);
+        while (newConfig.getFirst() != null) {
+            newConfig = newConfig.getFirst().run(newConfig.getSecond());
+        }
+
+        return Pair.of(s2, state);
     }
 
 }
