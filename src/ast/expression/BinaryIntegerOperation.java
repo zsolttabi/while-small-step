@@ -1,5 +1,6 @@
 package ast.expression;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -10,7 +11,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public abstract class BinaryIntegerOperation<T> extends Expression<T> {
 
+    @Getter
     protected final IntegerExpression lhs;
+    @Getter
     protected final IntegerExpression rhs;
 
     protected EvaluatedExpression<T> evaluate(BiFunction<Integer, Integer, T> evalFun) {
