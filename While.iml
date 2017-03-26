@@ -10,5 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="lombok" level="project" />
+    <orderEntry type="library" name="mogwai-fxgraph" level="project" />
   </component>
 </module>
