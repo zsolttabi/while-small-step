@@ -2,40 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/antlr_4_6_complete.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/BadBinaryExpression.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/BinaryBooleanExpression.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/BinaryExpression.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/BinaryRelationExpression.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/BinaryBooleanOperation.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/BooleanExpression.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/IntegerExpression.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/Statement.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/BinaryIntegerOperation.java" afterPath="$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/BooleanValue.java" afterPath="$PROJECT_DIR$/src/ast/expression/interfaces/BooleanValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/Equilty.java" afterPath="$PROJECT_DIR$/src/ast/expression/Equality.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/IntegerValue.java" afterPath="$PROJECT_DIR$/src/ast/expression/interfaces/IntegerValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/Value.java" afterPath="$PROJECT_DIR$/src/ast/expression/interfaces/Value.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/AstNode.java" afterPath="$PROJECT_DIR$/src/app/AstNode.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/Controller.java" afterPath="$PROJECT_DIR$/src/app/Controller.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/Main.java" afterPath="$PROJECT_DIR$/src/app/Main.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/sample/sample.fxml" afterPath="$PROJECT_DIR$/src/app/sample.fxml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/And.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/LessThen.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/Minus.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ast/expression/Plus.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/Equality.java" afterPath="$PROJECT_DIR$/src/ast/expression/Equals.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/While.iml" afterPath="$PROJECT_DIR$/While.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Addition.java" afterPath="$PROJECT_DIR$/src/ast/expression/Addition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/BoolLiteral.java" afterPath="$PROJECT_DIR$/src/ast/expression/BoolLiteral.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/BooleanVar.java" afterPath="$PROJECT_DIR$/src/ast/expression/BooleanVar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/EvaluatedBooleanExpression.java" afterPath="$PROJECT_DIR$/src/ast/expression/EvaluatedBooleanExpression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/EvaluatedExpression.java" afterPath="$PROJECT_DIR$/src/ast/expression/EvaluatedExpression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/EvaluatedIntegerExpression.java" afterPath="$PROJECT_DIR$/src/ast/expression/EvaluatedIntegerExpression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/EvaluationException.java" afterPath="$PROJECT_DIR$/src/ast/expression/EvaluationException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Expression.java" afterPath="$PROJECT_DIR$/src/ast/expression/Expression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/IntegerVar.java" afterPath="$PROJECT_DIR$/src/ast/expression/IntegerVar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/NumLiteral.java" afterPath="$PROJECT_DIR$/src/ast/expression/NumLiteral.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Var.java" afterPath="$PROJECT_DIR$/src/ast/expression/Var.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/statement/Assignment.java" afterPath="$PROJECT_DIR$/src/ast/statement/Assignment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/statement/While.java" afterPath="$PROJECT_DIR$/src/ast/statement/While.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -94,74 +66,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="EvaluatedBooleanExpression.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluatedBooleanExpression.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvaluatedExpression.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluatedExpression.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvaluatedIntegerExpression.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluatedIntegerExpression.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvaluationException.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluationException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="18" column="5" lean-forward="true" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Expression.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/Expression.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="48">
-              <caret line="3" column="16" lean-forward="false" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BoolLiteral.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/BoolLiteral.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-              <folding>
-                <element signature="e#318#319#0" expanded="true" />
-                <element signature="e#345#346#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Addition.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Addition.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ast/expression/Addition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="4" column="46" lean-forward="false" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+            <state relative-caret-position="192">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding>
                 <element signature="e#134#135#0" expanded="true" />
                 <element signature="e#165#166#0" expanded="true" />
@@ -170,11 +79,57 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Assignment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/statement/Assignment.java">
+      <file leaf-file-name="While.g4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+            <state relative-caret-position="544">
+              <caret line="55" column="32" lean-forward="true" selection-start-line="55" selection-start-column="32" selection-end-line="55" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Equals.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/Equals.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="32">
+              <caret line="2" column="41" lean-forward="false" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+              <folding>
+                <element signature="e#212#213#0" expanded="true" />
+                <element signature="e#259#260#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BinaryRelationExpression.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryRelationExpression.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="64">
+              <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LessThen.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/LessThen.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding>
+                <element signature="e#215#216#0" expanded="true" />
+                <element signature="e#266#267#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BinaryIntegerExpression.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -182,22 +137,51 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IntegerVar.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/IntegerVar.java">
+      <file leaf-file-name="Minus.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/Minus.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="32">
+              <caret line="2" column="30" lean-forward="false" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+              <folding>
+                <element signature="e#211#212#0" expanded="true" />
+                <element signature="e#263#264#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Plus.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/Plus.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="32">
+              <caret line="2" column="29" lean-forward="true" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+              <folding>
+                <element signature="e#209#210#0" expanded="true" />
+                <element signature="e#254#255#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BinaryBooleanExpression.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryBooleanExpression.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="64">
-              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+              <caret line="6" column="28" lean-forward="false" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NumLiteral.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/NumLiteral.java">
+      <file leaf-file-name="And.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/And.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="16">
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding>
+                <element signature="e#204#205#0" expanded="true" />
+                <element signature="e#256#257#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -227,11 +211,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/utils/Pair.java" />
-        <option value="$PROJECT_DIR$/src/ast/statement/Skip.java" />
-        <option value="$PROJECT_DIR$/src/ast/AST.java" />
-        <option value="$PROJECT_DIR$/lib/mogwai-fxgraph.jar!/com/google/code/javafxgraph/FXGraph.class" />
-        <option value="$PROJECT_DIR$/src/sample/Tree.java" />
         <option value="$PROJECT_DIR$/src/utils/Tree.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/IntegerValue.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/Num.java" />
@@ -263,14 +242,12 @@
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryInteger.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryIntegerToIntegerExpression.java" />
-        <option value="$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryBooleanToBooleanExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryBooleanExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BooleanExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BinaryRelationExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/Var.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/NumLiteral.java" />
-        <option value="$PROJECT_DIR$/src/ast/expression/Equality.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/BoolLiteral.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/interfaces/Value.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/interfaces/IntegerValue.java" />
@@ -278,6 +255,13 @@
         <option value="$PROJECT_DIR$/src/ast/statement/Assignment.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/IntegerExpression.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/Expression.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/Equality.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/Equals.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/LessThen.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/And.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/Plus.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java" />
+        <option value="$PROJECT_DIR$/src/ast/expression/Minus.java" />
       </list>
     </option>
   </component>
@@ -896,6 +880,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1358" y="-290" width="1696" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893288" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -917,8 +902,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1639164" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32949308" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20721272" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57535756" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20721272" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893288" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -962,16 +947,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Node.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/awt/Point.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/awt/geom/Point2D.java" />
-    <entry file="jar://$PROJECT_DIR$/lib/mogwai-fxgraph.jar!/com/google/code/javafxgraph/FXEdgeBuilder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="35" column="18" lean-forward="false" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Scene.java" />
     <entry file="file://$PROJECT_DIR$/src/utils/Either.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1168,70 +1143,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="60" column="56" lean-forward="false" selection-start-line="60" selection-start-column="56" selection-end-line="60" selection-end-column="56" />
-          <folding>
-            <element signature="e#16#112#1" expanded="false" />
-            <element signature="e#114#349#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="236">
           <caret line="614" column="64" lean-forward="false" selection-start-line="614" selection-start-column="64" selection-end-line="614" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#504#573#0" expanded="true" />
-            <element signature="e#2321#2322#0" expanded="true" />
-            <element signature="e#2345#2346#0" expanded="true" />
-            <element signature="e#2395#2396#0" expanded="true" />
-            <element signature="e#2419#2420#0" expanded="true" />
-            <element signature="e#3200#3201#0" expanded="true" />
-            <element signature="e#3256#3257#0" expanded="true" />
-            <element signature="e#3325#3326#0" expanded="true" />
-            <element signature="e#3362#3363#0" expanded="true" />
-            <element signature="e#4670#4671#0" expanded="true" />
-            <element signature="e#4721#4722#0" expanded="true" />
-            <element signature="e#4893#4894#0" expanded="true" />
-            <element signature="e#4944#4945#0" expanded="true" />
-            <element signature="e#5053#5054#0" expanded="true" />
-            <element signature="e#5110#5111#0" expanded="true" />
-            <element signature="e#5227#5228#0" expanded="true" />
-            <element signature="e#5282#5283#0" expanded="true" />
-            <element signature="e#5327#5328#0" expanded="true" />
-            <element signature="e#5383#5384#0" expanded="true" />
-            <element signature="e#5557#5558#0" expanded="true" />
-            <element signature="e#5608#5609#0" expanded="true" />
-            <element signature="e#5835#5836#0" expanded="true" />
-            <element signature="e#5872#5873#0" expanded="true" />
-            <element signature="e#9116#9117#0" expanded="true" />
-            <element signature="e#9153#9154#0" expanded="true" />
-            <element signature="e#10375#10376#0" expanded="true" />
-            <element signature="e#10426#10427#0" expanded="true" />
-            <element signature="e#10456#10457#0" expanded="true" />
-            <element signature="e#10507#10508#0" expanded="true" />
-            <element signature="e#10581#10582#0" expanded="true" />
-            <element signature="e#10618#10619#0" expanded="true" />
-            <element signature="e#12296#12297#0" expanded="true" />
-            <element signature="e#12346#12347#0" expanded="true" />
-            <element signature="e#12381#12382#0" expanded="true" />
-            <element signature="e#12432#12433#0" expanded="true" />
-            <element signature="e#12571#12572#0" expanded="true" />
-            <element signature="e#12608#12609#0" expanded="true" />
-            <element signature="e#15957#15958#0" expanded="true" />
-            <element signature="e#16007#16008#0" expanded="true" />
-            <element signature="e#16042#16043#0" expanded="true" />
-            <element signature="e#16093#16094#0" expanded="true" />
-            <element signature="e#16277#16278#0" expanded="true" />
-            <element signature="e#16327#16328#0" expanded="true" />
-            <element signature="e#16362#16363#0" expanded="true" />
-            <element signature="e#16413#16414#0" expanded="true" />
-            <element signature="e#16550#16551#0" expanded="true" />
-            <element signature="e#16587#16588#0" expanded="true" />
+            <element signature="e#417#486#0" expanded="true" />
+            <element signature="e#2234#2235#0" expanded="true" />
+            <element signature="e#2258#2259#0" expanded="true" />
+            <element signature="e#2308#2309#0" expanded="true" />
+            <element signature="e#2332#2333#0" expanded="true" />
+            <element signature="e#3113#3114#0" expanded="true" />
+            <element signature="e#3169#3170#0" expanded="true" />
+            <element signature="e#3238#3239#0" expanded="true" />
+            <element signature="e#3275#3276#0" expanded="true" />
+            <element signature="e#4583#4584#0" expanded="true" />
+            <element signature="e#4634#4635#0" expanded="true" />
+            <element signature="e#4806#4807#0" expanded="true" />
+            <element signature="e#4857#4858#0" expanded="true" />
+            <element signature="e#4966#4967#0" expanded="true" />
+            <element signature="e#5023#5024#0" expanded="true" />
+            <element signature="e#5140#5141#0" expanded="true" />
+            <element signature="e#5195#5196#0" expanded="true" />
+            <element signature="e#5240#5241#0" expanded="true" />
+            <element signature="e#5296#5297#0" expanded="true" />
+            <element signature="e#5470#5471#0" expanded="true" />
+            <element signature="e#5521#5522#0" expanded="true" />
+            <element signature="e#5748#5749#0" expanded="true" />
+            <element signature="e#5785#5786#0" expanded="true" />
+            <element signature="e#9029#9030#0" expanded="true" />
+            <element signature="e#9066#9067#0" expanded="true" />
+            <element signature="e#10288#10289#0" expanded="true" />
+            <element signature="e#10339#10340#0" expanded="true" />
+            <element signature="e#10369#10370#0" expanded="true" />
+            <element signature="e#10420#10421#0" expanded="true" />
+            <element signature="e#10494#10495#0" expanded="true" />
+            <element signature="e#10531#10532#0" expanded="true" />
+            <element signature="e#12209#12210#0" expanded="true" />
+            <element signature="e#12259#12260#0" expanded="true" />
+            <element signature="e#12294#12295#0" expanded="true" />
+            <element signature="e#12345#12346#0" expanded="true" />
+            <element signature="e#12484#12485#0" expanded="true" />
+            <element signature="e#12521#12522#0" expanded="true" />
+            <element signature="e#15870#15871#0" expanded="true" />
+            <element signature="e#15920#15921#0" expanded="true" />
+            <element signature="e#15955#15956#0" expanded="true" />
+            <element signature="e#16006#16007#0" expanded="true" />
+            <element signature="e#16190#16191#0" expanded="true" />
+            <element signature="e#16240#16241#0" expanded="true" />
+            <element signature="e#16275#16276#0" expanded="true" />
+            <element signature="e#16326#16327#0" expanded="true" />
+            <element signature="e#16463#16464#0" expanded="true" />
+            <element signature="e#16500#16501#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1240,25 +1204,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="245">
           <caret line="45" column="17" lean-forward="false" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="4" column="35" lean-forward="false" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
-          <folding>
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#287#288#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryRelationExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -1278,14 +1223,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryBooleanExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="6" column="28" lean-forward="false" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1334,17 +1271,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/Equality.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="10" column="40" lean-forward="false" selection-start-line="10" selection-start-column="40" selection-end-line="10" selection-end-column="40" />
-          <folding>
-            <element signature="e#216#217#0" expanded="true" />
-            <element signature="e#263#264#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluatedBooleanExpression.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
@@ -1372,7 +1298,7 @@
     <entry file="file://$PROJECT_DIR$/src/ast/expression/EvaluationException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
-          <caret line="18" column="5" lean-forward="true" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+          <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -1380,7 +1306,7 @@
     <entry file="file://$PROJECT_DIR$/src/ast/expression/NumLiteral.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1396,7 +1322,7 @@
     <entry file="file://$PROJECT_DIR$/src/ast/statement/Assignment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
-          <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <caret line="23" column="41" lean-forward="false" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1422,7 +1348,7 @@
     <entry file="file://$PROJECT_DIR$/src/ast/expression/BoolLiteral.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
-          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+          <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
           <folding>
             <element signature="e#318#319#0" expanded="true" />
             <element signature="e#345#346#0" expanded="true" />
@@ -1440,11 +1366,100 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ast/expression/Addition.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="4" column="46" lean-forward="false" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+        <state relative-caret-position="192">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
             <element signature="e#134#135#0" expanded="true" />
             <element signature="e#165#166#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="55" column="32" lean-forward="true" selection-start-line="55" selection-start-column="32" selection-end-line="55" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryRelationExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/Equals.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="2" column="41" lean-forward="false" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+          <folding>
+            <element signature="e#212#213#0" expanded="true" />
+            <element signature="e#259#260#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/LessThen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#215#216#0" expanded="true" />
+            <element signature="e#266#267#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryBooleanExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="6" column="28" lean-forward="false" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/And.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding>
+            <element signature="e#204#205#0" expanded="true" />
+            <element signature="e#256#257#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/Plus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="2" column="29" lean-forward="true" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+          <folding>
+            <element signature="e#209#210#0" expanded="true" />
+            <element signature="e#254#255#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/Minus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="2" column="30" lean-forward="false" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+          <folding>
+            <element signature="e#211#212#0" expanded="true" />
+            <element signature="e#263#264#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/BinaryIntegerExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -4,14 +4,14 @@ import ast.expression.interfaces.BooleanValue;
 
 import java.util.function.BiFunction;
 
-public abstract class BinaryBooleanExpression extends BinaryExpression {
+public abstract class BinaryBooleanExpressionOperation extends BinaryExpressionOperation {
 
-    public BinaryBooleanExpression(Expression lhs, Expression rhs) {
+    public BinaryBooleanExpressionOperation(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 
     protected Expression evaluate(BiFunction<Boolean, Boolean, Boolean> evalFun) {
-        return evaluate(evalFun, BooleanValue.class);
+        return evaluate(BooleanValue.class, evalFun);
     }
 
 }

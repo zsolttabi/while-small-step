@@ -4,14 +4,14 @@ import ast.expression.interfaces.IntegerValue;
 
 import java.util.function.BiFunction;
 
-public abstract class BinaryIntegerExpression extends BinaryExpression {
+public abstract class BinaryIntegerExpressionOperation extends BinaryExpressionOperation {
 
-    protected BinaryIntegerExpression(Expression lhs, Expression rhs) {
+    protected BinaryIntegerExpressionOperation(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 
     protected Expression evaluate(BiFunction<Integer, Integer, Integer> evalFun) {
-        return evaluate(evalFun, IntegerValue.class);
+        return evaluate(IntegerValue.class, evalFun);
     }
 
 }

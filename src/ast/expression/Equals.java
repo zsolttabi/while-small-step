@@ -1,8 +1,8 @@
 package ast.expression;
 
-public class Equality extends BinaryRelationExpression {
+public class Equals extends BinaryRelationExpressionOperation {
 
-    public Equality(Expression lhs, Expression rhs) {
+    public Equals(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 

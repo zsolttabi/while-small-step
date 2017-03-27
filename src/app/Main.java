@@ -1,7 +1,7 @@
 package app;
 
 import ast.AST;
-import ast.expression.BinaryIntegerExpression;
+import ast.expression.BinaryIntegerExpressionOperation;
 import ast.expression.BoolLiteral;
 import ast.expression.Expression;
 import ast.statement.If;
@@ -45,10 +45,10 @@ public class Main extends Application {
             }
         } else if (eitherStmExpr.getRight().isPresent()){
             val right = eitherStmExpr.getRight().get();
-            if (right instanceof BinaryIntegerExpression) {
+            if (right instanceof BinaryIntegerExpressionOperation) {
                 node.setData(new AstNode<>(AstType.IntBinOp));
-                node.addChild(createNode(Either.right(((BinaryIntegerExpression) right).getLhs())));
-                node.addChild(createNode(Either.right(((BinaryIntegerExpression) right).getRhs())));
+                node.addChild(createNode(Either.right(((BinaryIntegerExpressionOperation) right).getLhs())));
+                node.addChild(createNode(Either.right(((BinaryIntegerExpressionOperation) right).getRhs())));
             } else if (right instanceof BoolLiteral) {
                 node.setData(new AstNode<>(AstType.BoolLit, ((BoolLiteral) right).getValue()));
             }
