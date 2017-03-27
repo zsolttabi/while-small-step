@@ -1,13 +1,13 @@
 package ast.expression;
 
-public class Addition extends BinaryIntegerOperation<Integer> {
+public class Addition extends BinaryIntegerExpression {
 
-    public Addition(IntegerExpression lhs, IntegerExpression rhs) {
+    public Addition(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 
     @Override
-    public EvaluatedExpression<Integer> evaluate() {
+    public Expression evaluate() {
         return evaluate(Integer::sum);
     }
 

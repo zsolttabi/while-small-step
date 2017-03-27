@@ -1,11 +1,12 @@
 package ast.expression;
 
 
+import ast.expression.interfaces.IntegerValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class NumLiteral extends Expression<Integer> implements IntegerValue {
+public class NumLiteral implements Expression, IntegerValue {
 
     @Getter
     private final Integer value;

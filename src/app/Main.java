@@ -1,21 +1,20 @@
-package sample;
+package app;
 
 import ast.AST;
-import ast.expression.BinaryIntegerOperation;
+import ast.expression.BinaryIntegerExpression;
 import ast.expression.BoolLiteral;
 import ast.expression.Expression;
 import ast.statement.If;
 import ast.statement.Sequence;
-import ast.statement.Skip;
 import ast.statement.Statement;
 import com.google.code.javafxgraph.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.val;
-import sample.AstNode.AstType;
+import app.AstNode.AstType;
+import main.antlr4.com.while_parser.WhileParser;
 import utils.Either;
 import utils.Tree;
 import utils.Tree.Node;
@@ -46,10 +45,10 @@ public class Main extends Application {
             }
         } else if (eitherStmExpr.getRight().isPresent()){
             val right = eitherStmExpr.getRight().get();
-            if (right instanceof BinaryIntegerOperation) {
+            if (right instanceof BinaryIntegerExpression) {
                 node.setData(new AstNode<>(AstType.IntBinOp));
-                node.addChild(createNode(Either.right(((BinaryIntegerOperation) right).getLhs())));
-                node.addChild(createNode(Either.right(((BinaryIntegerOperation) right).getRhs())));
+                node.addChild(createNode(Either.right(((BinaryIntegerExpression) right).getLhs())));
+                node.addChild(createNode(Either.right(((BinaryIntegerExpression) right).getRhs())));
             } else if (right instanceof BoolLiteral) {
                 node.setData(new AstNode<>(AstType.BoolLit, ((BoolLiteral) right).getValue()));
             }
@@ -98,7 +97,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage aStage) throws Exception {
-
         aStage.setMinWidth(800);
         aStage.setMinHeight(600);
         aStage.setTitle(getClass().getSimpleName());
@@ -129,8 +127,11 @@ public class Main extends Application {
 //        }
 
 //        aStage.setScene(new Scene(theGraph));
+//        AST ast = new AST(new Sequence(new If(new BoolLiteral(true), new Skip(), new Skip()), new Skip()));
 
-        AST ast = new AST(new Sequence(new If(new BoolLiteral(true), new Skip(), new Skip()), new Skip()));
+        String example = "SKIP";
+        AST ast = WhileParser.parseAst(example);
+
         Tree<AstNode<?>> astTree = createTree(ast);
 
         aStage.setScene(new Scene(drawTree(astTree, AstNode::toString, new Point2D.Double(300, 50), 100, 100)));

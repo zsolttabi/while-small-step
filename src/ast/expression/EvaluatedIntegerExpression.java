@@ -1,5 +1,7 @@
 package ast.expression;
 
+import ast.expression.interfaces.IntegerValue;
+
 public class EvaluatedIntegerExpression extends EvaluatedExpression<Integer> implements IntegerValue {
 
 

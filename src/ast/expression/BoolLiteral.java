@@ -1,11 +1,12 @@
 package ast.expression;
 
 
+import ast.expression.interfaces.BooleanValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class BoolLiteral extends Expression<Boolean> implements BooleanValue {
+public class BoolLiteral implements Expression, BooleanValue {
 
     @Getter
     private final Boolean value;

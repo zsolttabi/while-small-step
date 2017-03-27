@@ -1,7 +1,6 @@
 package ast.statement;
 
 import ast.State;
-import ast.expression.BooleanExpression;
 import ast.expression.Expression;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

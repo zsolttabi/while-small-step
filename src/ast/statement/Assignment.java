@@ -2,14 +2,14 @@ package ast.statement;
 
 import ast.State;
 import ast.expression.*;
+import ast.expression.interfaces.BooleanValue;
+import ast.expression.interfaces.IntegerValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import utils.Pair;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class Assignment extends Statement {
@@ -17,14 +17,10 @@ public class Assignment extends Statement {
     @Getter
     private final Var<?> var;
     @Getter
-    private final Expression<?> value;
+    private final Expression value;
 
     @Override
     public Pair<Statement, State> run(State state) {
-        if (var instanceof BooleanVar && ! (value instanceof BooleanExpression) ||
-                var instanceof IntegerVar && ! (value instanceof IntegerExpression)) {
-            throw new EvaluationException("Lhs and rhs of assignment do not match", Stream.of(var, value).collect(Collectors.toList()));
-        }
         val evaluated = value.evaluate();
         if (evaluated instanceof BooleanValue && var instanceof BooleanVar) {
             ((BooleanVar)var).setValue(((BooleanValue) evaluated).getValue());

@@ -1,9 +1,10 @@
 package ast.expression;
 
+import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class Var<T> extends Expression<T> implements Value<T> {
+public abstract class Var<T> implements Expression, Value<T> {
 
     @Getter
     private final String identifier;

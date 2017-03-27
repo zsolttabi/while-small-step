@@ -1,5 +1,7 @@
 package ast.expression;
 
+import ast.expression.interfaces.IntegerValue;
+
 public class IntegerVar extends Var<Integer> implements IntegerValue {
 
     public IntegerVar(String identifier, Integer value) {

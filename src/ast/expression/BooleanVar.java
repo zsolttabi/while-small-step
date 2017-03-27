@@ -1,5 +1,7 @@
 package ast.expression;
 
+import ast.expression.interfaces.BooleanValue;
+
 public class BooleanVar extends Var<Boolean> implements BooleanValue {
 
     public BooleanVar(String identifier, Boolean value) {
