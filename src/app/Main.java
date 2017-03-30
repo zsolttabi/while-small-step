@@ -1,8 +1,8 @@
 package app;
 
 import ast.AST;
-import ast.expression.BinaryIntegerExpressionOperation;
-import ast.expression.BoolLiteral;
+import ast.expression.abstract_operations.ArithBinOp;
+import ast.expression.values.BoolLiteral;
 import ast.expression.Expression;
 import ast.statement.If;
 import ast.statement.Sequence;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 public class Main extends Application {
 
 
-    private static Node<AstNode<?>> createNode(Either<Statement, Expression<?>> eitherStmExpr) {
+    private static Node<AstNode<?>> createNode(Either<Statement, Expression> eitherStmExpr) {
 
         Node<AstNode<?>> node = new Node<>();
         if (eitherStmExpr.getLeft().isPresent()) {
@@ -45,10 +45,10 @@ public class Main extends Application {
             }
         } else if (eitherStmExpr.getRight().isPresent()){
             val right = eitherStmExpr.getRight().get();
-            if (right instanceof BinaryIntegerExpressionOperation) {
+            if (right instanceof ArithBinOp) {
                 node.setData(new AstNode<>(AstType.IntBinOp));
-                node.addChild(createNode(Either.right(((BinaryIntegerExpressionOperation) right).getLhs())));
-                node.addChild(createNode(Either.right(((BinaryIntegerExpressionOperation) right).getRhs())));
+                node.addChild(createNode(Either.right(((ArithBinOp) right).getLhs())));
+                node.addChild(createNode(Either.right(((ArithBinOp) right).getRhs())));
             } else if (right instanceof BoolLiteral) {
                 node.setData(new AstNode<>(AstType.BoolLit, ((BoolLiteral) right).getValue()));
             }

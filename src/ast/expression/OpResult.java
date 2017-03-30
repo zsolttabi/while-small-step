@@ -5,13 +5,18 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class EvaluatedExpression<T> implements Expression, Value<T> {
+public class OpResult<T> implements Expression, Value<T> {
 
     @Getter
     private final T value;
 
     @Override
-    public EvaluatedExpression evaluate() {
+    public OpResult evaluate() {
+        return this;
+    }
+
+    @Override
+    public Expression step() {
         return this;
     }
 

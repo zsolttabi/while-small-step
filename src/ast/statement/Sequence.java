@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import utils.Pair;
 
 @RequiredArgsConstructor
-public class Sequence extends Statement {
+public class Sequence implements Statement {
 
     @Getter
     private final Statement s1;
@@ -14,14 +14,15 @@ public class Sequence extends Statement {
     private final Statement s2;
 
     @Override
-    public Pair<Statement, State> run(State state) {
+    public Pair<Statement, State> step(State state) {
 
-        Pair<Statement, State> newConfig = s1.run(state);
-        while (newConfig.getFirst() != null) {
-            newConfig = newConfig.getFirst().run(newConfig.getSecond());
+        Pair<Statement, State> newConfig = s1.step(state);
+
+        if (newConfig.getFirst() instanceof BadStatement) {
+            return Pair.of(new BadSequence(newConfig.getFirst(), s2), state);
         }
 
-        return Pair.of(s2, state);
+        return newConfig.getFirst() != null ? Pair.of(s2, state) : newConfig;
     }
 
 }

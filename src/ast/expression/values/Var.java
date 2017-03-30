@@ -1,5 +1,6 @@
-package ast.expression;
+package ast.expression.values;
 
+import ast.expression.Expression;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,11 @@ public abstract class Var<T> implements Expression, Value<T> {
     protected Var(String identifier, T value) {
         this.identifier = identifier;
         this.value = value;
+    }
+
+    @Override
+    public Expression step() {
+        return this;
     }
 
 }

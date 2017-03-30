@@ -1,6 +1,7 @@
-package ast.expression;
+package ast.expression.values;
 
 
+import ast.expression.Expression;
 import ast.expression.interfaces.BooleanValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,11 @@ public class BoolLiteral implements Expression, BooleanValue {
 
     @Override
     public BoolLiteral evaluate() {
+        return this;
+    }
+
+    @Override
+    public Expression step() {
         return this;
     }
 }

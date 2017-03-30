@@ -1,6 +1,8 @@
 package ast.expression;
 
-public class And extends BinaryBooleanExpressionOperation {
+import ast.expression.abstract_operations.BoolBinOp;
+
+public class And extends BoolBinOp {
     public And(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
@@ -8,5 +10,10 @@ public class And extends BinaryBooleanExpressionOperation {
     @Override
     public Expression evaluate() {
         return evaluate(Boolean::logicalAnd);
+    }
+
+    @Override
+    public Expression step() {
+        return step(And::new, Boolean::logicalAnd);
     }
 }

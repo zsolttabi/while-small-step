@@ -1,4 +1,4 @@
-package ast.expression;
+package ast.expression.values;
 
 import ast.expression.interfaces.BooleanValue;
 
@@ -12,4 +12,5 @@ public class BooleanVar extends Var<Boolean> implements BooleanValue {
     public BooleanVar evaluate() {
         return this;
     }
+
 }

@@ -3,10 +3,10 @@ package ast.statement;
 import ast.State;
 import utils.Pair;
 
-public class Skip extends Statement {
+public class Skip implements Statement {
 
     @Override
-    public Pair<Statement, State> run(State state) {
+    public Pair<Statement, State> step(State state) {
         return Pair.of(null, state);
     }
 

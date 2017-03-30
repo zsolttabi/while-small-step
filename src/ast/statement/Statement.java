@@ -4,8 +4,8 @@ package ast.statement;
 import ast.State;
 import utils.Pair;
 
-public abstract class Statement {
+public interface Statement {
 
-    public abstract Pair<Statement, State> run(State state);
+    Pair<Statement, State> step(State state);
 
 }

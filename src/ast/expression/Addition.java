@@ -1,6 +1,8 @@
 package ast.expression;
 
-public class Addition extends BinaryIntegerExpressionOperation {
+import ast.expression.abstract_operations.ArithBinOp;
+
+public class Addition extends ArithBinOp {
 
     public Addition(Expression lhs, Expression rhs) {
         super(lhs, rhs);
@@ -9,6 +11,11 @@ public class Addition extends BinaryIntegerExpressionOperation {
     @Override
     public Expression evaluate() {
         return evaluate(Integer::sum);
+    }
+
+    @Override
+    public Expression step() {
+        return step(Addition::new, Integer::sum);
     }
 
 }

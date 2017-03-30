@@ -1,6 +1,8 @@
 package ast.expression;
 
-public class Minus extends BinaryIntegerExpressionOperation {
+import ast.expression.abstract_operations.ArithBinOp;
+
+public class Minus extends ArithBinOp {
     protected Minus(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
@@ -8,5 +10,10 @@ public class Minus extends BinaryIntegerExpressionOperation {
     @Override
     public Expression evaluate() {
         return evaluate((i1, i2) -> i1 - i2);
+    }
+
+    @Override
+    public Expression step() {
+        return step(Minus::new, (i1, i2) -> i1 - i2);
     }
 }

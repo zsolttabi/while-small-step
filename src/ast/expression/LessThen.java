@@ -1,6 +1,8 @@
 package ast.expression;
 
-public class LessThen extends BinaryRelationExpressionOperation {
+import ast.expression.abstract_operations.RelBinOp;
+
+public class LessThen extends RelBinOp {
     public LessThen(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
@@ -8,5 +10,10 @@ public class LessThen extends BinaryRelationExpressionOperation {
     @Override
     public Expression evaluate() {
         return evaluate((i1,i2) -> i1 < i2);
+    }
+
+    @Override
+    public Expression step() {
+        return step(LessThen::new, (i1,i2) -> i1 < i2);
     }
 }

@@ -1,18 +1,19 @@
 package ast.statement;
 
 import ast.State;
-import ast.expression.*;
+import ast.expression.Expression;
 import ast.expression.interfaces.BooleanValue;
 import ast.expression.interfaces.IntegerValue;
+import ast.expression.interfaces.Value;
+import ast.expression.values.BooleanVar;
+import ast.expression.values.IntegerVar;
+import ast.expression.values.Var;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import utils.Pair;
 
-import java.util.Collections;
-
 @RequiredArgsConstructor
-public class Assignment extends Statement {
+public class Assignment implements Statement {
 
     @Getter
     private final Var<?> var;
@@ -20,18 +21,21 @@ public class Assignment extends Statement {
     private final Expression value;
 
     @Override
-    public Pair<Statement, State> run(State state) {
-        val evaluated = value.evaluate();
-        if (evaluated instanceof BooleanValue && var instanceof BooleanVar) {
-            ((BooleanVar)var).setValue(((BooleanValue) evaluated).getValue());
-        } else if (evaluated instanceof IntegerValue && var instanceof IntegerVar) {
-            ((IntegerVar)var).setValue(((IntegerValue) evaluated).getValue());
+    public Pair<Statement, State> step(State state) {
+
+        if (!(value instanceof Value)) {
+            return Pair.of(new Assignment(var, value.step()), state);
+        }
+
+        if (value instanceof BooleanValue && var instanceof BooleanVar) {
+            ((BooleanVar)var).setValue(((BooleanValue) value).getValue());
+        } else if (value instanceof IntegerValue && var instanceof IntegerVar) {
+            ((IntegerVar)var).setValue(((IntegerValue) value).getValue());
         } else {
-            throw new EvaluationException("Could not evaluate rhs in Assignment to a Value", Collections.singletonList(value));
+            return Pair.of(new BadAssignment(var, value), state);
         }
 
         state.setVar(var.getIdentifier(), var);
-
         return Pair.of(null, state);
     }
 

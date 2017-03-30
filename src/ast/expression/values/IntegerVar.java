@@ -1,4 +1,4 @@
-package ast.expression;
+package ast.expression.values;
 
 import ast.expression.interfaces.IntegerValue;
 
@@ -12,4 +12,5 @@ public class IntegerVar extends Var<Integer> implements IntegerValue {
     public IntegerVar evaluate() {
         return this;
     }
+
 }

@@ -7,15 +7,15 @@ import lombok.RequiredArgsConstructor;
 import utils.Pair;
 
 @RequiredArgsConstructor
-public class While extends Statement {
+public class While implements Statement {
 
     @Getter
-    private final Expression<Boolean> condition;
+    private final Expression condition;
     @Getter
     private final Statement s;
 
     @Override
-    public Pair<Statement, State> run(State state) {
+    public Pair<Statement, State> step(State state) {
         return Pair.of(new If(condition, new Sequence(s, this), new Skip()), state);
     }
 }
