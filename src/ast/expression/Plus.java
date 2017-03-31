@@ -9,11 +9,6 @@ public class Plus extends ArithBinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate(Integer::sum);
-    }
-
-    @Override
     public Expression step() {
         return step(Plus::new, Integer::sum);
     }

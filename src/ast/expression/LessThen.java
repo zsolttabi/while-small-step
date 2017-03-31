@@ -9,11 +9,6 @@ public class LessThen extends RelBinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate((i1,i2) -> i1 < i2);
-    }
-
-    @Override
     public Expression step() {
         return step(LessThen::new, (i1,i2) -> i1 < i2);
     }

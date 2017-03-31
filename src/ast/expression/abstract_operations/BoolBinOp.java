@@ -11,10 +11,6 @@ public abstract class BoolBinOp extends BinOp {
         super(lhs, rhs);
     }
 
-    protected Expression evaluate(BiFunction<Boolean, Boolean, Boolean> evalFun) {
-        return evaluate(BoolValue.class, evalFun);
-    }
-
     protected Expression step(BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Boolean, Boolean, Boolean> evalFun) {
         return step(BoolValue.class, binOpCtor, evalFun);
     }

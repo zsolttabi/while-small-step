@@ -13,11 +13,6 @@ public class IntLiteral implements Expression, IntValue {
     private final Integer value;
 
     @Override
-    public IntLiteral evaluate() {
-        return this;
-    }
-
-    @Override
     public Expression step() {
         return this;
     }

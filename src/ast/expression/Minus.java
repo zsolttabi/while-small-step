@@ -9,11 +9,6 @@ public class Minus extends ArithBinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate((i1, i2) -> i1 - i2);
-    }
-
-    @Override
     public Expression step() {
         return step(Minus::new, (i1, i2) -> i1 - i2);
     }

@@ -9,11 +9,6 @@ public class BadBinOp extends BinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return this;
-    }
-
-    @Override
     public Expression step() {
         return this;
     }

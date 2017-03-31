@@ -9,11 +9,6 @@ public class Equals extends RelBinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate(Object::equals);
-    }
-
-    @Override
     public Expression step() {
         return step(Equals::new, Object::equals);
     }

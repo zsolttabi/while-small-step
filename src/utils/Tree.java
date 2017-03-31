@@ -1,5 +1,6 @@
 package utils;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,10 @@ public class Tree<T> {
         public Node(T data, Node<T> parent) {
             this.data = data;
             this.parent = parent;
+        }
+
+        public static <T> Node<T> of (T data, Node<T> parent) {
+            return new Node<>(data, parent);
         }
 
         public Node() {

@@ -21,18 +21,15 @@ start returns [Statement value]:
 ;
 
 statement returns [Statement value]:
-    s = skip { $value  = $s.value; }
-|
-    Identifier Asign e = expression { $value = new Assignment($Identifier.text, $e.value); }
-|
-    statement SeqSeparator statement
-|
-    If expression Then statement Else statement
-|
-    While expression Do statement
-;
 
-skip returns [Statement value]:
+    Identifier Assign e = expression { $value = new Assignment($Identifier.text, $e.value); }
+|
+    s1 = statement SeqSeparator s2 = statement { $value = new Sequence($s1.value, $s2.value); }
+|
+    If e = expression Then s1 = statement Else s2 = statement { $value = new If($e.value, $s1.value, $s2.value); }
+|
+    While e = expression Do s = statement { $value = new While($e.value, $s.value); }
+|
     Skip { $value  = new Skip(); }
 ;
 
@@ -69,15 +66,11 @@ While: 'while' ;
 
 Do: 'do' ;
 
-Asign: ':=' ;
+Assign: ':=' ;
 
 SeqSeparator: ';' ;
 
 Skip: 'SKIP' ;
-
-Identifier: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
-
-Int: '-'?('1'..'9') ('0'..'9')* ;
 
 True: 'tt' ;
 
@@ -94,5 +87,10 @@ LessThen: '<' ;
 Not: '!' ;
 
 And: '&&' ;
+
+Int: '-'?('1'..'9') ('0'..'9')* ;
+
+Identifier: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
+
 
 WS: [ \t|\r\n] -> skip;

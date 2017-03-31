@@ -9,11 +9,6 @@ public class And extends BoolBinOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate(Boolean::logicalAnd);
-    }
-
-    @Override
     public Expression step() {
         return step(And::new, Boolean::logicalAnd);
     }

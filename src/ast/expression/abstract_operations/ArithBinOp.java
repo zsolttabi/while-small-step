@@ -11,10 +11,6 @@ public abstract class ArithBinOp extends BinOp {
         super(lhs, rhs);
     }
 
-    protected Expression evaluate(BiFunction<Integer, Integer, Integer> evalFun) {
-        return evaluate(IntValue.class, evalFun);
-    }
-
     protected Expression step(BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Integer, Integer, Integer> evalFun) {
         return step(IntValue.class, binOpCtor, evalFun);
     }

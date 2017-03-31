@@ -1,11 +1,16 @@
 package ast;
 
+import app.SimpleASTNode;
 import ast.statement.BadStatement;
 import ast.statement.Statement;
 import lombok.Getter;
+import utils.Element;
 import utils.Pair;
+import utils.Tree;
+import utils.Tree.Node;
+import utils.Visitor;
 
-public class AST implements IAST {
+public class AST implements IAST, Element<Node<SimpleASTNode>> {
 
     @Getter
     private final State state;
@@ -42,6 +47,11 @@ public class AST implements IAST {
         }
 
         return newConfig.getFirst() == null ? new ReducedAST(newConfig) : new AST(newConfig);
+    }
+
+    @Override
+    public Node<SimpleASTNode> accept(Visitor<Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
     }
 
 }

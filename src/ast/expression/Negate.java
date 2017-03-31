@@ -10,11 +10,6 @@ public class Negate extends UnOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate(IntValue.class, i -> i * -1);
-    }
-
-    @Override
     public Expression step() {
         return step(IntValue.class, Negate::new, i -> -1 * i);
     }

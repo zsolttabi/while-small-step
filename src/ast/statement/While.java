@@ -18,4 +18,5 @@ public class While implements Statement {
     public Pair<Statement, State> step(State state) {
         return Pair.of(new If(condition, new Sequence(s, this), new Skip()), state);
     }
+
 }

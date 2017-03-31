@@ -10,11 +10,6 @@ public class Not extends UnOp {
     }
 
     @Override
-    public Expression evaluate() {
-        return evaluate(BoolValue.class, b -> !b);
-    }
-
-    @Override
     public Expression step() {
         return step(BoolValue.class, Not::new, b -> !b);
     }

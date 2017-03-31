@@ -11,11 +11,6 @@ public class OpResult<T> implements Expression, Value<T> {
     private final T value;
 
     @Override
-    public OpResult evaluate() {
-        return this;
-    }
-
-    @Override
     public Expression step() {
         return this;
     }

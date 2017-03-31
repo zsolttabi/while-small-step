@@ -13,11 +13,6 @@ public class BoolLiteral implements Expression, BoolValue {
     private final Boolean value;
 
     @Override
-    public BoolLiteral evaluate() {
-        return this;
-    }
-
-    @Override
     public Expression step() {
         return this;
     }
