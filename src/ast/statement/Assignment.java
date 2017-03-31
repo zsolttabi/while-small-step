@@ -2,12 +2,9 @@ package ast.statement;
 
 import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.BooleanValue;
-import ast.expression.interfaces.IntegerValue;
+import ast.expression.interfaces.BoolValue;
+import ast.expression.interfaces.IntValue;
 import ast.expression.interfaces.Value;
-import ast.expression.values.BooleanVar;
-import ast.expression.values.IntegerVar;
-import ast.expression.values.Var;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Pair;
@@ -16,7 +13,7 @@ import utils.Pair;
 public class Assignment implements Statement {
 
     @Getter
-    private final Var<?> var;
+    private final String identifier;
     @Getter
     private final Expression value;
 
@@ -24,18 +21,19 @@ public class Assignment implements Statement {
     public Pair<Statement, State> step(State state) {
 
         if (!(value instanceof Value)) {
-            return Pair.of(new Assignment(var, value.step()), state);
+            return Pair.of(new Assignment(identifier, value.step()), state);
         }
 
-        if (value instanceof BooleanValue && var instanceof BooleanVar) {
-            ((BooleanVar)var).setValue(((BooleanValue) value).getValue());
-        } else if (value instanceof IntegerValue && var instanceof IntegerVar) {
-            ((IntegerVar)var).setValue(((IntegerValue) value).getValue());
+        Value<?> currentValue = state.get(identifier);
+
+        if (value instanceof BoolValue && currentValue instanceof BoolValue) {
+            state.set(identifier, (BoolValue)value);
+        } else if (value instanceof IntValue && currentValue instanceof IntValue) {
+            state.set(identifier, (IntValue)value);
         } else {
-            return Pair.of(new BadAssignment(var, value), state);
+            return Pair.of(new BadAssignment(identifier, value), state);
         }
 
-        state.setVar(var.getIdentifier(), var);
         return Pair.of(null, state);
     }
 

@@ -3,6 +3,7 @@ package ast.expression;
 import ast.expression.abstract_operations.RelBinOp;
 
 public class LessThen extends RelBinOp {
+
     public LessThen(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }

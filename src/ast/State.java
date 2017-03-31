@@ -1,20 +1,19 @@
 package ast;
 
-import ast.expression.values.Var;
+import ast.expression.interfaces.Value;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class State {
 
-    private final Map<String, Var<?>> state = new HashMap<>();
+    private final Map<String, Value<?>> state = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
-    public <T> Var<T> getVar(String identifier) {
-        return (Var<T>)state.get(identifier);
+    public Value<?> get(String identifier) {
+        return state.get(identifier);
     }
 
-    public <T> void setVar(String identifier, Var<T> var) {
+    public void set(String identifier, Value<?> var) {
         state.put(identifier, var);
     }
 

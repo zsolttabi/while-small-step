@@ -1,7 +1,7 @@
 package ast.expression.abstract_operations;
 
 import ast.expression.Expression;
-import ast.expression.interfaces.BooleanValue;
+import ast.expression.interfaces.BoolValue;
 
 import java.util.function.BiFunction;
 
@@ -12,11 +12,11 @@ public abstract class BoolBinOp extends BinOp {
     }
 
     protected Expression evaluate(BiFunction<Boolean, Boolean, Boolean> evalFun) {
-        return evaluate(BooleanValue.class, evalFun);
+        return evaluate(BoolValue.class, evalFun);
     }
 
     protected Expression step(BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Boolean, Boolean, Boolean> evalFun) {
-        return step(BooleanValue.class, binOpCtor, evalFun);
+        return step(BoolValue.class, binOpCtor, evalFun);
     }
 
 }

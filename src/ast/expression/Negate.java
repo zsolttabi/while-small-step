@@ -1,7 +1,7 @@
 package ast.expression;
 
 import ast.expression.abstract_operations.UnOp;
-import ast.expression.interfaces.IntegerValue;
+import ast.expression.interfaces.IntValue;
 
 public class Negate extends UnOp {
 
@@ -11,12 +11,12 @@ public class Negate extends UnOp {
 
     @Override
     public Expression evaluate() {
-        return evaluate(IntegerValue.class, i -> i * -1);
+        return evaluate(IntValue.class, i -> i * -1);
     }
 
     @Override
     public Expression step() {
-        return step(IntegerValue.class, Negate::new, i -> -1 * i);
+        return step(IntValue.class, Negate::new, i -> -1 * i);
     }
 
 }

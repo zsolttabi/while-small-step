@@ -1,7 +1,7 @@
 package ast.expression.abstract_operations;
 
 import ast.expression.Expression;
-import ast.expression.interfaces.IntegerValue;
+import ast.expression.interfaces.IntValue;
 
 import java.util.function.BiFunction;
 
@@ -12,11 +12,11 @@ public abstract class RelBinOp extends BinOp {
     }
 
     protected Expression evaluate(BiFunction<Integer, Integer, Boolean> evalFun) {
-        return evaluate(IntegerValue.class, evalFun);
+        return evaluate(IntValue.class, evalFun);
     }
 
     protected Expression step(BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Integer, Integer, Boolean> evalFun) {
-        return step(IntegerValue.class, binOpCtor, evalFun);
+        return step(IntValue.class, binOpCtor, evalFun);
     }
 
 

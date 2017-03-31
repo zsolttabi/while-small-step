@@ -2,7 +2,7 @@ package ast.statement;
 
 import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.BooleanValue;
+import ast.expression.interfaces.BoolValue;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class If implements Statement {
             return Pair.of(new If(condition.step(), s1, s2), state);
         }
 
-        if (condition instanceof BooleanValue) {
-            return Pair.of(((BooleanValue) condition).getValue() ? s1 : s2, state);
+        if (condition instanceof BoolValue) {
+            return Pair.of(((BoolValue) condition).getValue() ? s1 : s2, state);
         }
 
         return Pair.of(new BadIf(condition, s1, s1), state);

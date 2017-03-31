@@ -4,6 +4,7 @@ grammar While;
     import ast.AST;
     import ast.statement.*;
     import ast.expression.*;
+    import ast.expression.values.*;
 }
 
 @parser::members {
@@ -22,7 +23,7 @@ start returns [Statement value]:
 statement returns [Statement value]:
     s = skip { $value  = $s.value; }
     |
-    Var Asign aExp {}
+    Identifier Asign a = aExp { $value = new Assingment($Identifier.text, $a.value); }
     |
     statement SeqSeparator statement
     |
@@ -42,15 +43,13 @@ expression returns [Expression value]:
 ;
 
 aExp returns [Expression value]:
-    Integer
+    Int { $value = new IntLiteral(Integer.parseInt($Int.text)); }
     |
-    Var
+    a1 = aExp Plus a2 = aExp { $value = new Plus($a1.value, $a2.value); }
     |
-    aExp Plus aExp
+    a1 = aExp Minus a2 = aExp { $value = new Minus($a1.value, $a2.value); }
     |
-    aExp Minus aExp
-    |
-    Minus aExp
+    Minus a = aExp { $value = new Negate($a.value); }
 ;
 
 bExp returns [Expression value]:
@@ -58,13 +57,13 @@ bExp returns [Expression value]:
     |
     False { $value = new BoolLiteral(false); }
     |
-    a1 = aExp Equals a2 = aExp { $value = new Equality($a1.value, $a2.value); }
+    a1 = aExp Equals a2 = aExp { $value = new Equals($a1.value, $a2.value); }
     |
-    aExp LessThen aExp
+    a1 = aExp LessThen a2 = aExp { $value = new LessThen($a1.value, $a2.value); }
     |
-    Not bExp
+    Not b = bExp { $value = new Not($b.value); }
     |
-    bExp And bExp
+    b1 = bExp And b2 = bExp  { $value = new LessThen($b1.value, $b2.value); }
 ;
 
 If: 'if' ;
@@ -83,9 +82,9 @@ SeqSeparator: ';' ;
 
 Skip: 'SKIP' ;
 
-Var: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
+Identifier: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
 
-Integer: '-'?('1'..'9') ('0'..'9')* ;
+Int: '-'?('1'..'9') ('0'..'9')* ;
 
 True: 'tt' ;
 

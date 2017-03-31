@@ -2,18 +2,18 @@ package ast.expression.values;
 
 
 import ast.expression.Expression;
-import ast.expression.interfaces.IntegerValue;
+import ast.expression.interfaces.IntValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class IntegerLiteral implements Expression, IntegerValue {
+public class IntLiteral implements Expression, IntValue {
 
     @Getter
     private final Integer value;
 
     @Override
-    public IntegerLiteral evaluate() {
+    public IntLiteral evaluate() {
         return this;
     }
 

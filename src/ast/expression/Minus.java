@@ -3,7 +3,8 @@ package ast.expression;
 import ast.expression.abstract_operations.ArithBinOp;
 
 public class Minus extends ArithBinOp {
-    protected Minus(Expression lhs, Expression rhs) {
+
+    public Minus(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 

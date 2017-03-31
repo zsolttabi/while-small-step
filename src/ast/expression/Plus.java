@@ -4,7 +4,7 @@ import ast.expression.abstract_operations.ArithBinOp;
 
 public class Plus extends ArithBinOp {
 
-    protected Plus(Expression lhs, Expression rhs) {
+    public Plus(Expression lhs, Expression rhs) {
         super(lhs, rhs);
     }
 
