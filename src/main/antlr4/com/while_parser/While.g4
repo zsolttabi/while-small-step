@@ -22,14 +22,14 @@ start returns [Statement value]:
 
 statement returns [Statement value]:
     s = skip { $value  = $s.value; }
-    |
-    Identifier Asign a = aExp { $value = new Assingment($Identifier.text, $a.value); }
-    |
+|
+    Identifier Asign e = expression { $value = new Assignment($Identifier.text, $e.value); }
+|
     statement SeqSeparator statement
-    |
+|
     If expression Then statement Else statement
-    |
-    While bExp Do statement
+|
+    While expression Do statement
 ;
 
 skip returns [Statement value]:
@@ -37,33 +37,26 @@ skip returns [Statement value]:
 ;
 
 expression returns [Expression value]:
-    aExp
-    |
-    bExp
-;
 
-aExp returns [Expression value]:
     Int { $value = new IntLiteral(Integer.parseInt($Int.text)); }
-    |
-    a1 = aExp Plus a2 = aExp { $value = new Plus($a1.value, $a2.value); }
-    |
-    a1 = aExp Minus a2 = aExp { $value = new Minus($a1.value, $a2.value); }
-    |
-    Minus a = aExp { $value = new Negate($a.value); }
-;
-
-bExp returns [Expression value]:
+|
+    e1 = expression Plus e2 = expression { $value = new Plus($e1.value, $e2.value); }
+|
+    e1 = expression Minus e2 = expression { $value = new Minus($e1.value, $e2.value); }
+|
+    Minus a = expression { $value = new Negate($a.value); }
+|
     True { $value = new BoolLiteral(true); }
-    |
+|
     False { $value = new BoolLiteral(false); }
-    |
-    a1 = aExp Equals a2 = aExp { $value = new Equals($a1.value, $a2.value); }
-    |
-    a1 = aExp LessThen a2 = aExp { $value = new LessThen($a1.value, $a2.value); }
-    |
-    Not b = bExp { $value = new Not($b.value); }
-    |
-    b1 = bExp And b2 = bExp  { $value = new LessThen($b1.value, $b2.value); }
+|
+    e1 = expression Equals e2 = expression { $value = new Equals($e1.value, $e2.value); }
+|
+    e1 = expression LessThen e2 = expression { $value = new LessThen($e1.value, $e2.value); }
+|
+    Not e = expression { $value = new Not($e.value); }
+|
+    e1 = expression And e2 = expression  { $value = new LessThen($e1.value, $e2.value); }
 ;
 
 If: 'if' ;

@@ -2,28 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/Addition.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/values/BooleanVar.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/values/IntegerVar.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ast/expression/values/Var.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/interfaces/BooleanValue.java" afterPath="$PROJECT_DIR$/src/ast/expression/interfaces/BoolValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/interfaces/IntegerValue.java" afterPath="$PROJECT_DIR$/src/ast/expression/interfaces/IntValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ast/expression/values/IntegerLiteral.java" afterPath="$PROJECT_DIR$/src/ast/expression/values/IntLiteral.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/State.java" afterPath="$PROJECT_DIR$/src/ast/State.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/And.java" afterPath="$PROJECT_DIR$/src/ast/expression/And.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/LessThen.java" afterPath="$PROJECT_DIR$/src/ast/expression/LessThen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Minus.java" afterPath="$PROJECT_DIR$/src/ast/expression/Minus.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Negate.java" afterPath="$PROJECT_DIR$/src/ast/expression/Negate.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Not.java" afterPath="$PROJECT_DIR$/src/ast/expression/Not.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/Plus.java" afterPath="$PROJECT_DIR$/src/ast/expression/Plus.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/abstract_operations/ArithBinOp.java" afterPath="$PROJECT_DIR$/src/ast/expression/abstract_operations/ArithBinOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/abstract_operations/BoolBinOp.java" afterPath="$PROJECT_DIR$/src/ast/expression/abstract_operations/BoolBinOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/abstract_operations/RelBinOp.java" afterPath="$PROJECT_DIR$/src/ast/expression/abstract_operations/RelBinOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/expression/values/BoolLiteral.java" afterPath="$PROJECT_DIR$/src/ast/expression/values/BoolLiteral.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/statement/Assignment.java" afterPath="$PROJECT_DIR$/src/ast/statement/Assignment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/statement/BadAssignment.java" afterPath="$PROJECT_DIR$/src/ast/statement/BadAssignment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ast/statement/If.java" afterPath="$PROJECT_DIR$/src/ast/statement/If.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4" afterPath="$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -101,8 +79,8 @@
       <file leaf-file-name="While.g4" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="25" column="83" lean-forward="false" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="83" />
+            <state relative-caret-position="132">
+              <caret line="25" column="57" lean-forward="false" selection-start-line="25" selection-start-column="57" selection-end-line="25" selection-end-column="57" />
               <folding>
                 <element signature="e#16#148#1" expanded="true" />
                 <element signature="e#150#385#1" expanded="true" />
@@ -125,8 +103,21 @@
         <entry file="file://$PROJECT_DIR$/src/ast/AST.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="688">
-              <caret line="46" column="1" lean-forward="true" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
+              <caret line="46" column="1" lean-forward="false" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Negate.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/Negate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="7" column="10" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="10" />
+              <folding>
+                <element signature="e#191#192#0" expanded="true" />
+                <element signature="e#221#222#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -134,10 +125,23 @@
       <file leaf-file-name="Assignment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ast/statement/Assignment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state relative-caret-position="400">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Minus.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ast/expression/Minus.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+              <folding>
+                <element signature="e#170#171#0" expanded="true" />
+                <element signature="e#201#202#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,16 +160,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IntLiteral.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ast/expression/values/IntLiteral.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="IntValue.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ast/expression/interfaces/IntValue.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -179,56 +173,36 @@
       <file leaf-file-name="WhileParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4003">
-              <caret line="464" column="69" lean-forward="false" selection-start-line="464" selection-start-column="69" selection-end-line="464" selection-end-column="69" />
+            <state relative-caret-position="186">
+              <caret line="224" column="65" lean-forward="false" selection-start-line="224" selection-start-column="65" selection-end-line="224" selection-end-column="65" />
               <folding>
                 <element signature="e#540#609#0" expanded="true" />
-                <element signature="e#2363#2364#0" expanded="true" />
-                <element signature="e#2387#2388#0" expanded="true" />
-                <element signature="e#2437#2438#0" expanded="true" />
-                <element signature="e#2461#2462#0" expanded="true" />
-                <element signature="e#3242#3243#0" expanded="true" />
-                <element signature="e#3298#3299#0" expanded="true" />
-                <element signature="e#3367#3368#0" expanded="true" />
-                <element signature="e#3404#3405#0" expanded="true" />
-                <element signature="e#4763#4764#0" expanded="true" />
-                <element signature="e#4814#4815#0" expanded="true" />
-                <element signature="e#5000#5001#0" expanded="true" />
-                <element signature="e#5051#5052#0" expanded="true" />
-                <element signature="e#5160#5161#0" expanded="true" />
-                <element signature="e#5217#5218#0" expanded="true" />
-                <element signature="e#5334#5335#0" expanded="true" />
-                <element signature="e#5389#5390#0" expanded="true" />
-                <element signature="e#5434#5435#0" expanded="true" />
-                <element signature="e#5490#5491#0" expanded="true" />
-                <element signature="e#5664#5665#0" expanded="true" />
-                <element signature="e#5715#5716#0" expanded="true" />
-                <element signature="e#5942#5943#0" expanded="true" />
-                <element signature="e#5979#5980#0" expanded="true" />
-                <element signature="e#9519#9520#0" expanded="true" />
-                <element signature="e#9556#9557#0" expanded="true" />
-                <element signature="e#10778#10779#0" expanded="true" />
-                <element signature="e#10829#10830#0" expanded="true" />
-                <element signature="e#10859#10860#0" expanded="true" />
-                <element signature="e#10910#10911#0" expanded="true" />
-                <element signature="e#10984#10985#0" expanded="true" />
-                <element signature="e#11021#11022#0" expanded="true" />
-                <element signature="e#12716#12717#0" expanded="true" />
-                <element signature="e#12766#12767#0" expanded="true" />
-                <element signature="e#12801#12802#0" expanded="true" />
-                <element signature="e#12852#12853#0" expanded="true" />
-                <element signature="e#12991#12992#0" expanded="true" />
-                <element signature="e#13028#13029#0" expanded="true" />
-                <element signature="e#17104#17105#0" expanded="true" />
-                <element signature="e#17154#17155#0" expanded="true" />
-                <element signature="e#17189#17190#0" expanded="true" />
-                <element signature="e#17240#17241#0" expanded="true" />
-                <element signature="e#17424#17425#0" expanded="true" />
-                <element signature="e#17474#17475#0" expanded="true" />
-                <element signature="e#17509#17510#0" expanded="true" />
-                <element signature="e#17560#17561#0" expanded="true" />
-                <element signature="e#17697#17698#0" expanded="true" />
-                <element signature="e#17734#17735#0" expanded="true" />
+                <element signature="e#2314#2315#0" expanded="true" />
+                <element signature="e#2338#2339#0" expanded="true" />
+                <element signature="e#2388#2389#0" expanded="true" />
+                <element signature="e#2412#2413#0" expanded="true" />
+                <element signature="e#3193#3194#0" expanded="true" />
+                <element signature="e#3249#3250#0" expanded="true" />
+                <element signature="e#3318#3319#0" expanded="true" />
+                <element signature="e#3355#3356#0" expanded="true" />
+                <element signature="e#4719#4720#0" expanded="true" />
+                <element signature="e#4770#4771#0" expanded="true" />
+                <element signature="e#4968#4969#0" expanded="true" />
+                <element signature="e#5025#5026#0" expanded="true" />
+                <element signature="e#5209#5210#0" expanded="true" />
+                <element signature="e#5264#5265#0" expanded="true" />
+                <element signature="e#5309#5310#0" expanded="true" />
+                <element signature="e#5365#5366#0" expanded="true" />
+                <element signature="e#5736#5737#0" expanded="true" />
+                <element signature="e#5773#5774#0" expanded="true" />
+                <element signature="e#9326#9327#0" expanded="true" />
+                <element signature="e#9363#9364#0" expanded="true" />
+                <element signature="e#10887#10888#0" expanded="true" />
+                <element signature="e#10943#10944#0" expanded="true" />
+                <element signature="e#10990#10991#0" expanded="true" />
+                <element signature="e#11047#11048#0" expanded="true" />
+                <element signature="e#11628#11629#0" expanded="true" />
+                <element signature="e#11665#11666#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -306,10 +280,10 @@
         <option value="$PROJECT_DIR$/src/ast/expression/interfaces/IntValue.java" />
         <option value="$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileParser.java" />
         <option value="$PROJECT_DIR$/src/ast/expression/Identifier.java" />
-        <option value="$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4" />
         <option value="$PROJECT_DIR$/src/ast/State.java" />
         <option value="$PROJECT_DIR$/src/ast/statement/Assignment.java" />
         <option value="$PROJECT_DIR$/src/ast/statement/BadAssignment.java" />
+        <option value="$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4" />
       </list>
     </option>
   </component>
@@ -872,6 +846,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1358" y="-290" width="1696" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893288" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -887,7 +862,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39976957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893288" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32893288" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1196,22 +1171,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/Negate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="7" column="10" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/expression/Minus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ast/expression/LessThen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
@@ -1300,16 +1259,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/statement/Assignment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ast/expression/values/BooleanVar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
@@ -1337,7 +1286,15 @@
     <entry file="file://$PROJECT_DIR$/src/ast/AST.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="688">
-          <caret line="46" column="1" lean-forward="true" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
+          <caret line="46" column="1" lean-forward="false" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -1353,74 +1310,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileListener.java">
+    <entry file="file://$PROJECT_DIR$/src/ast/statement/Assignment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="400">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/Minus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+          <folding>
+            <element signature="e#170#171#0" expanded="true" />
+            <element signature="e#201#202#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ast/expression/Negate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="7" column="10" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="10" />
+          <folding>
+            <element signature="e#191#192#0" expanded="true" />
+            <element signature="e#221#222#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gen/main/antlr4/com/while_parser/WhileParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4003">
-          <caret line="464" column="69" lean-forward="false" selection-start-line="464" selection-start-column="69" selection-end-line="464" selection-end-column="69" />
+        <state relative-caret-position="186">
+          <caret line="224" column="65" lean-forward="false" selection-start-line="224" selection-start-column="65" selection-end-line="224" selection-end-column="65" />
           <folding>
             <element signature="e#540#609#0" expanded="true" />
-            <element signature="e#2363#2364#0" expanded="true" />
-            <element signature="e#2387#2388#0" expanded="true" />
-            <element signature="e#2437#2438#0" expanded="true" />
-            <element signature="e#2461#2462#0" expanded="true" />
-            <element signature="e#3242#3243#0" expanded="true" />
-            <element signature="e#3298#3299#0" expanded="true" />
-            <element signature="e#3367#3368#0" expanded="true" />
-            <element signature="e#3404#3405#0" expanded="true" />
-            <element signature="e#4763#4764#0" expanded="true" />
-            <element signature="e#4814#4815#0" expanded="true" />
-            <element signature="e#5000#5001#0" expanded="true" />
-            <element signature="e#5051#5052#0" expanded="true" />
-            <element signature="e#5160#5161#0" expanded="true" />
-            <element signature="e#5217#5218#0" expanded="true" />
-            <element signature="e#5334#5335#0" expanded="true" />
-            <element signature="e#5389#5390#0" expanded="true" />
-            <element signature="e#5434#5435#0" expanded="true" />
-            <element signature="e#5490#5491#0" expanded="true" />
-            <element signature="e#5664#5665#0" expanded="true" />
-            <element signature="e#5715#5716#0" expanded="true" />
-            <element signature="e#5942#5943#0" expanded="true" />
-            <element signature="e#5979#5980#0" expanded="true" />
-            <element signature="e#9519#9520#0" expanded="true" />
-            <element signature="e#9556#9557#0" expanded="true" />
-            <element signature="e#10778#10779#0" expanded="true" />
-            <element signature="e#10829#10830#0" expanded="true" />
-            <element signature="e#10859#10860#0" expanded="true" />
-            <element signature="e#10910#10911#0" expanded="true" />
-            <element signature="e#10984#10985#0" expanded="true" />
-            <element signature="e#11021#11022#0" expanded="true" />
-            <element signature="e#12716#12717#0" expanded="true" />
-            <element signature="e#12766#12767#0" expanded="true" />
-            <element signature="e#12801#12802#0" expanded="true" />
-            <element signature="e#12852#12853#0" expanded="true" />
-            <element signature="e#12991#12992#0" expanded="true" />
-            <element signature="e#13028#13029#0" expanded="true" />
-            <element signature="e#17104#17105#0" expanded="true" />
-            <element signature="e#17154#17155#0" expanded="true" />
-            <element signature="e#17189#17190#0" expanded="true" />
-            <element signature="e#17240#17241#0" expanded="true" />
-            <element signature="e#17424#17425#0" expanded="true" />
-            <element signature="e#17474#17475#0" expanded="true" />
-            <element signature="e#17509#17510#0" expanded="true" />
-            <element signature="e#17560#17561#0" expanded="true" />
-            <element signature="e#17697#17698#0" expanded="true" />
-            <element signature="e#17734#17735#0" expanded="true" />
+            <element signature="e#2314#2315#0" expanded="true" />
+            <element signature="e#2338#2339#0" expanded="true" />
+            <element signature="e#2388#2389#0" expanded="true" />
+            <element signature="e#2412#2413#0" expanded="true" />
+            <element signature="e#3193#3194#0" expanded="true" />
+            <element signature="e#3249#3250#0" expanded="true" />
+            <element signature="e#3318#3319#0" expanded="true" />
+            <element signature="e#3355#3356#0" expanded="true" />
+            <element signature="e#4719#4720#0" expanded="true" />
+            <element signature="e#4770#4771#0" expanded="true" />
+            <element signature="e#4968#4969#0" expanded="true" />
+            <element signature="e#5025#5026#0" expanded="true" />
+            <element signature="e#5209#5210#0" expanded="true" />
+            <element signature="e#5264#5265#0" expanded="true" />
+            <element signature="e#5309#5310#0" expanded="true" />
+            <element signature="e#5365#5366#0" expanded="true" />
+            <element signature="e#5736#5737#0" expanded="true" />
+            <element signature="e#5773#5774#0" expanded="true" />
+            <element signature="e#9326#9327#0" expanded="true" />
+            <element signature="e#9363#9364#0" expanded="true" />
+            <element signature="e#10887#10888#0" expanded="true" />
+            <element signature="e#10943#10944#0" expanded="true" />
+            <element signature="e#10990#10991#0" expanded="true" />
+            <element signature="e#11047#11048#0" expanded="true" />
+            <element signature="e#11628#11629#0" expanded="true" />
+            <element signature="e#11665#11666#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/antlr4/com/while_parser/While.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="25" column="83" lean-forward="false" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="83" />
+        <state relative-caret-position="132">
+          <caret line="25" column="57" lean-forward="false" selection-start-line="25" selection-start-column="57" selection-end-line="25" selection-end-column="57" />
           <folding>
             <element signature="e#16#148#1" expanded="true" />
             <element signature="e#150#385#1" expanded="true" />
