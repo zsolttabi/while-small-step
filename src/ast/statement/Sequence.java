@@ -1,12 +1,16 @@
 package ast.statement;
 
+import app.SimpleASTNode;
 import ast.State;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import utils.Element;
 import utils.Pair;
+import utils.Tree;
+import utils.Visitor;
 
 @RequiredArgsConstructor
-public class Sequence implements Statement {
+public class Sequence implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     @Getter
     private final Statement s1;
@@ -25,4 +29,8 @@ public class Sequence implements Statement {
         return newConfig.getFirst() != null ? Pair.of(s2, state) : newConfig;
     }
 
+    @Override
+    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
+    }
 }

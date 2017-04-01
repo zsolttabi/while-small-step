@@ -1,5 +1,6 @@
 package ast;
 
+import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
 
 import java.util.HashMap;
@@ -7,13 +8,13 @@ import java.util.Map;
 
 public class State {
 
-    private final Map<String, Value<?>> state = new HashMap<>();
+    private final Map<Identifier, Value<?>> state = new HashMap<>();
 
-    public Value<?> get(String identifier) {
+    public Value<?> get(Identifier identifier) {
         return state.get(identifier);
     }
 
-    public void set(String identifier, Value<?> var) {
+    public void set(Identifier identifier, Value<?> var) {
         state.put(identifier, var);
     }
 

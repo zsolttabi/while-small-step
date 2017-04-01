@@ -6,7 +6,6 @@ import ast.statement.Statement;
 import lombok.Getter;
 import utils.Element;
 import utils.Pair;
-import utils.Tree;
 import utils.Tree.Node;
 import utils.Visitor;
 
@@ -27,16 +26,6 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
         this.state = newConfig.getSecond();
     }
 
-    public IAST reduce() {
-
-        IAST newAST = step();
-        while (!(newAST instanceof ReducedAST) && !(newAST instanceof BadAST)) {
-            newAST = newAST.step();
-        }
-
-        return newAST;
-    }
-
     @Override
     public IAST step() {
 
@@ -47,6 +36,16 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
         }
 
         return newConfig.getFirst() == null ? new ReducedAST(newConfig) : new AST(newConfig);
+    }
+
+    public IAST reduce() {
+
+        IAST newAST = step();
+        while (!(newAST instanceof ReducedAST) && !(newAST instanceof BadAST)) {
+            newAST = newAST.step();
+        }
+
+        return newAST;
     }
 
     @Override

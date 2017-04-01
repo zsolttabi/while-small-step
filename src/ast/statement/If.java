@@ -1,15 +1,19 @@
 package ast.statement;
 
+import app.SimpleASTNode;
 import ast.State;
 import ast.expression.Expression;
 import ast.expression.interfaces.BoolValue;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import utils.Element;
 import utils.Pair;
+import utils.Tree;
+import utils.Visitor;
 
 @RequiredArgsConstructor
-public class If implements Statement {
+public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     @Getter
     private final Expression condition;
@@ -30,5 +34,10 @@ public class If implements Statement {
         }
 
         return Pair.of(new BadIf(condition, s1, s1), state);
+    }
+
+    @Override
+    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
     }
 }

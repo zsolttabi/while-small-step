@@ -1,10 +1,13 @@
 package ast.expression.abstract_operations;
 
+import app.SimpleASTNode;
 import ast.expression.Expression;
 import ast.expression.OpResult;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import utils.Tree;
+import utils.Visitor;
 
 import java.util.function.BiFunction;
 
@@ -30,6 +33,11 @@ public abstract class BinOp implements Expression {
         }
 
         return new BadBinOp(lhs, rhs);
+    }
+
+    @Override
+    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
     }
 
 }

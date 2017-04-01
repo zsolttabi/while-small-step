@@ -13,7 +13,7 @@ public class SimpleASTNode {
 
     @Override
     public String toString() {
-        return elemClazz.getSimpleName() + (getValue() == null? "" :  " Value = " + getValue());
+        return elemClazz.getSimpleName() + (getValue() == null? "" :  " \nValue = " + getValue());
     }
 
 }

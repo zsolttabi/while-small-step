@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Tree<T> {
@@ -17,7 +18,12 @@ public class Tree<T> {
         this.root = root;
     }
 
+    public int depth() {
+        return root.depth();
+    }
+
     public static class Node<T> {
+
         @Setter
         @Getter
         private T data;
@@ -58,6 +64,10 @@ public class Tree<T> {
 
         public boolean isLeaf() {
             return children.isEmpty();
+        }
+
+        public int depth() {
+            return isLeaf() ? 0 : 1 + children.stream().mapToInt(Node::depth).max().orElse(0);
         }
 
     }

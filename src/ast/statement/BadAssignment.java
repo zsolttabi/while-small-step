@@ -2,11 +2,12 @@ package ast.statement;
 
 import ast.State;
 import ast.expression.Expression;
+import ast.expression.Identifier;
 import utils.Pair;
 
 public class BadAssignment extends Assignment implements BadStatement {
 
-    BadAssignment(String identifier, Expression value) {
+    BadAssignment(Expression identifier, Expression value) {
         super(identifier, value);
     }
 

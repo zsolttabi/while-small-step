@@ -1,40 +1,56 @@
 package ast.statement;
 
+import app.SimpleASTNode;
 import ast.State;
 import ast.expression.Expression;
+import ast.expression.Identifier;
 import ast.expression.interfaces.BoolValue;
 import ast.expression.interfaces.IntValue;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import utils.Element;
 import utils.Pair;
+import utils.Tree;
+import utils.Visitor;
 
 @RequiredArgsConstructor
-public class Assignment implements Statement {
+public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     @Getter
-    private final String identifier;
+    private final Expression identifier;
     @Getter
     private final Expression value;
 
     @Override
     public Pair<Statement, State> step(State state) {
 
+        if(!(identifier instanceof Identifier)) {
+            return Pair.of(new BadAssignment(identifier, value), state);
+        }
+
         if (!(value instanceof Value)) {
             return Pair.of(new Assignment(identifier, value.step()), state);
         }
 
-        Value<?> currentValue = state.get(identifier);
+        Identifier id = (Identifier)identifier;
 
-        if (value instanceof BoolValue && currentValue instanceof BoolValue) {
-            state.set(identifier, (BoolValue)value);
+        Value<?> currentValue = state.get(id);
+        if (currentValue == null) {
+            state.set(id, (Value<?>) value);
+        } else if (value instanceof BoolValue && currentValue instanceof BoolValue) {
+            state.set(id, (BoolValue)value);
         } else if (value instanceof IntValue && currentValue instanceof IntValue) {
-            state.set(identifier, (IntValue)value);
+            state.set(id, (IntValue)value);
         } else {
-            return Pair.of(new BadAssignment(identifier, value), state);
+            return Pair.of(new BadAssignment(id, value), state);
         }
 
         return Pair.of(null, state);
     }
 
+    @Override
+    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
+    }
 }

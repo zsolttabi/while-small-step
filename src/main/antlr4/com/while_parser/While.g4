@@ -22,7 +22,7 @@ start returns [Statement value]:
 
 statement returns [Statement value]:
 
-    Identifier Assign e = expression { $value = new Assignment($Identifier.text, $e.value); }
+    id = expression Assign e = expression { $value = new Assignment($id.value, $e.value); }
 |
     s1 = statement SeqSeparator s2 = statement { $value = new Sequence($s1.value, $s2.value); }
 |
@@ -35,6 +35,8 @@ statement returns [Statement value]:
 
 expression returns [Expression value]:
 
+    Identifier { $value = new Identifier($Identifier.text); }
+|
     Int { $value = new IntLiteral(Integer.parseInt($Int.text)); }
 |
     e1 = expression Plus e2 = expression { $value = new Plus($e1.value, $e2.value); }
@@ -88,7 +90,7 @@ Not: '!' ;
 
 And: '&&' ;
 
-Int: '-'?('1'..'9') ('0'..'9')* ;
+Int: '0' | ('-'? ('1'..'9') ('0'..'9')*) ;
 
 Identifier: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
 

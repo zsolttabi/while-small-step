@@ -1,10 +1,13 @@
 package ast.expression.abstract_operations;
 
+import app.SimpleASTNode;
 import ast.expression.Expression;
 import ast.expression.OpResult;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import utils.Tree;
+import utils.Visitor;
 
 import java.util.function.Function;
 
@@ -25,6 +28,11 @@ public abstract class UnOp implements Expression {
         }
 
         return new BadUnOp(operand);
+    }
+
+    @Override
+    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+        return visitor.visit(this);
     }
 
 }
