@@ -1,8 +1,8 @@
 package ast;
 
 import app.SimpleASTNode;
-import ast.statement.BadStatement;
-import ast.statement.Statement;
+import ast.statement.interfaces.BadStatement;
+import ast.statement.interfaces.Statement;
 import lombok.Getter;
 import utils.Element;
 import utils.Pair;

@@ -2,11 +2,14 @@ package ast.statement;
 
 import app.SimpleASTNode;
 import ast.State;
+import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
+import ast.statement.bad_statements.BadAssignment;
+import ast.statement.interfaces.Statement;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -17,6 +20,10 @@ import utils.Visitor;
 @RequiredArgsConstructor
 public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
+    public static Assignment of(Expression identifier, Expression value) {
+        return identifier == null || value == null ? new BadAssignment(identifier, value) : new Assignment(identifier, value);
+    }
+
     @Getter
     private final Expression identifier;
     @Getter
@@ -24,6 +31,10 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
 
     @Override
     public Pair<Statement, State> step(State state) {
+
+        if (identifier instanceof BadExpression || value instanceof BadExpression) {
+            return Pair.of(new BadAssignment(identifier, value), state);
+        }
 
         if(!(identifier instanceof Identifier)) {
             return Pair.of(new BadAssignment(identifier, value), state);

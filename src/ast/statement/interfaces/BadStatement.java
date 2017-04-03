@@ -1,4 +1,4 @@
-package ast.statement;
+package ast.statement.interfaces;
 
 import ast.State;
 import utils.Pair;

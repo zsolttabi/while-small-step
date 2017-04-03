@@ -2,6 +2,7 @@ package ast.statement;
 
 import app.SimpleASTNode;
 import ast.State;
+import ast.statement.interfaces.Statement;
 import utils.Element;
 import utils.Pair;
 import utils.Tree;

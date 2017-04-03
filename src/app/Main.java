@@ -101,13 +101,7 @@ public class Main extends Application {
     }
 
     private AST setAst(String input) {
-        AST newAst;
-        try {
-            newAst = WhileParser.parseAst(input);
-        } catch (Exception e) {
-            return ast;
-        }
-        return ast = newAst;
+        return ast = WhileParser.parseAst(input);
     }
 
     private AST reduceAST() {

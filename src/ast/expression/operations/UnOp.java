@@ -3,8 +3,10 @@ package ast.expression.operations;
 import app.SimpleASTNode;
 import ast.State;
 import ast.expression.Identifier;
+import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
+import ast.expression.operations.bad_operations.BadUnOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import lombok.Getter;
@@ -49,6 +51,10 @@ public class UnOp<T, R> implements Expression {
 
     @Override
     public Expression step(State state) {
+
+        if (operand instanceof BadExpression) {
+            return new BadUnOp<>(operator, operand);
+        }
 
         if (!(operand instanceof Value || operand instanceof Identifier)) {
             return new UnOp<>(operator, operand.step(state), operandClass, resultCtor, evalFun);

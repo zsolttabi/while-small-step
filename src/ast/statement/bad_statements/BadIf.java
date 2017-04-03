@@ -1,7 +1,10 @@
-package ast.statement;
+package ast.statement.bad_statements;
 
 import ast.State;
 import ast.expression.interfaces.Expression;
+import ast.statement.If;
+import ast.statement.interfaces.BadStatement;
+import ast.statement.interfaces.Statement;
 import utils.Pair;
 
 public class BadIf extends If implements BadStatement {

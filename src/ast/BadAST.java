@@ -1,6 +1,6 @@
 package ast;
 
-import ast.statement.Statement;
+import ast.statement.interfaces.Statement;
 import utils.Pair;
 
 public class BadAST extends AST implements IAST {

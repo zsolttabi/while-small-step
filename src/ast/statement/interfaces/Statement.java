@@ -1,4 +1,4 @@
-package ast.statement;
+package ast.statement.interfaces;
 
 
 import app.SimpleASTNode;

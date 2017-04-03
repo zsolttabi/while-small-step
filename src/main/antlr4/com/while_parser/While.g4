@@ -3,6 +3,7 @@ grammar While;
 @parser::header {
     import ast.AST;
     import ast.statement.*;
+    import ast.statement.interfaces.*;
     import ast.expression.*;
     import ast.expression.operations.*;
     import ast.expression.interfaces.*;
@@ -24,29 +25,13 @@ start returns [Statement value]:
 
 statement returns [Statement value]:
 
-    id = expression Assign e = expression {
-        $value = $id.value == null || $e.value == null ?
-         new BadAssignment($id.value, $e.value) :
-         new Assignment($id.value, $e.value);
-    }
+    id = expression Assign e = expression { $value = Assignment.of($id.value, $e.value); }
 |
-    s1 = statement SeqSeparator s2 = statement {
-        $value = $s1.value == null || $s2.value == null ?
-         new BadSequence($s1.value, $s2.value) :
-         new Sequence($s1.value, $s2.value);
-    }
+    s1 = statement SeqSeparator s2 = statement { $value = Sequence.of($s1.value, $s2.value); }
 |
-    If e = expression Then s1 = statement Else s2 = statement {
-        $value = $e.value == null || $s1.value == null || $s2.value == null ?
-         new BadIf($e.value, $s1.value, $s2.value) :
-         new If($e.value, $s1.value, $s2.value);
-    }
+    IfT e = expression Then s1 = statement Else s2 = statement { $value = If.of($e.value, $s1.value, $s2.value); }
 |
-    While e = expression Do s = statement {
-        $value = $e.value == null || $s.value == null ?
-         new BadWhile($e.value, $s.value) :
-         new While($e.value, $s.value);
-     }
+    WhileT e = expression Do s = statement { $value = While.of($e.value, $s.value); }
 |
     Skip { $value  = new Skip(); }
 ;
@@ -76,13 +61,13 @@ expression returns [Expression value]:
     e1 = expression And e2 = expression  { $value = BinOp.boolOp($And.text, $e1.value, $e2.value, Boolean::logicalAnd); }
 ;
 
-If: 'if' ;
+IfT: 'if' ;
 
 Then: 'then' ;
 
 Else: 'else' ;
 
-While: 'while' ;
+WhileT: 'while' ;
 
 Do: 'do' ;
 

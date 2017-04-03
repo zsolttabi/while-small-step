@@ -2,9 +2,11 @@ package ast.expression.operations;
 
 import app.SimpleASTNode;
 import ast.State;
+import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
+import ast.expression.operations.bad_operations.BadBinOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import lombok.Getter;
@@ -59,6 +61,10 @@ public class BinOp<T, R> implements Expression {
 
     @Override
     public Expression step(State state) {
+
+        if(lhs instanceof BadExpression || rhs instanceof BadExpression) {
+            return new BadBinOp<>(operator, rhs, lhs);
+        }
 
         if (!(lhs instanceof Value || lhs instanceof Identifier)) {
             return new BinOp<>(operator, lhs.step(state), rhs, operandClass, resultCtor, evalFun);
