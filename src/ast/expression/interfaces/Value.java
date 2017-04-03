@@ -1,11 +1,12 @@
 package ast.expression.interfaces;
 
 import app.SimpleASTNode;
+import ast.expression.Expression;
 import utils.Element;
 import utils.Tree;
 import utils.Visitor;
 
-public interface Value<T> extends Element<Tree.Node<SimpleASTNode>> {
+public interface Value<T> extends Expression, Element<Tree.Node<SimpleASTNode>> {
 
     T getValue();
 

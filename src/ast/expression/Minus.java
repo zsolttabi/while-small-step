@@ -1,5 +1,6 @@
 package ast.expression;
 
+import ast.State;
 import ast.expression.abstract_operations.ArithBinOp;
 
 public class Minus extends ArithBinOp {
@@ -9,7 +10,7 @@ public class Minus extends ArithBinOp {
     }
 
     @Override
-    public Expression step() {
-        return step(Minus::new, (i1, i2) -> i1 - i2);
+    public Expression step(State state) {
+        return step(state, Minus::new, (i1, i2) -> i1 - i2);
     }
 }

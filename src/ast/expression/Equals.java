@@ -1,5 +1,6 @@
 package ast.expression;
 
+import ast.State;
 import ast.expression.abstract_operations.RelBinOp;
 
 public class Equals extends RelBinOp {
@@ -9,8 +10,8 @@ public class Equals extends RelBinOp {
     }
 
     @Override
-    public Expression step() {
-        return step(Equals::new, Object::equals);
+    public Expression step(State state) {
+        return step(state, Equals::new, Object::equals);
     }
 
 }

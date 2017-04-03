@@ -4,9 +4,9 @@ import app.SimpleASTNode;
 import ast.State;
 import ast.expression.Expression;
 import ast.expression.Identifier;
-import ast.expression.interfaces.BoolValue;
-import ast.expression.interfaces.IntValue;
 import ast.expression.interfaces.Value;
+import ast.expression.values.BoolValue;
+import ast.expression.values.IntValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -30,7 +30,7 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
         }
 
         if (!(value instanceof Value)) {
-            return Pair.of(new Assignment(identifier, value.step()), state);
+            return Pair.of(new Assignment(identifier, value.step(state)), state);
         }
 
         Identifier id = (Identifier)identifier;

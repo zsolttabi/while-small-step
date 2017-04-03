@@ -1,5 +1,6 @@
 package ast.expression.abstract_operations;
 
+import ast.State;
 import ast.expression.Expression;
 
 public class BadUnOp extends UnOp {
@@ -9,7 +10,7 @@ public class BadUnOp extends UnOp {
     }
 
     @Override
-    public Expression step() {
+    public Expression step(State state) {
         return this;
     }
 

@@ -1,5 +1,6 @@
 package ast.expression;
 
+import ast.State;
 import ast.expression.abstract_operations.BoolBinOp;
 
 public class And extends BoolBinOp {
@@ -9,7 +10,7 @@ public class And extends BoolBinOp {
     }
 
     @Override
-    public Expression step() {
-        return step(And::new, Boolean::logicalAnd);
+    public Expression step(State state) {
+        return step(state, And::new, Boolean::logicalAnd);
     }
 }

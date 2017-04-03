@@ -2,7 +2,6 @@ package utils;
 
 import app.SimpleASTNode;
 import ast.AST;
-import ast.expression.Expression;
 import ast.expression.Identifier;
 import ast.expression.abstract_operations.BinOp;
 import ast.expression.abstract_operations.UnOp;
@@ -19,7 +18,9 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(AST element) {
-        return element.getStm().accept(this);
+        return element.getStm() == null ?
+                new Node<>(new SimpleASTNode(element.getClass(), "EMPTY"), null) :
+                element.getStm().accept(this);
     }
 
     @Override

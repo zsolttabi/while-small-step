@@ -2,6 +2,7 @@ package ast.expression;
 
 
 import app.SimpleASTNode;
+import ast.State;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -15,7 +16,7 @@ public class Identifier implements Expression, Element<Tree.Node<SimpleASTNode>>
     private final String identifier;
 
     @Override
-    public Expression step() {
+    public Expression step(State state) {
         return this;
     }
 

@@ -1,22 +1,20 @@
 package ast.expression.values;
 
 
-import app.SimpleASTNode;
+import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.BoolValue;
+import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Tree;
-import utils.Visitor;
 
 @RequiredArgsConstructor
-public class BoolLiteral implements Expression, BoolValue {
+public class BoolValue implements Expression, Value<Boolean> {
 
     @Getter
     private final Boolean value;
 
     @Override
-    public Expression step() {
+    public Expression step(State state) {
         return this;
     }
 

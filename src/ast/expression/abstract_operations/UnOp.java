@@ -1,8 +1,9 @@
 package ast.expression.abstract_operations;
 
 import app.SimpleASTNode;
+import ast.State;
 import ast.expression.Expression;
-import ast.expression.OpResult;
+import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,20 @@ public abstract class UnOp implements Expression {
     @Getter
     private final Expression operand;
 
-    protected <T, V extends Value<T>, R> Expression step(Class<V> valueClass, Function<Expression, UnOp> unOpCtor, Function<T, R> evalFun) {
+    protected <T, V extends Value<T>, R> Expression step(State state,
+                                                         Class<V> valueClass,
+                                                         Function<R, Value<R>> resultCtor,
+                                                         Function<Expression, UnOp> unOpCtor,
+                                                         Function<T, R> evalFun) {
 
-        if (!(operand instanceof Value)) {
-            return unOpCtor.apply(operand.step());
+        if (!(operand instanceof Value || operand instanceof Identifier)) {
+            return unOpCtor.apply(operand.step(state));
         }
 
-        if (valueClass.isAssignableFrom(operand.getClass())) {
-            return new OpResult<>(evalFun.apply(valueClass.cast(operand).getValue()));
+        Value operVal = operand instanceof Identifier ? state.get((Identifier)operand) : (Value) operand;
+
+        if ((operVal.getValue() != null && valueClass.isAssignableFrom(operVal.getClass()))) {
+            return resultCtor.apply(evalFun.apply(valueClass.cast(operand).getValue()));
         }
 
         return new BadUnOp(operand);

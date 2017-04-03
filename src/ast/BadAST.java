@@ -10,12 +10,12 @@ public class BadAST extends AST implements IAST {
     }
 
     @Override
-    public IAST step() {
+    public BadAST step() {
         return this;
     }
 
     @Override
-    public IAST reduce() {
+    public BadAST reduce() {
         return this;
     }
 

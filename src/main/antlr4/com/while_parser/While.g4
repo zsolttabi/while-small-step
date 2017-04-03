@@ -37,7 +37,7 @@ expression returns [Expression value]:
 
     Identifier { $value = new Identifier($Identifier.text); }
 |
-    Int { $value = new IntLiteral(Integer.parseInt($Int.text)); }
+    Int { $value = new IntValue(Integer.parseInt($Int.text)); }
 |
     e1 = expression Plus e2 = expression { $value = new Plus($e1.value, $e2.value); }
 |
@@ -45,9 +45,9 @@ expression returns [Expression value]:
 |
     Minus a = expression { $value = new Negate($a.value); }
 |
-    True { $value = new BoolLiteral(true); }
+    True { $value = new BoolValue(true); }
 |
-    False { $value = new BoolLiteral(false); }
+    False { $value = new BoolValue(false); }
 |
     e1 = expression Equals e2 = expression { $value = new Equals($e1.value, $e2.value); }
 |

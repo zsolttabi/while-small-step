@@ -1,7 +1,8 @@
 package ast.expression.abstract_operations;
 
+import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.IntValue;
+import ast.expression.values.IntValue;
 
 import java.util.function.BiFunction;
 
@@ -11,8 +12,8 @@ public abstract class ArithBinOp extends BinOp {
         super(lhs, rhs);
     }
 
-    protected Expression step(BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Integer, Integer, Integer> evalFun) {
-        return step(IntValue.class, binOpCtor, evalFun);
+    protected Expression step(State state, BiFunction<Expression, Expression, BinOp> binOpCtor, BiFunction<Integer, Integer, Integer> evalFun) {
+        return step(state, IntValue.class, IntValue::new, binOpCtor, evalFun);
     }
 
 }

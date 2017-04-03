@@ -10,12 +10,12 @@ public class ReducedAST extends AST implements IAST {
     }
 
     @Override
-    public IAST step() {
+    public ReducedAST step() {
         return this;
     }
 
     @Override
-    public IAST reduce() {
+    public ReducedAST reduce() {
         return this;
     }
 }

@@ -1,7 +1,8 @@
 package ast.expression;
 
+import ast.State;
 import ast.expression.abstract_operations.UnOp;
-import ast.expression.interfaces.BoolValue;
+import ast.expression.values.BoolValue;
 
 public class Not extends UnOp {
 
@@ -10,8 +11,8 @@ public class Not extends UnOp {
     }
 
     @Override
-    public Expression step() {
-        return step(BoolValue.class, Not::new, b -> !b);
+    public Expression step(State state) {
+        return step(state, BoolValue.class, BoolValue::new, Not::new, b -> !b);
     }
 
 }

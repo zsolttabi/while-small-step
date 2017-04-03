@@ -3,8 +3,8 @@ package ast.statement;
 import app.SimpleASTNode;
 import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.BoolValue;
 import ast.expression.interfaces.Value;
+import ast.expression.values.BoolValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -26,7 +26,7 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
     public Pair<Statement, State> step(State state) {
 
         if (!(condition instanceof Value)) {
-            return Pair.of(new If(condition.step(), s1, s2), state);
+            return Pair.of(new If(condition.step(state), s1, s2), state);
         }
 
         if (condition instanceof BoolValue) {

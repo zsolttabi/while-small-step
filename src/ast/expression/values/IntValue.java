@@ -1,22 +1,20 @@
 package ast.expression.values;
 
 
-import app.SimpleASTNode;
+import ast.State;
 import ast.expression.Expression;
-import ast.expression.interfaces.IntValue;
+import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Tree;
-import utils.Visitor;
 
 @RequiredArgsConstructor
-public class IntLiteral implements Expression, IntValue {
+public class IntValue implements Expression, Value<Integer> {
 
     @Getter
     private final Integer value;
 
     @Override
-    public Expression step() {
+    public Expression step(State state) {
         return this;
     }
 

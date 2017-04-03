@@ -1,11 +1,9 @@
 package ast.expression;
 
-import app.SimpleASTNode;
+import ast.State;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Tree;
-import utils.Visitor;
 
 @RequiredArgsConstructor
 public class OpResult<T> implements Expression, Value<T> {
@@ -14,7 +12,7 @@ public class OpResult<T> implements Expression, Value<T> {
     private final T value;
 
     @Override
-    public Expression step() {
+    public Expression step(State state) {
         return this;
     }
 

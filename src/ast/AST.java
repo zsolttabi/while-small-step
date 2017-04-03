@@ -27,7 +27,7 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
     }
 
     @Override
-    public IAST step() {
+    public AST step() {
 
         Pair<Statement, State> newConfig = stm.step(state);
 
@@ -38,9 +38,9 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
         return newConfig.getFirst() == null ? new ReducedAST(newConfig) : new AST(newConfig);
     }
 
-    public IAST reduce() {
+    public AST reduce() {
 
-        IAST newAST = step();
+        AST newAST = step();
         while (!(newAST instanceof ReducedAST) && !(newAST instanceof BadAST)) {
             newAST = newAST.step();
         }
