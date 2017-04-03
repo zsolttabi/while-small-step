@@ -2,7 +2,10 @@ package utils;
 
 import app.SimpleASTNode;
 import ast.AST;
+import ast.BadAST;
 import ast.expression.Identifier;
+import ast.expression.abstract_operations.BadBinOp;
+import ast.expression.abstract_operations.BadUnOp;
 import ast.expression.abstract_operations.BinOp;
 import ast.expression.abstract_operations.UnOp;
 import ast.expression.interfaces.Value;
@@ -12,79 +15,103 @@ import utils.Tree.Node;
 
 public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
-    private static Node<SimpleASTNode> makeSimple(Class<?> clazz) {
-        return new Node<>(new SimpleASTNode(clazz, null), null);
+    private static Node<SimpleASTNode> makeSimple(Class<?> clazz, boolean isBad) {
+        return new Node<>(new SimpleASTNode(clazz, null, isBad), null);
     }
 
     @Override
     public Node<SimpleASTNode> visit(AST element) {
         return element.getStm() == null ?
-                new Node<>(new SimpleASTNode(element.getClass(), "EMPTY"), null) :
+                new Node<>(new SimpleASTNode(element.getClass(), "EMPTY", element instanceof BadAST), null) :
                 element.getStm().accept(this);
     }
 
     @Override
     public Node<SimpleASTNode> visit(Skip element) {
-        return makeSimple(element.getClass());
+        return makeSimple(element.getClass(), false);
     }
 
     @Override
     public Node<SimpleASTNode> visit(Sequence element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getS1().accept(this));
-        node.addChild(element.getS2().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof BadSequence);
+        if (element.getS1() != null) {
+            node.addChild(element.getS1().accept(this));
+        }
+        if (element.getS2() != null) {
+            node.addChild(element.getS2().accept(this));
+        }
         return node;
     }
 
     @Override
     public Node<SimpleASTNode> visit(Assignment element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getIdentifier().accept(this));
-        node.addChild(element.getValue().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof  BadAssignment);
+        if (element.getIdentifier() != null) {
+            node.addChild(element.getIdentifier().accept(this));
+        }
+        if (element.getValue() != null) {
+            node.addChild(element.getValue().accept(this));
+        }
         return node;
     }
 
 
     @Override
     public Node<SimpleASTNode> visit(If element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getCondition().accept(this));
-        node.addChild(element.getS1().accept(this));
-        node.addChild(element.getS2().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof BadIf);
+        if (element.getCondition() != null) {
+            node.addChild(element.getCondition().accept(this));
+        }
+        if (element.getS1() != null) {
+            node.addChild(element.getS1().accept(this));
+        }
+        if (element.getS2() != null) {
+            node.addChild(element.getS2().accept(this));
+        }
         return node;
     }
 
     @Override
     public Node<SimpleASTNode> visit(While element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getCondition().accept(this));
-        node.addChild(element.getS().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof BadWhile);
+        if (element.getCondition() != null) {
+            node.addChild(element.getCondition().accept(this));
+        }
+        if (element.getS() != null) {
+            node.addChild(element.getS().accept(this));
+        }
         return node;
     }
 
     @Override
     public Node<SimpleASTNode> visit(BinOp element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getLhs().accept(this));
-        node.addChild(element.getRhs().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof BadBinOp);
+        if (element.getLhs() != null) {
+            node.addChild(element.getLhs().accept(this));
+        }
+        if (element.getRhs() != null) {
+            node.addChild(element.getRhs().accept(this));
+        }
         return node;
     }
 
     @Override
     public Node<SimpleASTNode> visit(UnOp element) {
-        val node = makeSimple(element.getClass());
-        node.addChild(element.getOperand().accept(this));
+        val node = makeSimple(element.getClass(), element instanceof BadUnOp);
+        if (element.getOperand() != null) {
+            node.addChild(element.getOperand().accept(this));
+        }
         return node;
     }
 
     @Override
     public Node<SimpleASTNode> visit(Value<?> element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getValue().toString()), null);
+        return new Node<>(new SimpleASTNode(element.getClass(), element.getValue() == null ? "" : element.getValue().toString(), false), null);
     }
 
     @Override
     public Node<SimpleASTNode> visit(Identifier element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getIdentifier()), null);
+        return new Node<>(new SimpleASTNode(element.getClass(), element.getIdentifier(), false), null);
     }
 
 }

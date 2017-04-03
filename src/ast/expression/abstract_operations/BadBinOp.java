@@ -2,11 +2,16 @@ package ast.expression.abstract_operations;
 
 import ast.State;
 import ast.expression.Expression;
+import ast.expression.interfaces.Value;
 
-public class BadBinOp extends BinOp {
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-    BadBinOp(Expression lhs, Expression rhs) {
-        super(lhs, rhs);
+public class BadBinOp<T, V extends Value<T>, R> extends BinOp<T, V, R> {
+
+
+    public BadBinOp(String operator, Expression lhs, Expression rhs) {
+        super(operator, lhs, rhs, null, null, null);
     }
 
     @Override

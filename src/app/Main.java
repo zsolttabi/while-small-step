@@ -4,14 +4,16 @@ import ast.AST;
 import com.google.code.javafxgraph.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.antlr4.com.while_parser.WhileParser;
 import utils.SimpleTreeBuilder;
@@ -25,6 +27,7 @@ import java.util.function.Function;
 public class Main extends Application {
 
     private BorderPane mainPane;
+    private String example = "x := 0;\nwhile x < 5 do\n    x :=  x + 1";
 
     private static Tree<SimpleASTNode> createSimpleTree(AST ast) {
         return new Tree<>(new SimpleTreeBuilder().visit(ast));
@@ -37,6 +40,7 @@ public class Main extends Application {
     }
 
     private static <T> FXNode drawNode(Node<T> node,
+                                       Function<T, String> dataToColor,
                                         Function<T, String> dataToString,
                                         Point2D position,
                                         double distanceX,
@@ -46,22 +50,23 @@ public class Main extends Application {
 
         Button button = new Button();
         button.setText(dataToString.apply(node.getData()));
+        button.setStyle("-fx-text-fill: " + dataToColor.apply(node.getData()) + ";");
         FXNode fxNode = nodeBuilder.node(button).x(position.getX()).y(position.getY()).build();
 
         for (int i = 0; i < node.size(); ++i) {
             Point2D childPos = calculateChildPosition(i, node.size(), position, distanceX * node.depth(), distanceY);
-            FXNode childFxNode = drawNode(node.getChild(i), dataToString, childPos, distanceX, distanceY, nodeBuilder, edgeBuilder);
+            FXNode childFxNode = drawNode(node.getChild(i), dataToColor, dataToString, childPos, distanceX, distanceY, nodeBuilder, edgeBuilder);
             edgeBuilder.source(fxNode).destination(childFxNode).build();
         }
 
         return fxNode;
     }
 
-    private static <T> FXGraph drawTree(Tree<T> tree, Function<T, String> dataToString, Point2D position, double distanceX, double distanceY) {
+    private static <T> FXGraph drawTree(Tree<T> tree, Function<T, String> dataToColor, Function<T, String> dataToString, Point2D position, double distanceX, double distanceY) {
         FXGraph graph = FXGraphBuilder.create().build();
         FXNodeBuilder theNodeBuilder = new FXNodeBuilder(graph);
         FXEdgeBuilder theEdgeBuilder = new FXEdgeBuilder(graph);
-        drawNode(tree.getRoot(), dataToString, position, distanceX, distanceY, theNodeBuilder, theEdgeBuilder);
+        drawNode(tree.getRoot(), dataToColor, dataToString, position, distanceX, distanceY, theNodeBuilder, theEdgeBuilder);
         return graph;
     }
 
@@ -73,17 +78,11 @@ public class Main extends Application {
         aStage.setMinHeight(700);
         aStage.setTitle(getClass().getSimpleName());
 
-        String example = "x := 0; while x < 4 do x :=  x + 1";
-        ast = WhileParser.parseAst(example);
-
-        Button stepButton = new Button("Step");
-        stepButton.setOnAction(e -> mainPane.setCenter(center()));
-
         mainPane = new BorderPane();
         mainPane.setTop(top());
         mainPane.setLeft(left());
         mainPane.setRight(right());
-        mainPane.setCenter(center());
+        mainPane.setCenter(center(setAst(example)));
 
         Scene scene = new Scene(mainPane);
         scene.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
@@ -101,45 +100,68 @@ public class Main extends Application {
         return ast = ast.step();
     }
 
+    private AST setAst(String input) {
+        AST newAst;
+        try {
+            newAst = WhileParser.parseAst(input);
+        } catch (Exception e) {
+            return ast;
+        }
+        return ast = newAst;
+    }
+
+    private AST reduceAST() {
+        return ast = ast.reduce();
+    }
+
     private HBox top() {
+
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #2c2e33; -fx-border-width: 0 0 3 0; -fx-border-color: #ccc7cb #ccc7cb #ccc7cb #ccc7cb;");
-
-        Button buttonCurrent = new Button("Current");
-        buttonCurrent.setPrefSize(100, 20);
-
-        Button buttonProjected = new Button("Projected");
-        buttonProjected.setPrefSize(100, 20);
-        hbox.getChildren().addAll(buttonCurrent, buttonProjected);
 
         return hbox;
     }
 
     private VBox left() {
 
+        Button stepButton = new Button("Step");
+        stepButton.setPrefSize(120, 20);
+        stepButton.setOnAction(e -> mainPane.setCenter(center(stepAst())));
+
+        Button reduceButton = new Button("Reduce");
+        reduceButton.setPrefSize(120, 20);
+        reduceButton.setOnAction(e -> mainPane.setCenter(center(reduceAST())));
+
+        HBox buttonBox = new HBox();
+        buttonBox.setPadding(new Insets(10, 15, 10, 15));
+        buttonBox.setSpacing(10);
+        buttonBox.getChildren().addAll(stepButton, reduceButton);
+
         TextArea textArea = new TextArea();
         textArea.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         textArea.setWrapText(false);
         textArea.setPrefColumnCount(30);
         textArea.setPrefRowCount(35);
-        textArea.setStyle("-fx-background-color: #ffffff;-fx-control-inner-background: #ffffff;");
+        textArea.setText(example);
+        textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!oldValue.equals(newValue)) {
+                mainPane.setCenter(center(setAst(newValue)));
+            }
+        });
 
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         vbox.setStyle("-fx-background-color: #2c2e33;  -fx-border-width: 0 3 0 0; -fx-border-color: #ccc7cb #ccc7cb #ccc7cb #ccc7cb;");
-        vbox.getChildren().add(textArea);
+        vbox.getChildren().addAll(buttonBox, textArea);
+
         return vbox;
     }
 
-    private GridPane center() {
-        Tree<SimpleASTNode> astTree = createSimpleTree(ast);
+    private ScrollPane center(AST ast) {
 
-        FXGraph fxGraph = drawTree(astTree, SimpleASTNode::toString, new Point2D.Double(500, 200), 50, 50);
-
-        drawTree(createSimpleTree(stepAst()), SimpleASTNode::toString, new Point2D.Double(500, 200), 50, 50);
 
         GridPane grid = new GridPane();
         grid.setStyle("-fx-background-color: #4e5156;");
@@ -148,27 +170,12 @@ public class Main extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 10));
 
-        // Category in column 2, row 1
-        Text category = new Text("Sales:");
-        category.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        grid.add(category, 1, 0);
+        FXGraph fxGraph = drawTree(createSimpleTree(ast),
+                s -> s.isBad() ? "#ff0000" : "Black", SimpleASTNode::toString,
+                new Point2D.Double(500, 100), 50, 50);
+        fxGraph.setStyle("-fx-background-color: #4e5156;");
 
-        // Title in column 3, row 1
-        Text chartTitle = new Text("Current Year");
-        chartTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        grid.add(chartTitle, 2, 0);
-
-        // Subtitle in columns 2-3, row 2
-        Text chartSubtitle = new Text("Goods and Services");
-        grid.add(chartSubtitle, 1, 1, 2, 1);
-
-        // Hous
-        // Right label in column 4 (top), row 3
-        Text servicesPercent = new Text("Services\n20%");
-        GridPane.setValignment(servicesPercent, VPos.TOP);
-        grid.add(servicesPercent, 3, 2);
-
-        return grid;
+        return fxGraph;
     }
 
     public static void main(String[] args) {

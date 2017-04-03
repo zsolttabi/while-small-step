@@ -25,6 +25,10 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
     @Override
     public Pair<Statement, State> step(State state) {
 
+        if (identifier == null || value == null) {
+            return Pair.of(new BadAssignment(identifier, value), state);
+        }
+
         if(!(identifier instanceof Identifier)) {
             return Pair.of(new BadAssignment(identifier, value), state);
         }

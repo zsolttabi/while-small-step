@@ -23,6 +23,9 @@ public abstract class UnOp implements Expression {
                                                          Function<R, Value<R>> resultCtor,
                                                          Function<Expression, UnOp> unOpCtor,
                                                          Function<T, R> evalFun) {
+        if (operand == null) {
+            return new BadUnOp(operand);
+        }
 
         if (!(operand instanceof Value || operand instanceof Identifier)) {
             return unOpCtor.apply(operand.step(state));

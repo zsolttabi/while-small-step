@@ -20,6 +20,10 @@ public class Sequence implements Statement, Element<Tree.Node<SimpleASTNode>> {
     @Override
     public Pair<Statement, State> step(State state) {
 
+        if (s1 == null || s2 == null) {
+            return Pair.of(new BadSequence(s1, s2), state);
+        }
+
         Pair<Statement, State> s1NewConfig = s1.step(state);
 
         if (s1NewConfig.getFirst() instanceof BadStatement) {
