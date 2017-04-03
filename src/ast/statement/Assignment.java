@@ -2,7 +2,7 @@ package ast.statement;
 
 import app.SimpleASTNode;
 import ast.State;
-import ast.expression.Expression;
+import ast.expression.interfaces.Expression;
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
 import ast.expression.values.BoolValue;
@@ -24,10 +24,6 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
 
     @Override
     public Pair<Statement, State> step(State state) {
-
-        if (identifier == null || value == null) {
-            return Pair.of(new BadAssignment(identifier, value), state);
-        }
 
         if(!(identifier instanceof Identifier)) {
             return Pair.of(new BadAssignment(identifier, value), state);

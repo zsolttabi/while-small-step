@@ -4,10 +4,10 @@ import app.SimpleASTNode;
 import ast.AST;
 import ast.BadAST;
 import ast.expression.Identifier;
-import ast.expression.abstract_operations.BadBinOp;
-import ast.expression.abstract_operations.BadUnOp;
-import ast.expression.abstract_operations.BinOp;
-import ast.expression.abstract_operations.UnOp;
+import ast.expression.operations.BadBinOp;
+import ast.expression.operations.BadUnOp;
+import ast.expression.operations.BinOp;
+import ast.expression.operations.UnOp;
 import ast.expression.interfaces.Value;
 import ast.statement.*;
 import lombok.val;
@@ -18,6 +18,11 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     private static Node<SimpleASTNode> makeSimple(Class<?> clazz, boolean isBad) {
         return new Node<>(new SimpleASTNode(clazz, null, isBad), null);
     }
+
+    private static Node<SimpleASTNode> makeSimple(Class<?> clazz, String value, boolean isBad) {
+        return new Node<>(new SimpleASTNode(clazz, value, isBad), null);
+    }
+
 
     @Override
     public Node<SimpleASTNode> visit(AST element) {
@@ -85,7 +90,7 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(BinOp element) {
-        val node = makeSimple(element.getClass(), element instanceof BadBinOp);
+        val node = makeSimple(element.getClass(), element.getOperator(), element instanceof BadBinOp);
         if (element.getLhs() != null) {
             node.addChild(element.getLhs().accept(this));
         }

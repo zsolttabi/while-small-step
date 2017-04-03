@@ -4,6 +4,8 @@ grammar While;
     import ast.AST;
     import ast.statement.*;
     import ast.expression.*;
+    import ast.expression.operations.*;
+    import ast.expression.interfaces.*;
     import ast.expression.values.*;
 }
 
@@ -55,23 +57,23 @@ expression returns [Expression value]:
 |
     Int { $value = new IntValue(Integer.parseInt($Int.text)); }
 |
-    e1 = expression Plus e2 = expression { $value = BinOp.of($Plus.text, $e1.value, $e2.value, Integer.class, IntValue::new, Integer::sum); }
+    e1 = expression Plus e2 = expression { $value = BinOp.arithOp($Plus.text, $e1.value, $e2.value, Integer::sum); }
 |
-    e1 = expression Minus e2 = expression { $value = BinOp.of($Minus.text, $e1.value, $e2.value, Integer.class, IntValue::new,  (i1, i2) -> i1 - i2); }
+    e1 = expression Minus e2 = expression { $value = BinOp.arithOp($Minus.text, $e1.value, $e2.value, (i1, i2) -> i1 - i2); }
 |
-    Minus a = expression { $value = new Negate($a.value); }
+    Minus a = expression { $value = UnOp.intOp($Minus.text, $a.value,  i -> -1 * i); }
 |
     True { $value = new BoolValue(true); }
 |
     False { $value = new BoolValue(false); }
 |
-    e1 = expression Equals e2 = expression { $value = BinOp.of(Equals.text, $e1.value, $e2.value, Integer.class, BoolValue::new, Object::equals); }
+    e1 = expression Equals e2 = expression { $value = BinOp.intRelOp($Equals.text, $e1.value, $e2.value, Object::equals); }
 |
-    e1 = expression LessThen e2 = expression { $value = BinOp.of(LessThen.text, $e1.value, $e2.value, Integer.class, BoolValue::new, (i1,i2) -> i1 < i2); }
+    e1 = expression LessThen e2 = expression { $value = BinOp.intRelOp($LessThen.text, $e1.value, $e2.value, (i1,i2) -> i1 < i2); }
 |
-    Not e = expression { $value = new Not($e.value); }
+    Not e = expression { $value = UnOp.boolOp($Not.text, $e.value, b -> !b); }
 |
-    e1 = expression And e2 = expression  { $value = BinOp.of(And.text, e1.value, $e2.value, Boolean.class, BoolValue::new, Boolean::logicalAnd); }
+    e1 = expression And e2 = expression  { $value = BinOp.boolOp($And.text, $e1.value, $e2.value, Boolean::logicalAnd); }
 ;
 
 If: 'if' ;

@@ -2,8 +2,8 @@ package utils;
 
 import ast.AST;
 import ast.expression.Identifier;
-import ast.expression.abstract_operations.BinOp;
-import ast.expression.abstract_operations.UnOp;
+import ast.expression.operations.BinOp;
+import ast.expression.operations.UnOp;
 import ast.expression.interfaces.Value;
 import ast.statement.*;
 

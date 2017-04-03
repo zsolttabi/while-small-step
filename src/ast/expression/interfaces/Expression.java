@@ -1,4 +1,4 @@
-package ast.expression;
+package ast.expression.interfaces;
 
 
 import app.SimpleASTNode;

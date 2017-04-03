@@ -1,7 +1,7 @@
 package ast.statement;
 
 import ast.State;
-import ast.expression.Expression;
+import ast.expression.interfaces.Expression;
 import utils.Pair;
 
 public class BadWhile extends While implements BadStatement {

@@ -2,7 +2,7 @@ package ast.statement;
 
 import app.SimpleASTNode;
 import ast.State;
-import ast.expression.Expression;
+import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
 import ast.expression.values.BoolValue;
 import lombok.Getter;
@@ -24,10 +24,6 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     @Override
     public Pair<Statement, State> step(State state) {
-
-        if (condition == null || s1 == null || s2 == null) {
-            return Pair.of(new BadIf(condition, s1, s2), state);
-        }
 
         if (!(condition instanceof Value)) {
             return Pair.of(new If(condition.step(state), s1, s2), state);

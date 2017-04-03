@@ -2,7 +2,7 @@ package ast.expression.values;
 
 
 import ast.State;
-import ast.expression.Expression;
+import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

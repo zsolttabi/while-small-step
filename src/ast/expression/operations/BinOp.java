@@ -1,11 +1,12 @@
-package ast.expression.abstract_operations;
+package ast.expression.operations;
 
 import app.SimpleASTNode;
 import ast.State;
-import ast.expression.And;
-import ast.expression.Expression;
+import ast.expression.interfaces.Expression;
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
+import ast.expression.values.BoolValue;
+import ast.expression.values.IntValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Tree;
@@ -15,12 +16,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
-public class BinOp<T, V extends Value<T>, R> implements Expression {
+public class BinOp<T, R> implements Expression {
 
-    public static <T, V extends Value<T>, R> BinOp<T, V, R> of(String operator,
+    public static <T, R> BinOp<T, R> of(String operator,
                                                                         Expression lhs,
                                                                         Expression rhs,
-                                                                        Class<V> operandClass,
+                                                                        Class<? extends Value<T>> operandClass,
                                                                         Function<R, Value<R>> resultCtor,
                                                                         BiFunction<T, T, R> evalFun) {
 
@@ -32,6 +33,19 @@ public class BinOp<T, V extends Value<T>, R> implements Expression {
                 evalFun);
     }
 
+    public static BinOp<Integer, Integer> arithOp(String operator, Expression lhs, Expression rhs, BiFunction<Integer, Integer, Integer> evalFun) {
+        return BinOp.of(operator, lhs, rhs, IntValue.class, IntValue::new, evalFun);
+    }
+
+    public static BinOp<Boolean, Boolean> boolOp(String operator, Expression lhs, Expression rhs, BiFunction<Boolean, Boolean, Boolean> evalFun) {
+        return BinOp.of(operator, lhs, rhs, BoolValue.class, BoolValue::new, evalFun);
+    }
+
+    public static BinOp<Integer, Boolean> intRelOp(String operator, Expression lhs, Expression rhs, BiFunction<Integer, Integer, Boolean> evalFun) {
+        return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::new, evalFun);
+    }
+
+
     @Getter
     private final String operator;
     @Getter
@@ -39,7 +53,7 @@ public class BinOp<T, V extends Value<T>, R> implements Expression {
     @Getter
     private final Expression rhs;
 
-    private final Class<V> operandClass;
+    private final Class<? extends Value<T>> operandClass;
     private final Function<R, Value<R>> resultCtor;
     private final BiFunction<T, T, R> evalFun;
 
@@ -64,29 +78,6 @@ public class BinOp<T, V extends Value<T>, R> implements Expression {
         return new BadBinOp(operator, lhs, rhs);
     }
 
-    protected <T, V extends Value<T>, R> Expression step(State state,
-                                                         Class<V> valueClass,
-                                                         Function<R, Value<R>> resultCtor,
-                                                         BiFunction<Expression, Expression, BinOp> binOpCtor,
-                                                         BiFunction<T, T, R> evalFun) {
-
-        if (!(lhs instanceof Value || lhs instanceof Identifier)) {
-            return binOpCtor.apply(lhs.step(state), rhs);
-        }
-
-        if (!(rhs instanceof Value || rhs instanceof Identifier)) {
-            return binOpCtor.apply(lhs, rhs.step(state));
-        }
-
-        Value lVal = lhs instanceof Identifier ? state.get((Identifier)lhs) : (Value) lhs;
-        Value rVal = rhs instanceof Identifier ? state.get((Identifier)rhs) : (Value) rhs;
-
-        if (lVal != null && rVal != null && valueClass.isAssignableFrom(lVal.getClass()) && valueClass.isAssignableFrom(rVal.getClass())) {
-            return resultCtor.apply(evalFun.apply(valueClass.cast(lVal).getValue(), valueClass.cast(rVal).getValue()));
-        }
-
-        return new BadBinOp(operator, lhs, rhs);
-    }
 
     @Override
     public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
