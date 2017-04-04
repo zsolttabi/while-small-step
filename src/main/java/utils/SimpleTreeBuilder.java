@@ -37,12 +37,12 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(Skip element) {
-        return makeSimple(element.getClass(), false);
+        return makeSimple(element.getClass(), "SKIP", false);
     }
 
     @Override
     public Node<SimpleASTNode> visit(Sequence element) {
-        val node = makeSimple(element.getClass(), element instanceof BadSequence);
+        val node = makeSimple(element.getClass(), ";", element instanceof BadSequence);
         if (element.getS1() != null) {
             node.addChild(element.getS1().accept(this));
         }
@@ -54,7 +54,7 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(Assignment element) {
-        val node = makeSimple(element.getClass(), element instanceof BadAssignment);
+        val node = makeSimple(element.getClass(), ":=", element instanceof BadAssignment);
         if (element.getIdentifier() != null) {
             node.addChild(element.getIdentifier().accept(this));
         }
@@ -67,7 +67,7 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(If element) {
-        val node = makeSimple(element.getClass(), element instanceof BadIf);
+        val node = makeSimple(element.getClass(), "if", element instanceof BadIf);
         if (element.getCondition() != null) {
             node.addChild(element.getCondition().accept(this));
         }
@@ -82,7 +82,7 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(While element) {
-        val node = makeSimple(element.getClass(), element instanceof BadWhile);
+        val node = makeSimple(element.getClass(), "while", element instanceof BadWhile);
         if (element.getCondition() != null) {
             node.addChild(element.getCondition().accept(this));
         }

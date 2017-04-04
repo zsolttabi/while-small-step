@@ -14,7 +14,7 @@ public class SimpleASTNode {
 
     @Override
     public String toString() {
-        return elemClazz.getSimpleName() + (getValue() == null? "" :  " \nValue = " + getValue());
+        return getValue() == null ? elemClazz.getSimpleName() :  getValue();
     }
 
     public boolean isBad() {
