@@ -29,9 +29,9 @@ statement returns [Statement value]:
 |
     s1 = statement SeqSeparator s2 = statement { $value = Sequence.of($s1.value, $s2.value); }
 |
-    IfT e = expression Then s1 = statement Else s2 = statement { $value = If.of($e.value, $s1.value, $s2.value); }
+    IF e = expression Then s1 = statement Else s2 = statement Fi { $value = If.of($e.value, $s1.value, $s2.value); }
 |
-    WhileT e = expression Do s = statement { $value = While.of($e.value, $s.value); }
+    WHILE e = expression Do s = statement Od { $value = While.of($e.value, $s.value); }
 |
     Skip { $value  = new Skip(); }
 ;
@@ -61,15 +61,19 @@ expression returns [Expression value]:
     e1 = expression And e2 = expression  { $value = BinOp.boolOp($And.text, $e1.value, $e2.value, Boolean::logicalAnd); }
 ;
 
-IfT: 'if' ;
+IF: 'if' ;
+
+Fi: 'fi';
 
 Then: 'then' ;
 
 Else: 'else' ;
 
-WhileT: 'while' ;
+WHILE: 'while' ;
 
 Do: 'do' ;
+
+Od: 'od';
 
 Assign: ':=' ;
 
