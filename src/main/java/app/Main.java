@@ -3,16 +3,22 @@ package app;
 import antlr4.com.while_parser.WhileParser;
 import ast.AST;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -27,7 +33,7 @@ public class Main extends Application {
 
     private static final String BACK_COLOR = "#2c2e33";
     private static final String BORDER_COLOR = "#ccc7cb";
-    private static final String LIGHT_BACK_COLOR = " #686c6d";
+    private static final String LIGHT_BACK_COLOR = "#686c6d";
     private BorderPane mainPane;
     private String example = "x := 0;\nwhile x < 5 do\n  x :=  x + 1\nod";
     private AST ast;
@@ -42,22 +48,44 @@ public class Main extends Application {
         TreeLayout<SimpleASTNode> treeLayout = new TreeLayout<>(tree,
                 new SimpleAstNodeExtentProvider(30, 30),
                 new DefaultConfiguration<>(50.0, 10.0));
-        TreePane<SimpleASTNode> simpleASTNodeTreePane = new TreePane<>(treeLayout,
+
+        return new TreePane<>(treeLayout,
                 SimpleASTNode::toString,
                 s -> s.isBad() ? "#FF0000" : "#000000",
                 Font.font("Courier New", FontWeight.BOLD, 14));
-        simpleASTNodeTreePane.setStyle("-fx-background-color:" + LIGHT_BACK_COLOR);
-        return simpleASTNodeTreePane;
     }
 
     private void refreshCenter() {
-        ScrollPane scrollPane = new ScrollPane(getTreePane());
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setStyle("-fx-focus-color: transparent;");
-        mainPane.setCenter(scrollPane);
+//        TreePane<SimpleASTNode> node = getTreePane();
+//        StackPane nodeContainer = new StackPane(node);
+//        nodeContainer.setPadding(new Insets(20, 20, 20, 20));
+//
+//
+//        ScrollPane scrollPane = new ScrollPane(nodeContainer);
+//        scrollPane.viewportBoundsProperty().addListener(
+//                (observableValue, oldBounds, newBounds) -> nodeContainer.setPrefSize(
+//                        Math.max(node.getBoundsInParent().getMaxX(), newBounds.getWidth()),
+//                        Math.max(node.getBoundsInParent().getMaxY(), newBounds.getHeight())
+//                ));
+//
+//
+//        final ToggleButton scale = new ToggleButton("Scale");
+//        scale.setOnAction(actionEvent -> {
+//            if (scale.isSelected()) {
+//                node.setScaleX(3); node.setScaleY(3);
+//            } else {
+//                node.setScaleX(1); node.setScaleY(1);
+//            }
+//            // runlater as we want to size the container after a layout pass has been performed on the scaled node.
+//            Platform.runLater(() -> nodeContainer.setPrefSize(
+//                    Math.max(nodeContainer.getBoundsInParent().getMaxX(), scrollPane.getViewportBounds().getWidth()),
+//                    Math.max(nodeContainer.getBoundsInParent().getMaxY(), scrollPane.getViewportBounds().getHeight())
+//            ));
+//        });
 
+        mainPane.setCenter(getTreePane());
     }
+
 
     @Override
     public void start(Stage aStage) throws Exception {
@@ -166,6 +194,7 @@ public class Main extends Application {
         textArea.setWrapText(false);
         textArea.setPrefColumnCount(30);
         textArea.setPrefRowCount(35);
+
         textArea.setText(example);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue)) {
