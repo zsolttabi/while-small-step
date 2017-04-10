@@ -4,6 +4,9 @@
       <root url="jar://$PROJECT_DIR$/lib/antlr-4.6-complete.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/treelayout-master/treelayout-master/org.abego.treelayout/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/treelayout-master/treelayout-master/org.abego.treelayout/src/test/java" />
+    </SOURCES>
   </library>
 </component>
