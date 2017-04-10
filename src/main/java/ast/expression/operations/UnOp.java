@@ -56,14 +56,14 @@ public class UnOp<T, R> implements Expression {
             return new BadUnOp<>(operator, operand);
         }
 
-        if (!(operand instanceof Value || operand instanceof Identifier)) {
+        if (!(operand instanceof Value)) {
             return new UnOp<>(operator, operand.step(state), operandClass, resultCtor, evalFun);
         }
 
-        Value operVal = operand instanceof Identifier ? state.get((Identifier)operand) : (Value) operand;
+        Value val = (Value) operand;
 
-        if ((operVal.getValue() != null && operandClass.isAssignableFrom(operVal.getClass()))) {
-            return resultCtor.apply(evalFun.apply(operandClass.cast(operand).getValue()));
+        if ((operandClass.isAssignableFrom(val.getClass()))) {
+            return resultCtor.apply(evalFun.apply(operandClass.cast(val).getValue()));
         }
 
         return new BadUnOp(operator, operand);

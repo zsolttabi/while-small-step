@@ -3,22 +3,15 @@ package app;
 import antlr4.com.while_parser.WhileParser;
 import ast.AST;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -56,33 +49,6 @@ public class Main extends Application {
     }
 
     private void refreshCenter() {
-//        TreePane<SimpleASTNode> node = getTreePane();
-//        StackPane nodeContainer = new StackPane(node);
-//        nodeContainer.setPadding(new Insets(20, 20, 20, 20));
-//
-//
-//        ScrollPane scrollPane = new ScrollPane(nodeContainer);
-//        scrollPane.viewportBoundsProperty().addListener(
-//                (observableValue, oldBounds, newBounds) -> nodeContainer.setPrefSize(
-//                        Math.max(node.getBoundsInParent().getMaxX(), newBounds.getWidth()),
-//                        Math.max(node.getBoundsInParent().getMaxY(), newBounds.getHeight())
-//                ));
-//
-//
-//        final ToggleButton scale = new ToggleButton("Scale");
-//        scale.setOnAction(actionEvent -> {
-//            if (scale.isSelected()) {
-//                node.setScaleX(3); node.setScaleY(3);
-//            } else {
-//                node.setScaleX(1); node.setScaleY(1);
-//            }
-//            // runlater as we want to size the container after a layout pass has been performed on the scaled node.
-//            Platform.runLater(() -> nodeContainer.setPrefSize(
-//                    Math.max(nodeContainer.getBoundsInParent().getMaxX(), scrollPane.getViewportBounds().getWidth()),
-//                    Math.max(nodeContainer.getBoundsInParent().getMaxY(), scrollPane.getViewportBounds().getHeight())
-//            ));
-//        });
-
         mainPane.setCenter(getTreePane());
     }
 
@@ -124,8 +90,7 @@ public class Main extends Application {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10, 12, 10, 12));
         hbox.setSpacing(10);
-        hbox.setStyle(
-                "-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 3 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
+        hbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 3 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
 
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(5, 10, 5, 10));

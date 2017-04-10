@@ -47,7 +47,6 @@ public class BinOp<T, R> implements Expression {
         return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::new, evalFun);
     }
 
-
     @Getter
     private final String operator;
     @Getter
@@ -66,18 +65,18 @@ public class BinOp<T, R> implements Expression {
             return new BadBinOp<>(operator, rhs, lhs);
         }
 
-        if (!(lhs instanceof Value || lhs instanceof Identifier)) {
+        if (!(lhs instanceof Value)) {
             return new BinOp<>(operator, lhs.step(state), rhs, operandClass, resultCtor, evalFun);
         }
 
-        if (!(rhs instanceof Value || rhs instanceof Identifier)) {
+        if (!(rhs instanceof Value)) {
             return new BinOp<>(operator, lhs, rhs.step(state), operandClass, resultCtor, evalFun);
         }
 
-        Value lVal = lhs instanceof Identifier ? state.get((Identifier)lhs) : (Value) lhs;
-        Value rVal = rhs instanceof Identifier ? state.get((Identifier)rhs) : (Value) rhs;
+        Value lVal = (Value) lhs;
+        Value rVal = (Value) rhs;
 
-        if (lVal != null && rVal != null && operandClass.isAssignableFrom(lVal.getClass()) && operandClass.isAssignableFrom(rVal.getClass())) {
+        if (operandClass.isAssignableFrom(lVal.getClass()) && operandClass.isAssignableFrom(rVal.getClass())) {
             return resultCtor.apply(evalFun.apply(operandClass.cast(lVal).getValue(), operandClass.cast(rVal).getValue()));
         }
 

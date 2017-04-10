@@ -4,6 +4,7 @@ import app.SimpleASTNode;
 import ast.AST;
 import ast.BadAST;
 import ast.expression.Identifier;
+import ast.expression.interfaces.BadExpression;
 import ast.expression.operations.bad_operations.BadBinOp;
 import ast.expression.operations.bad_operations.BadUnOp;
 import ast.expression.operations.BinOp;
@@ -106,7 +107,7 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(UnOp element) {
-        val node = makeSimple(element.getClass(), element instanceof BadUnOp);
+        val node = makeSimple(element.getClass(), element.getOperator(), element instanceof BadUnOp);
         if (element.getOperand() != null) {
             node.addChild(element.getOperand().accept(this));
         }
@@ -115,12 +116,12 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
 
     @Override
     public Node<SimpleASTNode> visit(Value<?> element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getValue() == null ? "" : element.getValue().toString(), false), null);
+        return new Node<>(new SimpleASTNode(element.getClass(), element.getValue() == null ? "" : element.getValue().toString(), element instanceof BadExpression), null);
     }
 
     @Override
     public Node<SimpleASTNode> visit(Identifier element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getIdentifier(), false), null);
+        return new Node<>(new SimpleASTNode(element.getClass(), element.getIdentifier(), element instanceof BadExpression), null);
     }
 
 }

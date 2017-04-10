@@ -29,7 +29,7 @@ public class While implements Statement, Element<Tree.Node<SimpleASTNode>> {
     @Override
     public Pair<Statement, State> step(State state) {
 
-        if (condition instanceof BadExpression || s instanceof BadStatement) {
+        if (condition instanceof BadExpression) {
             return Pair.of(new BadWhile(condition, s), state);
         }
 

@@ -46,13 +46,13 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
 
         Identifier id = (Identifier)identifier;
 
-        Value<?> currentValue = state.get(id);
+        Value currentValue = state.get(id);
         if (currentValue == null) {
-            state.set(id, (Value<?>) value);
+            state.set(id, (Value) value);
         } else if (value instanceof BoolValue && currentValue instanceof BoolValue) {
-            state.set(id, (BoolValue)value);
+            state.set(id, (BoolValue) value);
         } else if (value instanceof IntValue && currentValue instanceof IntValue) {
-            state.set(id, (IntValue)value);
+            state.set(id, (IntValue) value);
         } else {
             return Pair.of(new BadAssignment(id, value), state);
         }

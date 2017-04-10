@@ -21,7 +21,7 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
         state = new State();
     }
 
-    AST(Pair<Statement, State> newConfig) {
+    protected AST(Pair<Statement, State> newConfig) {
         this.stm = newConfig.getFirst();
         this.state = newConfig.getSecond();
     }

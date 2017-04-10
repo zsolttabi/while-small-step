@@ -19,4 +19,5 @@ public class Skip implements Statement, Element<Tree.Node<SimpleASTNode>> {
     public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
         return visitor.visit(this);
     }
+
 }

@@ -34,7 +34,7 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
     @Override
     public Pair<Statement, State> step(State state) {
 
-        if (condition instanceof BadExpression || s1 instanceof BadStatement || s2 instanceof BadStatement) {
+        if (condition instanceof BadExpression) {
             return Pair.of(new BadIf(condition, s1, s2), state);
         }
 

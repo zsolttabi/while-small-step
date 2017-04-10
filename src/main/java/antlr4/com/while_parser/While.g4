@@ -46,7 +46,7 @@ expression returns [Expression value]:
 |
     e1 = expression Minus e2 = expression { $value = BinOp.arithOp($Minus.text, $e1.value, $e2.value, (i1, i2) -> i1 - i2); }
 |
-    Minus a = expression { $value = UnOp.intOp($Minus.text, $a.value,  i -> -1 * i); }
+    Minus a = expression { $value = UnOp.intOp($Minus.text, $a.value,  i -> 0 - i); }
 |
     True { $value = new BoolValue(true); }
 |
