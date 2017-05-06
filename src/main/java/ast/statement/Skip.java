@@ -20,4 +20,9 @@ public class Skip implements Statement, Element<Tree.Node<SimpleASTNode>> {
         return visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return this == o || !(o == null || getClass() != o.getClass());
+    }
+
 }
