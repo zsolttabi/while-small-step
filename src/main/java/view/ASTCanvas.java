@@ -1,4 +1,4 @@
-package app;
+package view;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -13,7 +13,7 @@ import org.abego.treelayout.TreeLayout;
 import java.util.function.Function;
 
 
-public class TreeCanvas<T> extends Canvas {
+public class ASTCanvas<T> extends Canvas {
 
     private final static int ARC_SIZE = 10;
     private final static Color BOX_COLOR = Color.LIGHTGRAY;
@@ -23,7 +23,7 @@ public class TreeCanvas<T> extends Canvas {
     private final Function<T, String> toColorFun;
     private final Font font;
 
-    public TreeCanvas(TreeLayout<T> treeLayout, Function<T, String> toStringFun, Function<T, String> toColorFun, Font font) {
+    public ASTCanvas(TreeLayout<T> treeLayout, Function<T, String> toStringFun, Function<T, String> toColorFun, Font font) {
         super(treeLayout.getBounds().getBounds().getWidth(),
                 treeLayout.getBounds().getBounds().getHeight());
         this.treeLayout = treeLayout;

@@ -1,49 +1,53 @@
-package utils;
+package viewmodel;
 
-import app.SimpleASTNode;
 import ast.AST;
 import ast.BadAST;
 import ast.expression.Identifier;
 import ast.expression.interfaces.BadExpression;
-import ast.expression.operations.bad_operations.BadBinOp;
-import ast.expression.operations.bad_operations.BadUnOp;
+import ast.expression.interfaces.Value;
 import ast.expression.operations.BinOp;
 import ast.expression.operations.UnOp;
-import ast.expression.interfaces.Value;
+import ast.expression.operations.bad_operations.BadBinOp;
+import ast.expression.operations.bad_operations.BadUnOp;
 import ast.statement.*;
 import ast.statement.bad_statements.BadAssignment;
 import ast.statement.bad_statements.BadIf;
 import ast.statement.bad_statements.BadSequence;
 import ast.statement.bad_statements.BadWhile;
 import lombok.val;
+import utils.Tree;
 import utils.Tree.Node;
+import viewmodel.interfaces.IASTVisitor;
 
-public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
+public class ASTVisitor implements IASTVisitor<Node<ASTNode>> {
 
-    private static Node<SimpleASTNode> makeSimple(Class<?> clazz, boolean isBad) {
-        return new Node<>(new SimpleASTNode(clazz, null, isBad), null);
+    public static Tree<ASTNode> visitAST(AST ast) {
+        return new Tree<>(new ASTVisitor().visit(ast));
     }
 
-    private static Node<SimpleASTNode> makeSimple(Class<?> clazz, String value, boolean isBad) {
-        return new Node<>(new SimpleASTNode(clazz, value, isBad), null);
+    private static Node<ASTNode> createNode(Class<?> clazz, boolean isBad) {
+        return new Node<>(new ASTNode(clazz, null, isBad), null);
     }
 
+    private static Node<ASTNode> createNode(Class<?> clazz, String value, boolean isBad) {
+        return new Node<>(new ASTNode(clazz, value, isBad), null);
+    }
 
     @Override
-    public Node<SimpleASTNode> visit(AST element) {
+    public Node<ASTNode> visit(AST element) {
         return element.getStm() == null ?
-                new Node<>(new SimpleASTNode(element.getClass(), "EMPTY", element instanceof BadAST), null) :
+                new Node<>(new ASTNode(element.getClass(), "EMPTY", element instanceof BadAST), null) :
                 element.getStm().accept(this);
     }
 
     @Override
-    public Node<SimpleASTNode> visit(Skip element) {
-        return makeSimple(element.getClass(), "SKIP", false);
+    public Node<ASTNode> visit(Skip element) {
+        return createNode(element.getClass(), "SKIP", false);
     }
 
     @Override
-    public Node<SimpleASTNode> visit(Sequence element) {
-        val node = makeSimple(element.getClass(), ";", element instanceof BadSequence);
+    public Node<ASTNode> visit(Sequence element) {
+        val node = createNode(element.getClass(), ";", element instanceof BadSequence);
         if (element.getS1() != null) {
             node.addChild(element.getS1().accept(this));
         }
@@ -54,8 +58,8 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> visit(Assignment element) {
-        val node = makeSimple(element.getClass(), ":=", element instanceof BadAssignment);
+    public Node<ASTNode> visit(Assignment element) {
+        val node = createNode(element.getClass(), ":=", element instanceof BadAssignment);
         if (element.getIdentifier() != null) {
             node.addChild(element.getIdentifier().accept(this));
         }
@@ -65,10 +69,9 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
         return node;
     }
 
-
     @Override
-    public Node<SimpleASTNode> visit(If element) {
-        val node = makeSimple(element.getClass(), "if", element instanceof BadIf);
+    public Node<ASTNode> visit(If element) {
+        val node = createNode(element.getClass(), "if", element instanceof BadIf);
         if (element.getCondition() != null) {
             node.addChild(element.getCondition().accept(this));
         }
@@ -82,8 +85,8 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> visit(While element) {
-        val node = makeSimple(element.getClass(), "while", element instanceof BadWhile);
+    public Node<ASTNode> visit(While element) {
+        val node = createNode(element.getClass(), "while", element instanceof BadWhile);
         if (element.getCondition() != null) {
             node.addChild(element.getCondition().accept(this));
         }
@@ -94,8 +97,8 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> visit(BinOp element) {
-        val node = makeSimple(element.getClass(), element.getOperator(), element instanceof BadBinOp);
+    public Node<ASTNode> visit(BinOp element) {
+        val node = createNode(element.getClass(), element.getOperator(), element instanceof BadBinOp);
         if (element.getLhs() != null) {
             node.addChild(element.getLhs().accept(this));
         }
@@ -106,8 +109,8 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> visit(UnOp element) {
-        val node = makeSimple(element.getClass(), element.getOperator(), element instanceof BadUnOp);
+    public Node<ASTNode> visit(UnOp element) {
+        val node = createNode(element.getClass(), element.getOperator(), element instanceof BadUnOp);
         if (element.getOperand() != null) {
             node.addChild(element.getOperand().accept(this));
         }
@@ -115,13 +118,13 @@ public class SimpleTreeBuilder implements Visitor<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> visit(Value<?> element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getValue() == null ? "" : element.getValue().toString(), element instanceof BadExpression), null);
+    public Node<ASTNode> visit(Value<?> element) {
+        return new Node<>(new ASTNode(element.getClass(), element.getValue() == null ? "" : element.getValue().toString(), element instanceof BadExpression), null);
     }
 
     @Override
-    public Node<SimpleASTNode> visit(Identifier element) {
-        return new Node<>(new SimpleASTNode(element.getClass(), element.getIdentifier(), element instanceof BadExpression), null);
+    public Node<ASTNode> visit(Identifier element) {
+        return new Node<>(new ASTNode(element.getClass(), element.getIdentifier(), element instanceof BadExpression), null);
     }
 
 }

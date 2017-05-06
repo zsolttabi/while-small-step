@@ -1,4 +1,4 @@
-package app;
+package view;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
@@ -9,13 +9,13 @@ import org.abego.treelayout.TreeLayout;
 import java.util.function.Function;
 
 
-public class TreePane<T> extends ScrollPane {
+public class ASTPane<T> extends ScrollPane {
 
-    private final TreeCanvas<T> canvas;
+    private final ASTCanvas<T> canvas;
 
-    public TreePane(TreeLayout<T> treeLayout, Function<T, String> toStringFun, Function<T, String> toColorFun, Font font) {
+    public ASTPane(TreeLayout<T> treeLayout, Function<T, String> toStringFun, Function<T, String> toColorFun, Font font) {
 
-        canvas = new TreeCanvas<>(treeLayout, toStringFun, toColorFun, font);
+        canvas = new ASTCanvas<>(treeLayout, toStringFun, toColorFun, font);
 
         StackPane canvasContainer = new StackPane(canvas);
         canvasContainer.setPadding(new Insets(20, 20, 20, 20));

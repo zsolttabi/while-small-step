@@ -1,8 +1,6 @@
 package ast.expression.operations;
 
-import app.SimpleASTNode;
 import ast.State;
-import ast.expression.Identifier;
 import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
@@ -13,7 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Tree;
-import utils.Visitor;
+import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTVisitor;
 
 import java.util.function.Function;
 
@@ -81,7 +80,7 @@ public class UnOp<T, R> implements Expression {
 
 
     @Override
-    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+    public Tree.Node<ASTNode> accept(IASTVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }
 

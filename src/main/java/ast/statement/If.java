@@ -1,26 +1,24 @@
 package ast.statement;
 
-import app.SimpleASTNode;
 import ast.State;
 import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
 import ast.expression.values.BoolValue;
 import ast.statement.bad_statements.BadIf;
-import ast.statement.bad_statements.BadSequence;
-import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Element;
 import utils.Pair;
 import utils.Tree;
-import utils.Visitor;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTVisitor;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
+public class If implements Statement, IASTElement<Tree.Node<ASTNode>> {
 
     public static If of(Expression condition, Statement s1, Statement s2) {
         return condition == null || s1 == null || s2 == null ? new BadIf(condition, s1, s2) : new If(condition, s1, s2);
@@ -52,7 +50,7 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
     }
 
     @Override
-    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+    public Tree.Node<ASTNode> accept(IASTVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }
 

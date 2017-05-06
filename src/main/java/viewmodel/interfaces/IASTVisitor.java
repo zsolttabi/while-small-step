@@ -1,13 +1,13 @@
-package utils;
+package viewmodel.interfaces;
 
 import ast.AST;
 import ast.expression.Identifier;
+import ast.expression.interfaces.Value;
 import ast.expression.operations.BinOp;
 import ast.expression.operations.UnOp;
-import ast.expression.interfaces.Value;
 import ast.statement.*;
 
-public interface Visitor<T> {
+public interface IASTVisitor<T> {
 
     T visit(AST element);
     T visit(Skip element);

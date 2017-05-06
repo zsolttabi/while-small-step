@@ -1,10 +1,10 @@
-package app;
+package viewmodel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SimpleASTNode {
+public class ASTNode {
 
     @Getter
     private final Class<?> elemClazz;

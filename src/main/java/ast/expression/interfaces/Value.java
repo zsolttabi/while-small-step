@@ -1,16 +1,16 @@
 package ast.expression.interfaces;
 
-import app.SimpleASTNode;
-import utils.Element;
 import utils.Tree;
-import utils.Visitor;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTVisitor;
 
-public interface Value<T> extends Expression, Element<Tree.Node<SimpleASTNode>> {
+public interface Value<T> extends Expression, IASTElement<Tree.Node<ASTNode>> {
 
     T getValue();
 
     @Override
-    default Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+    default Tree.Node<ASTNode> accept(IASTVisitor<Tree.Node<ASTNode>> visitor) {
         return  visitor.visit(this);
     }
 }

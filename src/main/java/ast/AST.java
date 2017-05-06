@@ -1,17 +1,17 @@
 package ast;
 
-import app.SimpleASTNode;
 import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import utils.Element;
 import utils.Pair;
 import utils.Tree.Node;
-import utils.Visitor;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTVisitor;
 
 @EqualsAndHashCode
-public class AST implements IAST, Element<Node<SimpleASTNode>> {
+public class AST implements IAST, IASTElement<Node<ASTNode>> {
 
     @Getter
     private final State state;
@@ -51,7 +51,7 @@ public class AST implements IAST, Element<Node<SimpleASTNode>> {
     }
 
     @Override
-    public Node<SimpleASTNode> accept(Visitor<Node<SimpleASTNode>> visitor) {
+    public Node<ASTNode> accept(IASTVisitor<Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }
 

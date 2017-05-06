@@ -1,12 +1,12 @@
 package ast.expression.interfaces;
 
 
-import app.SimpleASTNode;
 import ast.State;
-import utils.Element;
 import utils.Tree;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
 
-public interface Expression extends Element<Tree.Node<SimpleASTNode>> {
+public interface Expression extends IASTElement<Tree.Node<ASTNode>> {
 
     Expression step(State state);
 

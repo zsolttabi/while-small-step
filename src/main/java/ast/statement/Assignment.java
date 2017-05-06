@@ -1,10 +1,9 @@
 package ast.statement;
 
-import app.SimpleASTNode;
 import ast.State;
+import ast.expression.Identifier;
 import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
-import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
@@ -13,14 +12,15 @@ import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Element;
 import utils.Pair;
 import utils.Tree;
-import utils.Visitor;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTVisitor;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> {
+public class Assignment implements Statement, IASTElement<Tree.Node<ASTNode>> {
 
     public static Assignment of(Expression identifier, Expression value) {
         return identifier == null || value == null ? new BadAssignment(identifier, value) : new Assignment(identifier, value);
@@ -63,7 +63,7 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
     }
 
     @Override
-    public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
+    public Tree.Node<ASTNode> accept(IASTVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }
 

@@ -1,13 +1,13 @@
 package ast.statement.interfaces;
 
 
-import app.SimpleASTNode;
 import ast.State;
-import utils.Element;
 import utils.Pair;
 import utils.Tree;
+import viewmodel.interfaces.IASTElement;
+import viewmodel.ASTNode;
 
-public interface Statement extends Element<Tree.Node<SimpleASTNode>> {
+public interface Statement extends IASTElement<Tree.Node<ASTNode>> {
 
     Pair<Statement, State> step(State state);
 
