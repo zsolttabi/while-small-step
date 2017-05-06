@@ -3,12 +3,14 @@ package ast;
 import app.SimpleASTNode;
 import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import utils.Element;
 import utils.Pair;
 import utils.Tree.Node;
 import utils.Visitor;
 
+@EqualsAndHashCode
 public class AST implements IAST, Element<Node<SimpleASTNode>> {
 
     @Getter

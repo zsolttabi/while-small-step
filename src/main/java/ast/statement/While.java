@@ -5,6 +5,7 @@ import ast.State;
 import ast.expression.interfaces.Expression;
 import ast.statement.bad_statements.BadWhile;
 import ast.statement.interfaces.Statement;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -13,6 +14,7 @@ import utils.Tree;
 import utils.Visitor;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class While implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     public static While of(Expression condition, Statement s) {
@@ -34,21 +36,4 @@ public class While implements Statement, Element<Tree.Node<SimpleASTNode>> {
         return visitor.visit(this);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        While aWhile = (While) o;
-
-        if (condition != null ? !condition.equals(aWhile.condition) : aWhile.condition != null) return false;
-        return s != null ? s.equals(aWhile.s) : aWhile.s == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = condition != null ? condition.hashCode() : 0;
-        result = 31 * result + (s != null ? s.hashCode() : 0);
-        return result;
-    }
 }

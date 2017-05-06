@@ -9,6 +9,7 @@ import ast.expression.interfaces.Value;
 import ast.expression.operations.bad_operations.BadBinOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Tree;
@@ -18,6 +19,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class BinOp<T, R> implements Expression {
 
     public static <T, R> BinOp<T, R> of(String operator,
@@ -39,12 +41,32 @@ public class BinOp<T, R> implements Expression {
         return BinOp.of(operator, lhs, rhs, IntValue.class, IntValue::new, evalFun);
     }
 
+    public static BinOp<Integer, Integer> add(Expression lhs, Expression rhs) {
+        return BinOp.arithOp("+", lhs, rhs, Integer::sum);
+    }
+
+    public static BinOp<Integer, Integer> subtract(Expression lhs, Expression rhs) {
+        return BinOp.arithOp("-", lhs, rhs, (i1, i2) -> i1 - i2);
+    }
+
     public static BinOp<Boolean, Boolean> boolOp(String operator, Expression lhs, Expression rhs, BiFunction<Boolean, Boolean, Boolean> evalFun) {
         return BinOp.of(operator, lhs, rhs, BoolValue.class, BoolValue::new, evalFun);
     }
 
+    public static BinOp<Boolean, Boolean> and(Expression lhs, Expression rhs) {
+        return BinOp.boolOp("and", lhs, rhs, Boolean::logicalAnd);
+    }
+
     public static BinOp<Integer, Boolean> intRelOp(String operator, Expression lhs, Expression rhs, BiFunction<Integer, Integer, Boolean> evalFun) {
         return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::new, evalFun);
+    }
+
+    public static BinOp<Integer, Boolean> equals(Expression lhs, Expression rhs) {
+        return BinOp.intRelOp("=", lhs, rhs, Object::equals);
+    }
+
+    public static BinOp<Integer, Boolean> lessThen(Expression lhs, Expression rhs) {
+        return BinOp.intRelOp("<=", lhs, rhs, (i1, i2) -> i1 < i2);
     }
 
     @Getter
@@ -61,12 +83,16 @@ public class BinOp<T, R> implements Expression {
     @Override
     public Expression step(State state) {
 
-        if(lhs instanceof BadExpression || rhs instanceof BadExpression) {
+        if(lhs instanceof BadExpression) {
             return new BadBinOp<>(operator, rhs, lhs);
         }
 
         if (!(lhs instanceof Value)) {
             return new BinOp<>(operator, lhs.step(state), rhs, operandClass, resultCtor, evalFun);
+        }
+
+        if(rhs instanceof BadExpression) {
+            return new BadBinOp<>(operator, rhs, lhs);
         }
 
         if (!(rhs instanceof Value)) {

@@ -10,6 +10,7 @@ import ast.statement.bad_statements.BadIf;
 import ast.statement.bad_statements.BadSequence;
 import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -18,6 +19,7 @@ import utils.Tree;
 import utils.Visitor;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     public static If of(Expression condition, Statement s1, Statement s2) {
@@ -54,24 +56,4 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
         return visitor.visit(this);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        If anIf = (If) o;
-
-        if (getCondition() != null ? !getCondition().equals(anIf.getCondition()) : anIf.getCondition() != null)
-            return false;
-        if (getS1() != null ? !getS1().equals(anIf.getS1()) : anIf.getS1() != null) return false;
-        return getS2() != null ? getS2().equals(anIf.getS2()) : anIf.getS2() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getCondition() != null ? getCondition().hashCode() : 0;
-        result = 31 * result + (getS1() != null ? getS1().hashCode() : 0);
-        result = 31 * result + (getS2() != null ? getS2().hashCode() : 0);
-        return result;
-    }
 }

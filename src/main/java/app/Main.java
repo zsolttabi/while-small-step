@@ -1,6 +1,5 @@
 package app;
 
-import antlr4.com.while_parser.WhileParser;
 import ast.AST;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,6 +19,7 @@ import javafx.stage.Stage;
 import org.abego.treelayout.TreeForTreeLayout;
 import org.abego.treelayout.TreeLayout;
 import org.abego.treelayout.util.DefaultConfiguration;
+import syntax.while_parser.WhileParser;
 
 
 public class Main extends Application {
@@ -78,7 +78,7 @@ public class Main extends Application {
     }
 
     private void setAst(String input) {
-        ast = WhileParser.parseAst(input);
+        ast = WhileParser.parse(input);
     }
 
     private void reduceAST() {

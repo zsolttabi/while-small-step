@@ -4,10 +4,12 @@ package ast.expression.values;
 import ast.State;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class IntValue implements Expression, Value<Integer> {
 
     @Getter

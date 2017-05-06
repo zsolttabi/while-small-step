@@ -2,11 +2,13 @@ package ast;
 
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
+import lombok.EqualsAndHashCode;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+@EqualsAndHashCode
 public class State {
 
     private final Map<Identifier, Value<?>> state = new LinkedHashMap<>();
@@ -23,18 +25,4 @@ public class State {
         return state.entrySet();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        State state1 = (State) o;
-
-        return state != null ? state.equals(state1.state) : state1.state == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return state != null ? state.hashCode() : 0;
-    }
 }

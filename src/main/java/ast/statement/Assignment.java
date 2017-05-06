@@ -10,6 +10,7 @@ import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import ast.statement.bad_statements.BadAssignment;
 import ast.statement.interfaces.Statement;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Element;
@@ -18,6 +19,7 @@ import utils.Tree;
 import utils.Visitor;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> {
 
     public static Assignment of(Expression identifier, Expression value) {
@@ -65,22 +67,4 @@ public class Assignment implements Statement, Element<Tree.Node<SimpleASTNode>> 
         return visitor.visit(this);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Assignment that = (Assignment) o;
-
-        if (getIdentifier() != null ? !getIdentifier().equals(that.getIdentifier()) : that.getIdentifier() != null)
-            return false;
-        return getValue() != null ? getValue().equals(that.getValue()) : that.getValue() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getIdentifier() != null ? getIdentifier().hashCode() : 0;
-        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
-        return result;
-    }
 }

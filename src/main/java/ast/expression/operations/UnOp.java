@@ -9,6 +9,7 @@ import ast.expression.interfaces.Value;
 import ast.expression.operations.bad_operations.BadUnOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Tree;
@@ -17,6 +18,7 @@ import utils.Visitor;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class UnOp<T, R> implements Expression {
 
     public static <T, R> UnOp<T, R> of(String operator,
@@ -36,8 +38,16 @@ public class UnOp<T, R> implements Expression {
         return UnOp.of(operator, operand, IntValue.class, IntValue::new, evalFun);
     }
 
+    public static UnOp<Integer, Integer> neg(Expression operand) {
+        return UnOp.intOp("-", operand, i -> 0 - i);
+    }
+
     public static UnOp<Boolean, Boolean> boolOp(String operator, Expression operand, Function<Boolean, Boolean> evalFun) {
         return UnOp.of(operator, operand, BoolValue.class, BoolValue::new, evalFun);
+    }
+
+    public static UnOp<Boolean, Boolean> not(Expression operand) {
+        return UnOp.boolOp("not", operand, b -> !b);
     }
 
     @Getter

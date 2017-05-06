@@ -12,8 +12,8 @@ grammar While;
 
 @parser::members {
 
-    public static AST parseAst(String input) {
-        WhileParser parser = new WhileParser(new CommonTokenStream(new WhileLexer(new ANTLRInputStream(input))));
+    public static AST parse(String input) {
+        WhileParser parser = new WhileParser(new CommonTokenStream(new WhileLexer(CharStreams.fromString(input))));
         return new AST(parser.start().value);
     }
 
@@ -42,23 +42,23 @@ expression returns [Expression value]:
 |
     Int { $value = new IntValue(Integer.parseInt($Int.text)); }
 |
-    e1 = expression Plus e2 = expression { $value = BinOp.arithOp($Plus.text, $e1.value, $e2.value, Integer::sum); }
+    e1 = expression Plus e2 = expression { $value = BinOp.add($e1.value, $e2.value); }
 |
-    e1 = expression Minus e2 = expression { $value = BinOp.arithOp($Minus.text, $e1.value, $e2.value, (i1, i2) -> i1 - i2); }
+    e1 = expression Minus e2 = expression { $value = BinOp.subtract($e1.value, $e2.value); }
 |
-    Minus a = expression { $value = UnOp.intOp($Minus.text, $a.value,  i -> 0 - i); }
+    Minus a = expression { $value = UnOp.neg($a.value); }
 |
     True { $value = new BoolValue(true); }
 |
     False { $value = new BoolValue(false); }
 |
-    e1 = expression Equals e2 = expression { $value = BinOp.intRelOp($Equals.text, $e1.value, $e2.value, Object::equals); }
+    e1 = expression Equals e2 = expression { $value = BinOp.equals($e1.value, $e2.value); }
 |
-    e1 = expression LessThen e2 = expression { $value = BinOp.intRelOp($LessThen.text, $e1.value, $e2.value, (i1,i2) -> i1 < i2); }
+    e1 = expression LessThen e2 = expression { $value = BinOp.lessThen($e1.value, $e2.value); }
 |
-    Not e = expression { $value = UnOp.boolOp($Not.text, $e.value, b -> !b); }
+    Not e = expression { $value = UnOp.not($e.value); }
 |
-    e1 = expression And e2 = expression  { $value = BinOp.boolOp($And.text, $e1.value, $e2.value, Boolean::logicalAnd); }
+    e1 = expression And e2 = expression  { $value = BinOp.and($e1.value, $e2.value); }
 ;
 
 IF: 'if' ;
