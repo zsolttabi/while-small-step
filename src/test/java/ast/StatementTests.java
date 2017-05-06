@@ -2,8 +2,10 @@ package ast;
 
 import ast.expression.Identifier;
 import ast.expression.interfaces.Value;
+import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import ast.statement.Assignment;
+import ast.statement.If;
 import ast.statement.Sequence;
 import ast.statement.Skip;
 import ast.statement.bad_statements.BadAssignment;
@@ -103,13 +105,13 @@ public class StatementTests {
     public void testSequence() {
 
         Statement s1 = new Skip();
-        Statement s2 = new Skip();
+        Statement s2 = new If(null, null, null);
         State state = new State();
         Statement underTest = new Sequence(s1, s2);
 
         Pair<Statement, State> result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst().getClass(), s2.getClass());
+        Assert.assertEquals(result.getFirst(), s2);
         Assert.assertEquals(result.getSecond(), new State());
 
     }
@@ -131,17 +133,28 @@ public class StatementTests {
 
 
     @Test
-    public void testIf() {
+    public void testIfTrueBranch() {
 
-//        Statement underTest = new If();
+        Statement s1 = new If(null, null, null);
+        Statement s2 = new Sequence(null, null);
+        State state = new State();
+        Statement underTest = new If(new BoolValue(true), s1, s2);
+
+        Pair<Statement, State> result = underTest.step(state);
+
+        Assert.assertEquals(result.getFirst(), s1);
+        Assert.assertEquals(result.getSecond(), new State());
+
+    }
+
+    @Test
+    public void testIfFalseBranch() {
 
     }
 
 
     @Test
     public void testWhile() {
-
-//        Statement underTest = new While();
 
     }
 

@@ -5,7 +5,6 @@ import ast.State;
 import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
 import ast.statement.bad_statements.BadWhile;
-import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

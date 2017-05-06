@@ -42,4 +42,22 @@ public class Sequence implements Statement, Element<Tree.Node<SimpleASTNode>> {
     public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Sequence sequence = (Sequence) o;
+
+        if (getS1() != null ? !getS1().equals(sequence.getS1()) : sequence.getS1() != null) return false;
+        return getS2() != null ? getS2().equals(sequence.getS2()) : sequence.getS2() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getS1() != null ? getS1().hashCode() : 0;
+        result = 31 * result + (getS2() != null ? getS2().hashCode() : 0);
+        return result;
+    }
 }

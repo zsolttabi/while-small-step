@@ -53,4 +53,25 @@ public class If implements Statement, Element<Tree.Node<SimpleASTNode>> {
     public Tree.Node<SimpleASTNode> accept(Visitor<Tree.Node<SimpleASTNode>> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        If anIf = (If) o;
+
+        if (getCondition() != null ? !getCondition().equals(anIf.getCondition()) : anIf.getCondition() != null)
+            return false;
+        if (getS1() != null ? !getS1().equals(anIf.getS1()) : anIf.getS1() != null) return false;
+        return getS2() != null ? getS2().equals(anIf.getS2()) : anIf.getS2() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCondition() != null ? getCondition().hashCode() : 0;
+        result = 31 * result + (getS1() != null ? getS1().hashCode() : 0);
+        result = 31 * result + (getS2() != null ? getS2().hashCode() : 0);
+        return result;
+    }
 }
