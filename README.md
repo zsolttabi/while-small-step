@@ -2,7 +2,7 @@
 
 <p>
 
-This project is intended to grpachically illustrate the smal-step semantics of the classic <i>While</i> language. 
+This project is intended to graphically illustrate the small-step semantics of the classic <i>While</i> language. 
 It only serves educational purposes.
 
 
