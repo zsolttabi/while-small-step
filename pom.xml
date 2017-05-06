@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>elte.zsolt.tabi.while</groupId>
-    <artifactId>while_small_step</artifactId>
+    <groupId>elte.zsolt.tabi.while-small-step</groupId>
+    <artifactId>while-small-step</artifactId>
     <version>1.1</version>
 
     <properties>
