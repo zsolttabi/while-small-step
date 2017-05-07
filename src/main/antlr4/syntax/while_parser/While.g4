@@ -52,7 +52,7 @@ expression returns [Expression value]:
 |
     False { $value = new BoolValue(false); }
 |
-    e1 = expression Equals e2 = expression { $value = BinOp.equals($e1.value, $e2.value); }
+    e1 = expression Equals e2 = expression { $value = BinOp.areEquals($e1.value, $e2.value); }
 |
     e1 = expression LessThen e2 = expression { $value = BinOp.lessThen($e1.value, $e2.value); }
 |

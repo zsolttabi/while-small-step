@@ -60,7 +60,7 @@ public class BinOp<T, R> implements Expression {
         return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::new, evalFun);
     }
 
-    public static BinOp<Integer, Boolean> equals(Expression lhs, Expression rhs) {
+    public static BinOp<Integer, Boolean> areEquals(Expression lhs, Expression rhs) {
         return BinOp.intRelOp("=", lhs, rhs, Object::equals);
     }
 
@@ -91,7 +91,7 @@ public class BinOp<T, R> implements Expression {
         }
 
         if(rhs instanceof BadExpression) {
-            return new BadBinOp<>(operator, rhs, lhs);
+            return new BadBinOp<>(operator, lhs, rhs);
         }
 
         if (!(rhs instanceof Value)) {
