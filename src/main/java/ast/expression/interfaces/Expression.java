@@ -3,8 +3,8 @@ package ast.expression.interfaces;
 
 import ast.State;
 import utils.Tree;
-import viewmodel.interfaces.IASTElement;
 import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTElement;
 
 public interface Expression extends IASTElement<Tree.Node<ASTNode>> {
 

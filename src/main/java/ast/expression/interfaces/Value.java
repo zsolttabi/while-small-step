@@ -1,8 +1,8 @@
 package ast.expression.interfaces;
 
 import utils.Tree;
-import viewmodel.interfaces.IASTElement;
 import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTElement;
 import viewmodel.interfaces.IASTVisitor;
 
 public interface Value<T> extends Expression, IASTElement<Tree.Node<ASTNode>> {

@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import utils.Pair;
 import utils.Tree;
-import viewmodel.interfaces.IASTElement;
 import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTElement;
 import viewmodel.interfaces.IASTVisitor;
 
 @RequiredArgsConstructor

@@ -5,8 +5,8 @@ import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import utils.Pair;
 import utils.Tree;
-import viewmodel.interfaces.IASTElement;
 import viewmodel.ASTNode;
+import viewmodel.interfaces.IASTElement;
 import viewmodel.interfaces.IASTVisitor;
 
 @EqualsAndHashCode
