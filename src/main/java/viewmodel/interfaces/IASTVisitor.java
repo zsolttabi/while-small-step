@@ -19,4 +19,5 @@ public interface IASTVisitor<T> {
     T visit(UnOp element);
     T visit(Value<?> element);
     T visit(Identifier element);
+    T visit(Abort element);
 }

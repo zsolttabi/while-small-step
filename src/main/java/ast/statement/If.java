@@ -46,7 +46,7 @@ public class If implements Statement, IASTElement<Tree.Node<ASTNode>> {
             return Pair.of(((BoolValue) condition).getValue() ? s1 : s2, state);
         }
 
-        return Pair.of(new BadIf(condition, s1, s1), state);
+        return Pair.of(new BadIf(condition, s1, s2), state);
     }
 
     @Override

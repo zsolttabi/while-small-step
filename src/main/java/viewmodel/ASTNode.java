@@ -7,17 +7,16 @@ import lombok.RequiredArgsConstructor;
 public class ASTNode {
 
     @Getter
-    private final Class<?> elemClazz;
-    @Getter
-    private final String value;
+    private final String label;
     private final boolean bad;
 
     @Override
     public String toString() {
-        return getValue() == null ? elemClazz.getSimpleName() :  getValue();
+        return getLabel();
     }
 
     public boolean isBad() {
         return bad;
     }
+
 }

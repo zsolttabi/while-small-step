@@ -34,6 +34,8 @@ statement returns [Statement value]:
     WHILE e = expression Do s = statement Od { $value = While.of($e.value, $s.value); }
 |
     Skip { $value  = new Skip(); }
+|
+    Abort { $value = new Abort(); }
 ;
 
 expression returns [Expression value]:
@@ -70,6 +72,8 @@ Then: 'then' ;
 Else: 'else' ;
 
 WHILE: 'while' ;
+
+Abort: 'abort' ;
 
 Do: 'do' ;
 
