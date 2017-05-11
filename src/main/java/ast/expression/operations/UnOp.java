@@ -1,10 +1,11 @@
 package ast.expression.operations;
 
+import ast.ExprConfig;
 import ast.State;
-import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
+import ast.expression.interfaces.StuckExpression;
 import ast.expression.interfaces.Value;
-import ast.expression.operations.bad_operations.BadUnOp;
+import ast.expression.operations.bad_operations.StuckUnOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,7 @@ public class UnOp<T, R> implements Expression {
                                         Function<R, Value<R>> resultCtor,
                                         Function<T, R> evalFun) {
 
-        return operand == null ? new BadUnOp<>(operator, operand) : new UnOp<>(operator,
+        return operand == null ? new StuckUnOp<>(operator, operand) : new UnOp<>(operator,
                 operand,
                 operandClass,
                 resultCtor,
@@ -34,7 +35,7 @@ public class UnOp<T, R> implements Expression {
     }
 
     public static UnOp<Integer, Integer> intOp(String operator, Expression operand, Function<Integer, Integer> evalFun) {
-        return UnOp.of(operator, operand, IntValue.class, IntValue::new, evalFun);
+        return UnOp.of(operator, operand, IntValue.class, IntValue::of, evalFun);
     }
 
     public static UnOp<Integer, Integer> neg(Expression operand) {
@@ -42,7 +43,7 @@ public class UnOp<T, R> implements Expression {
     }
 
     public static UnOp<Boolean, Boolean> boolOp(String operator, Expression operand, Function<Boolean, Boolean> evalFun) {
-        return UnOp.of(operator, operand, BoolValue.class, BoolValue::new, evalFun);
+        return UnOp.of(operator, operand, BoolValue.class, BoolValue::of, evalFun);
     }
 
     public static UnOp<Boolean, Boolean> not(Expression operand) {
@@ -59,23 +60,24 @@ public class UnOp<T, R> implements Expression {
     private final Function<T, R> evalFun;
 
     @Override
-    public Expression step(State state) {
+    public ExprConfig step(State state) {
 
-        if (operand instanceof BadExpression) {
-            return new BadUnOp<>(operator, operand);
+        if (operand instanceof StuckExpression) {
+            return ExprConfig.of(new StuckUnOp<>(operator, operand), state);
         }
 
         if (!(operand instanceof Value)) {
-            return new UnOp<>(operator, operand.step(state), operandClass, resultCtor, evalFun);
+            return ExprConfig.of(new UnOp<>(operator, operand.step(state).getExpression(), operandClass, resultCtor, evalFun),
+                    state);
         }
 
         Value val = (Value) operand;
 
         if ((operandClass.isAssignableFrom(val.getClass()))) {
-            return resultCtor.apply(evalFun.apply(operandClass.cast(val).getValue()));
+            return ExprConfig.of(resultCtor.apply(evalFun.apply(operandClass.cast(val).getValue())), state);
         }
 
-        return new BadUnOp(operator, operand);
+        return ExprConfig.of(new StuckUnOp(operator, operand), state);
     }
 
 

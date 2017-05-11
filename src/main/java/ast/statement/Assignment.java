@@ -1,18 +1,16 @@
 package ast.statement;
 
 import ast.State;
+import ast.StmConfig;
 import ast.expression.Identifier;
-import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
+import ast.expression.interfaces.StuckExpression;
 import ast.expression.interfaces.Value;
-import ast.expression.values.BoolValue;
-import ast.expression.values.IntValue;
-import ast.statement.bad_statements.BadAssignment;
+import ast.statement.bad_statements.StuckAssignment;
 import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Pair;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.IASTElement;
@@ -23,7 +21,7 @@ import viewmodel.interfaces.IASTVisitor;
 public class Assignment implements Statement, IASTElement<Tree.Node<ASTNode>> {
 
     public static Assignment of(Expression identifier, Expression value) {
-        return identifier == null || value == null ? new BadAssignment(identifier, value) : new Assignment(identifier, value);
+        return identifier == null || value == null ? new StuckAssignment(identifier, value) : new Assignment(identifier, value);
     }
 
     @Getter
@@ -32,34 +30,30 @@ public class Assignment implements Statement, IASTElement<Tree.Node<ASTNode>> {
     private final Expression value;
 
     @Override
-    public Pair<Statement, State> step(State state) {
+    public StmConfig step(State state) {
 
-        if (identifier instanceof BadExpression || value instanceof BadExpression) {
-            return Pair.of(new BadAssignment(identifier, value), state);
+        if (identifier instanceof StuckExpression || value instanceof StuckExpression) {
+            return StmConfig.of(new StuckAssignment(identifier, value), state);
         }
 
         if(!(identifier instanceof Identifier)) {
-            return Pair.of(new BadAssignment(identifier, value), state);
+            return StmConfig.of(new StuckAssignment(identifier, value), state);
         }
 
         if (!(value instanceof Value)) {
-            return Pair.of(new Assignment(identifier, value.step(state)), state);
+            return StmConfig.of(new Assignment(identifier, value.step(state).getExpression()), state);
         }
 
-        Identifier id = (Identifier)identifier;
+        Identifier id = (Identifier) identifier;
 
         Value currentValue = state.get(id);
-        if (currentValue == null) {
-            state.set(id, (Value) value);
-        } else if (value instanceof BoolValue && currentValue instanceof BoolValue) {
-            state.set(id, (BoolValue) value);
-        } else if (value instanceof IntValue && currentValue instanceof IntValue) {
-            state.set(id, (IntValue) value);
-        } else {
-            return Pair.of(new BadAssignment(id, value), state);
+        State newState = state.copy();
+        if (currentValue == null || value.getClass() == currentValue.getClass()) {
+            newState.set(id, (Value) value);
+            return StmConfig.endConfig(newState);
         }
 
-        return Pair.of(null, state);
+        return StmConfig.of(new StuckAssignment(id, value), state);
     }
 
     @Override

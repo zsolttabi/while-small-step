@@ -8,15 +8,15 @@ public class ASTNode {
 
     @Getter
     private final String label;
-    private final boolean bad;
+    private final boolean stuck;
 
     @Override
     public String toString() {
         return getLabel();
     }
 
-    public boolean isBad() {
-        return bad;
+    public boolean isStuck() {
+        return stuck;
     }
 
 }

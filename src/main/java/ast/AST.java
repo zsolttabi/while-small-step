@@ -1,10 +1,9 @@
 package ast;
 
-import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
+import ast.statement.interfaces.StuckStatement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import utils.Pair;
 import utils.Tree.Node;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.IASTElement;
@@ -14,30 +13,26 @@ import viewmodel.interfaces.IASTVisitor;
 public class AST implements IAST, IASTElement<Node<ASTNode>> {
 
     @Getter
-    private final State state;
-    @Getter
-    private final Statement stm;
+    private final StmConfig config;
 
     public AST(Statement stm) {
-        this.stm = stm;
-        state = new State();
+        config = StmConfig.of(stm, new State());
     }
 
-    protected AST(Pair<Statement, State> newConfig) {
-        this.stm = newConfig.getFirst();
-        this.state = newConfig.getSecond();
+    protected AST(StmConfig config) {
+        this.config = config;
     }
 
     @Override
     public AST step() {
 
-        Pair<Statement, State> newConfig = stm.step(state);
+        StmConfig newConfig = config.step();
 
-        if (newConfig.getFirst() instanceof BadStatement) {
+        if (newConfig.getStatement() instanceof StuckStatement) {
             return new BadAST(newConfig);
         }
 
-        return newConfig.getFirst() == null ? new ReducedAST(newConfig) : new AST(newConfig);
+        return newConfig.getStatement() == null ? new ReducedAST(newConfig) : new AST(newConfig);
     }
 
     public AST reduce() {

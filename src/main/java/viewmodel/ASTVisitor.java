@@ -3,14 +3,14 @@ package viewmodel;
 import ast.AST;
 import ast.BadAST;
 import ast.expression.Identifier;
-import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
+import ast.expression.interfaces.StuckExpression;
 import ast.expression.interfaces.Value;
 import ast.expression.operations.BinOp;
 import ast.expression.operations.UnOp;
 import ast.statement.*;
-import ast.statement.interfaces.BadStatement;
 import ast.statement.interfaces.Statement;
+import ast.statement.interfaces.StuckStatement;
 import lombok.val;
 import utils.Tree;
 import utils.Tree.Node;
@@ -27,18 +27,18 @@ public class ASTVisitor implements IASTVisitor<Node<ASTNode>> {
     }
 
     private static Node<ASTNode> createNode(String label, Expression exp) {
-        return createNode(label, exp instanceof BadExpression);
+        return createNode(label, exp instanceof StuckExpression);
     }
 
     private static Node<ASTNode> createNode(String label, Statement s) {
-        return createNode(label, s instanceof BadStatement);
+        return createNode(label, s instanceof StuckStatement);
     }
 
     @Override
     public Node<ASTNode> visit(AST element) {
-        return element.getStm() == null ?
+        return element.getConfig().getStatement() == null ?
                 createNode("EMPTY", element instanceof BadAST) :
-                element.getStm().accept(this);
+                element.getConfig().getStatement().accept(this);
     }
 
     @Override

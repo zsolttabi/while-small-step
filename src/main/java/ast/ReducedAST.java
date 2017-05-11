@@ -1,11 +1,8 @@
 package ast;
 
-import ast.statement.interfaces.Statement;
-import utils.Pair;
-
 public class ReducedAST extends AST implements IAST {
 
-    ReducedAST(Pair<Statement, State> newConfig) {
+    ReducedAST(StmConfig newConfig) {
         super(newConfig);
     }
 

@@ -1,10 +1,11 @@
 package ast.expression.operations;
 
+import ast.ExprConfig;
 import ast.State;
-import ast.expression.interfaces.BadExpression;
 import ast.expression.interfaces.Expression;
+import ast.expression.interfaces.StuckExpression;
 import ast.expression.interfaces.Value;
-import ast.expression.operations.bad_operations.BadBinOp;
+import ast.expression.operations.bad_operations.StuckBinOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import lombok.EqualsAndHashCode;
@@ -28,7 +29,7 @@ public class BinOp<T, R> implements Expression {
                                                                         Function<R, Value<R>> resultCtor,
                                                                         BiFunction<T, T, R> evalFun) {
 
-        return lhs == null || rhs == null ? new BadBinOp<>(operator, lhs, rhs) : new BinOp<>(operator,
+        return lhs == null || rhs == null ? new StuckBinOp<>(operator, lhs, rhs) : new BinOp<>(operator,
                 lhs,
                 rhs,
                 operandClass,
@@ -37,7 +38,7 @@ public class BinOp<T, R> implements Expression {
     }
 
     public static BinOp<Integer, Integer> arithOp(String operator, Expression lhs, Expression rhs, BiFunction<Integer, Integer, Integer> evalFun) {
-        return BinOp.of(operator, lhs, rhs, IntValue.class, IntValue::new, evalFun);
+        return BinOp.of(operator, lhs, rhs, IntValue.class, IntValue::of, evalFun);
     }
 
     public static BinOp<Integer, Integer> add(Expression lhs, Expression rhs) {
@@ -49,7 +50,7 @@ public class BinOp<T, R> implements Expression {
     }
 
     public static BinOp<Boolean, Boolean> boolOp(String operator, Expression lhs, Expression rhs, BiFunction<Boolean, Boolean, Boolean> evalFun) {
-        return BinOp.of(operator, lhs, rhs, BoolValue.class, BoolValue::new, evalFun);
+        return BinOp.of(operator, lhs, rhs, BoolValue.class, BoolValue::of, evalFun);
     }
 
     public static BinOp<Boolean, Boolean> and(Expression lhs, Expression rhs) {
@@ -57,7 +58,7 @@ public class BinOp<T, R> implements Expression {
     }
 
     public static BinOp<Integer, Boolean> intRelOp(String operator, Expression lhs, Expression rhs, BiFunction<Integer, Integer, Boolean> evalFun) {
-        return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::new, evalFun);
+        return BinOp.of(operator, lhs, rhs, IntValue.class, BoolValue::of, evalFun);
     }
 
     public static BinOp<Integer, Boolean> areEquals(Expression lhs, Expression rhs) {
@@ -65,7 +66,7 @@ public class BinOp<T, R> implements Expression {
     }
 
     public static BinOp<Integer, Boolean> lessThen(Expression lhs, Expression rhs) {
-        return BinOp.intRelOp("<=", lhs, rhs, (i1, i2) -> i1 < i2);
+        return BinOp.intRelOp("<", lhs, rhs, (i1, i2) -> i1 < i2);
     }
 
     @Getter
@@ -80,32 +81,35 @@ public class BinOp<T, R> implements Expression {
     private final BiFunction<T, T, R> evalFun;
 
     @Override
-    public Expression step(State state) {
+    public ExprConfig step(State state) {
 
-        if(lhs instanceof BadExpression) {
-            return new BadBinOp<>(operator, rhs, lhs);
+        if(lhs instanceof StuckExpression) {
+            return ExprConfig.of(new StuckBinOp<>(operator, rhs, lhs), state);
         }
 
         if (!(lhs instanceof Value)) {
-            return new BinOp<>(operator, lhs.step(state), rhs, operandClass, resultCtor, evalFun);
+            return ExprConfig.of(new BinOp<>(operator, lhs.step(state).getExpression(), rhs, operandClass, resultCtor, evalFun),
+                    state);
         }
 
-        if(rhs instanceof BadExpression) {
-            return new BadBinOp<>(operator, lhs, rhs);
+        if(rhs instanceof StuckExpression) {
+            return ExprConfig.of(new StuckBinOp<>(operator, lhs, rhs), state);
         }
 
         if (!(rhs instanceof Value)) {
-            return new BinOp<>(operator, lhs, rhs.step(state), operandClass, resultCtor, evalFun);
+            return ExprConfig.of(new BinOp<>(operator, lhs, rhs.step(state).getExpression(), operandClass, resultCtor, evalFun),
+                    state);
         }
 
         Value lVal = (Value) lhs;
         Value rVal = (Value) rhs;
 
         if (operandClass.isAssignableFrom(lVal.getClass()) && operandClass.isAssignableFrom(rVal.getClass())) {
-            return resultCtor.apply(evalFun.apply(operandClass.cast(lVal).getValue(), operandClass.cast(rVal).getValue()));
+            return ExprConfig.of(resultCtor.apply(evalFun.apply(operandClass.cast(lVal).getValue(), operandClass.cast(rVal).getValue())),
+                    state);
         }
 
-        return new BadBinOp(operator, lhs, rhs);
+        return ExprConfig.of(new StuckBinOp(operator, lhs, rhs), state);
     }
 
 

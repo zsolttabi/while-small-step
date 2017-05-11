@@ -1,20 +1,19 @@
 package ast;
 
-import ast.expression.BadIdentifier;
 import ast.expression.Identifier;
+import ast.expression.StuckIdentifier;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
-import ast.expression.operations.bad_operations.BadUnOp;
+import ast.expression.operations.bad_operations.StuckUnOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import ast.statement.*;
-import ast.statement.bad_statements.BadAssignment;
-import ast.statement.bad_statements.BadIf;
-import ast.statement.bad_statements.BadSequence;
+import ast.statement.bad_statements.StuckAssignment;
+import ast.statement.bad_statements.StuckIf;
+import ast.statement.bad_statements.StuckSequence;
 import ast.statement.interfaces.Statement;
 import org.junit.Assert;
 import org.junit.Test;
-import utils.Pair;
 
 public class StatementTests {
 
@@ -24,10 +23,10 @@ public class StatementTests {
         Statement underTest = new Skip();
         State state = new State();
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertNull(result.getFirst());
-        Assert.assertEquals(result.getSecond(), state);
+        Assert.assertNull(result.getStatement());
+        Assert.assertEquals(state, result.getState());
 
     }
 
@@ -42,10 +41,10 @@ public class StatementTests {
         expectedState.set(identifier, value);
         Statement underTest = new Assignment(identifier, value);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertNull(result.getFirst());
-        Assert.assertEquals(result.getSecond(), expectedState);
+        Assert.assertNull(result.getStatement());
+        Assert.assertEquals(expectedState, result.getState());
 
     }
 
@@ -63,10 +62,10 @@ public class StatementTests {
 
         Statement underTest = new Assignment(identifier, value);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertNull(result.getFirst());
-        Assert.assertEquals(result.getSecond(), expectedState);
+        Assert.assertNull(result.getStatement());
+        Assert.assertEquals(expectedState, result.getState());
 
     }
 
@@ -77,29 +76,29 @@ public class StatementTests {
         Expression y = new Identifier("y");
         Statement underTest = new Assignment(x, y);
 
-        Pair<Statement, State> result = underTest.step(new State());
+        StmConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result.getFirst(), new Assignment(x, y.step(new State())));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(new Assignment(x, y.step(new State()).getExpression()), result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
-        result = result.getFirst().step(result.getSecond());
+        result = result.getStatement().step(result.getState());
 
-        Assert.assertEquals(result.getFirst(), new BadAssignment(x, y.step(new State())));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(new StuckAssignment(x, y.step(new State()).getExpression()), result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
     @Test
     public void testAssignToBadIdentifierYieldsBadAssignment() {
 
-        Expression x = new BadIdentifier("x");
+        Expression x = new StuckIdentifier("x");
         Expression y = new Identifier("y");
         Statement underTest = new Assignment(x, y);
 
-        Pair<Statement, State> result = underTest.step(new State());
+        StmConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result.getFirst(), new BadAssignment(x, y));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(new StuckAssignment(x, y), result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
@@ -108,13 +107,13 @@ public class StatementTests {
     public void testAssignBadValueYieldsBadAssignment() {
 
         Expression x = new Identifier("x");
-        Expression badVal = new BadUnOp<Integer, Integer>("", null);
+        Expression badVal = new StuckUnOp<Integer, Integer>("", null);
         Statement underTest = new Assignment(x, badVal);
 
-        Pair<Statement, State> result = underTest.step(new State());
+        StmConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result.getFirst(), new BadAssignment(x, badVal));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(new StuckAssignment(x, badVal), result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
@@ -127,25 +126,25 @@ public class StatementTests {
         State state = new State();
         Statement underTest = new Sequence(s1, s2);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst(), s2);
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(s2, result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
     @Test
     public void testBadSequence() {
 
-        Statement s1 = new BadAssignment(new Identifier("x"), new Identifier("y"));
+        Statement s1 = new StuckAssignment(new Identifier("x"), new Identifier("y"));
         Statement s2 = new Skip();
         State state = new State();
         Statement underTest = new Sequence(s1, s2);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst().getClass(), BadSequence.class);
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(StuckSequence.class, result.getStatement().getClass());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
@@ -158,10 +157,10 @@ public class StatementTests {
         State state = new State();
         Statement underTest = new If(new BoolValue(true), s1, s2);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst(), s1);
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(s1, result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
@@ -172,24 +171,24 @@ public class StatementTests {
         Statement s2 = new Sequence(null, null);
         Statement underTest = new If(new BoolValue(false), s1, s2);
 
-        Pair<Statement, State> result = underTest.step(new State());
+        StmConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result.getFirst(), s2);
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(s2, result.getStatement());
+        Assert.assertEquals(new State(), result.getState());
 
     }
 
     @Test
     public void testBadExprYieldsBadIf() {
 
-        Expression expr = new BadUnOp<Integer, Integer>("", null);
+        Expression expr = new StuckUnOp<Integer, Integer>("", null);
         State state = new State();
         Statement underTest = new If(expr, null, null);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst(), new BadIf(expr, null, null));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(result.getStatement(), new StuckIf(expr, null, null));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -200,10 +199,10 @@ public class StatementTests {
         State state = new State();
         Statement underTest = new If(expr, null, null);
 
-        Pair<Statement, State> result = underTest.step(state);
+        StmConfig result = underTest.step(state);
 
-        Assert.assertEquals(result.getFirst(), new BadIf(expr, null, null));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(result.getStatement(), new StuckIf(expr, null, null));
+        Assert.assertEquals(result.getState(), new State());
     }
 
 
@@ -214,10 +213,10 @@ public class StatementTests {
         Statement s = new Sequence(new Skip(), new Skip());
         Statement underTest = new While(cond, s);
 
-        Pair<Statement, State> result = underTest.step(new State());
+        StmConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result.getFirst(), new If(cond, new Sequence(s, underTest), new Skip()));
-        Assert.assertEquals(result.getSecond(), new State());
+        Assert.assertEquals(result.getStatement(), new If(cond, new Sequence(s, underTest), new Skip()));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 

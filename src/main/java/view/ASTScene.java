@@ -101,7 +101,7 @@ public class ASTScene extends Scene {
         vBox.getChildren().add(values);
         hbox.getChildren().add(vBox);
 
-        ast.getState().entrySet().forEach(e -> {
+        ast.getConfig().getState().entrySet().forEach(e -> {
 
             Label var = new Label(e.getKey().getIdentifier());
             var.setTextFill(Paint.valueOf("#d8d8d8"));
@@ -200,7 +200,7 @@ public class ASTScene extends Scene {
 
         return new ASTPane<>(treeLayout,
                 ASTNode::toString,
-                s -> s.isBad() ? "#FF0000" : "#000000",
+                s -> s.isStuck() ? "#FF0000" : "#000000",
                 Font.font("Courier New", FontWeight.BOLD, 14));
     }
 

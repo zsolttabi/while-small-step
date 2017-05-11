@@ -1,13 +1,13 @@
 package ast.statement;
 
 import ast.State;
+import ast.StmConfig;
 import ast.expression.interfaces.Expression;
-import ast.statement.bad_statements.BadWhile;
+import ast.statement.bad_statements.StuckWhile;
 import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import utils.Pair;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.IASTElement;
@@ -18,7 +18,7 @@ import viewmodel.interfaces.IASTVisitor;
 public class While implements Statement, IASTElement<Tree.Node<ASTNode>> {
 
     public static While of(Expression condition, Statement s) {
-        return condition == null || s == null ? new BadWhile(condition, s) : new While(condition, s);
+        return condition == null || s == null ? new StuckWhile(condition, s) : new While(condition, s);
     }
 
     @Getter
@@ -27,8 +27,8 @@ public class While implements Statement, IASTElement<Tree.Node<ASTNode>> {
     private final Statement s;
 
     @Override
-    public Pair<Statement, State> step(State state) {
-        return Pair.of(new If(condition, new Sequence(s, this), new Skip()), state);
+    public StmConfig step(State state) {
+        return StmConfig.of(new If(condition, new Sequence(s, this), new Skip()), state);
     }
 
     @Override

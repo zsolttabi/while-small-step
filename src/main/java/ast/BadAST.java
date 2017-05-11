@@ -1,11 +1,8 @@
 package ast;
 
-import ast.statement.interfaces.Statement;
-import utils.Pair;
-
 public class BadAST extends AST implements IAST {
 
-    BadAST(Pair<Statement, State> newConfig) {
+    BadAST(StmConfig newConfig) {
         super(newConfig);
     }
 

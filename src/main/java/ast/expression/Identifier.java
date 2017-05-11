@@ -1,6 +1,7 @@
 package ast.expression;
 
 
+import ast.ExprConfig;
 import ast.State;
 import ast.expression.interfaces.Expression;
 import ast.expression.interfaces.Value;
@@ -20,9 +21,9 @@ public class Identifier implements Expression, IASTElement<Tree.Node<ASTNode>> {
     private final String identifier;
 
     @Override
-    public Expression step(State state) {
+    public ExprConfig step(State state) {
         Value<?> value = state.get(this);
-        return value == null ? new BadIdentifier(identifier) : value;
+        return  ExprConfig.of(value == null ? new StuckIdentifier(identifier) : value, state);
     }
 
     @Override

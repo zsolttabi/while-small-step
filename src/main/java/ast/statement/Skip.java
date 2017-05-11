@@ -1,9 +1,9 @@
 package ast.statement;
 
 import ast.State;
+import ast.StmConfig;
 import ast.statement.interfaces.Statement;
 import lombok.EqualsAndHashCode;
-import utils.Pair;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.IASTElement;
@@ -13,8 +13,8 @@ import viewmodel.interfaces.IASTVisitor;
 public class Skip implements Statement, IASTElement<Tree.Node<ASTNode>> {
 
     @Override
-    public Pair<Statement, State> step(State state) {
-        return Pair.of(null, state);
+    public StmConfig step(State state) {
+        return StmConfig.endConfig(state);
     }
 
     @Override

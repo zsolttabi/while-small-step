@@ -1,12 +1,12 @@
 package ast;
 
-import ast.expression.BadIdentifier;
 import ast.expression.Identifier;
+import ast.expression.StuckIdentifier;
 import ast.expression.interfaces.Expression;
 import ast.expression.operations.BinOp;
 import ast.expression.operations.UnOp;
-import ast.expression.operations.bad_operations.BadBinOp;
-import ast.expression.operations.bad_operations.BadUnOp;
+import ast.expression.operations.bad_operations.StuckBinOp;
+import ast.expression.operations.bad_operations.StuckUnOp;
 import ast.expression.values.BoolValue;
 import ast.expression.values.IntValue;
 import org.junit.Assert;
@@ -18,13 +18,14 @@ public class ExpressionTests {
     public void testInitializedIdentifierYieldsValue() {
 
         Identifier underTest = new Identifier("x");
-        State state = new State();
         IntValue value = new IntValue(1);
+        State state = new State();
         state.set(underTest, value);
 
-        Expression result = underTest.step(state);
+        ExprConfig result = underTest.step(state);
 
-        Assert.assertEquals(result, value);
+        Assert.assertEquals(result.getExpression(), value);
+        Assert.assertEquals(result.getState(), state);
 
     }
 
@@ -33,9 +34,10 @@ public class ExpressionTests {
 
         Identifier underTest = new Identifier("x");
         State state = new State();
-        Expression result = underTest.step(state);
+        ExprConfig result = underTest.step(state);
 
-        Assert.assertEquals(result, new BadIdentifier("x"));
+        Assert.assertEquals(result.getExpression(), new StuckIdentifier("x"));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -46,9 +48,10 @@ public class ExpressionTests {
         Expression rhs = new IntValue(1);
         Expression underTest = BinOp.add(lhs, rhs);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, new IntValue(2));
+        Assert.assertEquals(result.getExpression(), new IntValue(2));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -59,13 +62,14 @@ public class ExpressionTests {
         Expression rhs = new Identifier("x");
         Expression underTest = BinOp.add(lhs, rhs);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result,  BinOp.add(lhs, rhs.step(new State())));
+        Assert.assertEquals(result.getExpression(),  BinOp.add(lhs, rhs.step(new State()).getExpression()));
 
-        result = result.step(new State());
+        result = result.step();
 
-        Assert.assertEquals(result, new BadBinOp<>("+", lhs, rhs.step(new State())));
+        Assert.assertEquals(result.getExpression(), new StuckBinOp<>("+", lhs, rhs.step(new State()).getExpression()));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -76,9 +80,10 @@ public class ExpressionTests {
         Expression rhs = new IntValue(1);
         Expression underTest = BinOp.add(lhs, rhs);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, new BadBinOp<>("+", lhs, rhs));
+        Assert.assertEquals(result.getExpression(), new StuckBinOp<>("+", lhs, rhs));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -89,9 +94,10 @@ public class ExpressionTests {
         Expression rhs = new IntValue(1);
         Expression underTest = BinOp.and(lhs, rhs);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, new BadBinOp<>("and", lhs, rhs));
+        Assert.assertEquals(result.getExpression(), new StuckBinOp<>("and", lhs, rhs));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -101,9 +107,10 @@ public class ExpressionTests {
         Expression operand = new IntValue(1);
         Expression underTest = UnOp.neg(operand);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, new IntValue(-1));
+        Assert.assertEquals(result.getExpression(), new IntValue(-1));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -113,13 +120,14 @@ public class ExpressionTests {
         Expression operand = new Identifier("x");
         Expression underTest = UnOp.neg(operand);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, UnOp.neg(operand.step(new State())));
+        Assert.assertEquals(result.getExpression(), UnOp.neg(operand.step(new State()).getExpression()));
 
-        result = result.step(new State());
+        result = result.step();
 
-        Assert.assertEquals(result, new BadUnOp<>( "-", operand.step(new State())));
+        Assert.assertEquals(result.getExpression(), new StuckUnOp<>( "-", operand.step(new State()).getExpression()));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
@@ -129,9 +137,10 @@ public class ExpressionTests {
         Expression operand = new IntValue(1);
         Expression underTest = UnOp.not(operand);
 
-        Expression result = underTest.step(new State());
+        ExprConfig result = underTest.step(new State());
 
-        Assert.assertEquals(result, new BadUnOp<>("not", operand));
+        Assert.assertEquals(result.getExpression(), new StuckUnOp<>("not", operand));
+        Assert.assertEquals(result.getState(), new State());
 
     }
 
