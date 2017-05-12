@@ -1,20 +1,16 @@
 grammar While;
 
 @parser::header {
-    import ast.AST;
-    import ast.statement.*;
-    import ast.statement.interfaces.*;
-    import ast.expression.*;
-    import ast.expression.operations.*;
-    import ast.expression.interfaces.*;
-    import ast.expression.values.*;
+    import program.*;
+    import program.statements.*;
+    import program.expressions.*;
 }
 
 @parser::members {
 
-    public static AST parse(String input) {
+    public static Statement parse(String input) {
         WhileParser parser = new WhileParser(new CommonTokenStream(new WhileLexer(CharStreams.fromString(input))));
-        return new AST(parser.start().value);
+        return parser.start().value;
     }
 
 }
@@ -25,13 +21,13 @@ start returns [Statement value]:
 
 statement returns [Statement value]:
 
-    id = expression Assign e = expression { $value = Assignment.of($id.value, $e.value); }
+    id = expression Assign e = expression { $value = new Assignment($id.value, $e.value); }
 |
-    s1 = statement SeqSeparator s2 = statement { $value = Sequence.of($s1.value, $s2.value); }
+    s1 = statement SeqSeparator s2 = statement { $value = new Sequence($s1.value, $s2.value); }
 |
-    IF e = expression Then s1 = statement Else s2 = statement Fi { $value = If.of($e.value, $s1.value, $s2.value); }
+    IF e = expression Then s1 = statement Else s2 = statement Fi { $value = new If($e.value, $s1.value, $s2.value); }
 |
-    WHILE e = expression Do s = statement Od { $value = While.of($e.value, $s.value); }
+    WHILE e = expression Do s = statement Od { $value = new While($e.value, $s.value); }
 |
     Skip { $value  = new Skip(); }
 |

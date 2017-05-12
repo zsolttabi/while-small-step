@@ -1,6 +1,5 @@
 package view;
 
-import ast.AST;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +17,7 @@ import org.abego.treelayout.TreeForTreeLayout;
 import org.abego.treelayout.TreeLayout;
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
+import program.Program;
 import syntax.while_parser.WhileParser;
 import utils.Tree;
 import viewmodel.ASTNode;
@@ -25,18 +25,30 @@ import viewmodel.ASTNodeExtentProvider;
 import viewmodel.ASTVisitor;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import static viewmodel.ASTNode.NodeType;
 
 public class ASTScene extends Scene {
 
     private static final String BACK_COLOR = "#2c2e33";
     private static final String BORDER_COLOR = "#ccc7cb";
     private static final String LIGHT_BACK_COLOR = "#686c6d";
-    private AST ast;
+    private Program program;
     private BorderPane mainPane;
+
+    private static Map<NodeType, String> NODE_TYPE_TO_COLOR = new HashMap<>();
+    static {
+        NODE_TYPE_TO_COLOR.put(NodeType.NORMAL, "#000000");
+        NODE_TYPE_TO_COLOR.put(NodeType.NEXT, "#3F92EA");
+        NODE_TYPE_TO_COLOR.put(NodeType.STUCK, "#FF0000");
+        NODE_TYPE_TO_COLOR.put(NodeType.TERMINATED, "#4CEA3F");
+    }
 
     public ASTScene(String initialInput) {
         super(new BorderPane());
-        setAst(initialInput);
+        setProgram(initialInput);
 
         mainPane = (BorderPane) getRoot();
         mainPane.setTop(top());
@@ -67,15 +79,15 @@ public class ASTScene extends Scene {
     }
 
     private void stepAst() {
-        ast = ast.step();
+        program.step();
     }
 
-    private void setAst(String input) {
-        ast = WhileParser.parse(input);
+    private void setProgram(String input) {
+        program = new Program(WhileParser.parse(input), 1000);
     }
 
     private void reduceAST() {
-        ast = ast.reduce();
+        program.reduce();
     }
 
     private HBox top() {
@@ -101,7 +113,7 @@ public class ASTScene extends Scene {
         vBox.getChildren().add(values);
         hbox.getChildren().add(vBox);
 
-        ast.getConfig().getState().entrySet().forEach(e -> {
+        program.getCurrentConfiguration().getState().entrySet().forEach(e -> {
 
             Label var = new Label(e.getKey().getIdentifier());
             var.setTextFill(Paint.valueOf("#d8d8d8"));
@@ -156,7 +168,7 @@ public class ASTScene extends Scene {
         textArea.setText(initialInput);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue)) {
-                setAst(newValue);
+                setProgram(newValue);
                 refreshCenter();
             }
         });
@@ -193,14 +205,14 @@ public class ASTScene extends Scene {
 
     private ASTPane<ASTNode> getTreePane() {
 
-        TreeForTreeLayout<ASTNode> tree = ASTScene.createTreeLayout(ASTVisitor.visitAST(ast).getRoot());
+        TreeForTreeLayout<ASTNode> tree = ASTScene.createTreeLayout(ASTVisitor.visitAST(program).getRoot());
         TreeLayout<ASTNode> treeLayout = new TreeLayout<>(tree,
                 new ASTNodeExtentProvider(30, 30),
                 new DefaultConfiguration<>(50.0, 10.0));
 
         return new ASTPane<>(treeLayout,
                 ASTNode::toString,
-                s -> s.isStuck() ? "#FF0000" : "#000000",
+                s -> NODE_TYPE_TO_COLOR.get(s.getNodeType()),
                 Font.font("Courier New", FontWeight.BOLD, 14));
     }
 

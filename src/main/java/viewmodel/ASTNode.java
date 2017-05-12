@@ -6,17 +6,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ASTNode {
 
+    public enum NodeType {
+        NORMAL, NEXT, STUCK, TERMINATED
+    }
+
     @Getter
     private final String label;
-    private final boolean stuck;
+    @Getter
+    private final NodeType nodeType;
 
     @Override
     public String toString() {
         return getLabel();
-    }
-
-    public boolean isStuck() {
-        return stuck;
     }
 
 }

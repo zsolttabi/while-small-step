@@ -1,49 +1,65 @@
 package viewmodel;
 
-import ast.AST;
-import ast.BadAST;
-import ast.expression.Identifier;
-import ast.expression.interfaces.Expression;
-import ast.expression.interfaces.StuckExpression;
-import ast.expression.interfaces.Value;
-import ast.expression.operations.BinOp;
-import ast.expression.operations.UnOp;
-import ast.statement.*;
-import ast.statement.interfaces.Statement;
-import ast.statement.interfaces.StuckStatement;
 import lombok.val;
+import program.Configuration;
+import program.Configuration.ConfigType;
+import program.IASTNode;
+import program.Program;
+import program.expressions.BinOp;
+import program.expressions.Identifier;
+import program.expressions.UnOp;
+import program.expressions.Value;
+import program.statements.*;
 import utils.Tree;
 import utils.Tree.Node;
-import viewmodel.interfaces.IASTVisitor;
+import viewmodel.ASTNode.NodeType;
+import viewmodel.interfaces.INodeVisitor;
 
-public class ASTVisitor implements IASTVisitor<Node<ASTNode>> {
+import static program.Configuration.ConfigType.TERMINATED;
 
-    public static Tree<ASTNode> visitAST(AST ast) {
-        return new Tree<>(new ASTVisitor().visit(ast));
+public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
+
+    private Configuration currentConfiguration;
+    private Configuration nextConfiguration;
+
+    public static Tree<ASTNode> visitAST(Program program) {
+        return new Tree<>(new ASTVisitor().visit(program));
     }
 
-    private static Node<ASTNode> createNode(String label, boolean isBad) {
-        return new Node<>(new ASTNode(label, isBad), null);
+    private Node<ASTNode> createNode(String label, IASTNode element) {
+        return new Node<>(new ASTNode(label, getNodeType(element)), null);
     }
 
-    private static Node<ASTNode> createNode(String label, Expression exp) {
-        return createNode(label, exp instanceof StuckExpression);
-    }
-
-    private static Node<ASTNode> createNode(String label, Statement s) {
-        return createNode(label, s instanceof StuckStatement);
+    private NodeType getNodeType(IASTNode element) {
+        if (currentConfiguration.getConfigType() == ConfigType.STUCK && nextConfiguration.getNode() == element) {
+            return NodeType.STUCK;
+        }
+        if (currentConfiguration.getConfigType() == ConfigType.TERMINATED && nextConfiguration.getNode() == element) {
+            return NodeType.TERMINATED;
+        }
+        if (currentConfiguration.getConfigType() == ConfigType.INTERMEDIATE && nextConfiguration.getNode() == element) {
+            return NodeType.NEXT;
+        }
+        return NodeType.NORMAL;
     }
 
     @Override
-    public Node<ASTNode> visit(AST element) {
-        return element.getConfig().getStatement() == null ?
-                createNode("EMPTY", element instanceof BadAST) :
-                element.getConfig().getStatement().accept(this);
+    public Node<ASTNode> visit(Program element) {
+        this.currentConfiguration = element.getCurrentConfiguration();
+        this.nextConfiguration = element.next();
+        return element.getCurrentConfiguration().accept(this);
+    }
+
+    @Override
+    public Node<ASTNode> visit(Configuration element) {
+        return element.getConfigType() == TERMINATED ?
+                new Node<>(new ASTNode("TERMINATED", NodeType.TERMINATED), null) :
+                element.getNode().accept(this);
     }
 
     @Override
     public Node<ASTNode> visit(Skip element) {
-        return createNode("SKIP", false);
+        return createNode("SKIP", element);
     }
 
     @Override
@@ -91,8 +107,8 @@ public class ASTVisitor implements IASTVisitor<Node<ASTNode>> {
         if (element.getCondition() != null) {
             node.addChild(element.getCondition().accept(this));
         }
-        if (element.getS() != null) {
-            node.addChild(element.getS().accept(this));
+        if (element.getStm() != null) {
+            node.addChild(element.getStm().accept(this));
         }
         return node;
     }
@@ -130,7 +146,7 @@ public class ASTVisitor implements IASTVisitor<Node<ASTNode>> {
 
     @Override
     public Node<ASTNode> visit(Abort element) {
-        return createNode("ABORT", true);
+        return createNode("ABORT", element);
     }
 
 }
