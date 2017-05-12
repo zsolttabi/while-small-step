@@ -3,49 +3,54 @@ package program.statements;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration;
-import program.Configuration.ConfigType;
 import program.State;
-import program.expressions.Expression;
 import program.expressions.ExpressionConfiguration;
+import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
 import utils.Tree.Node;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
-@EqualsAndHashCode
+import static program.Configuration.ConfigType.*;
+
 @RequiredArgsConstructor
-public class Assignment implements Statement {
+@EqualsAndHashCode
+@ToString
+public class Assignment implements IStatement {
 
     @Getter
-    private final Expression identifier;
+    private final IExpression identifier;
     @Getter
-    private final Expression value;
+    private final IExpression value;
 
     @Override
     public StatementConfiguration step(State state) {
 
         if (!(identifier instanceof Identifier)) {
-            return new StatementConfiguration(this, state, ConfigType.STUCK);
+            return new StatementConfiguration(this, state, STUCK);
+        }
+
+        if (!(value instanceof Value)) {
+            ExpressionConfiguration valueConf = value.step(state);
+            return new StatementConfiguration(new Assignment(identifier, valueConf.getNode()),
+                    valueConf.getState(),
+                    valueConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
 
         Identifier id = (Identifier) identifier;
-        Value currentValue = state.get(id);
+        Value val = (Value) this.value;
 
-        ExpressionConfiguration nextValueConfig = value.step(state);
-        if (nextValueConfig.getConfigType() == ConfigType.TERMINATED) {
-            State newState = state.copy();
-            if (currentValue == null || value.getClass() == currentValue.getClass()) {
-                newState.set(id, (Value) value);
-                return new StatementConfiguration(null, newState, ConfigType.TERMINATED);
-            }
-            return new StatementConfiguration(this, state, ConfigType.STUCK);
+        Value currentValue = state.get(id);
+        if (currentValue != null && currentValue.getValue().getClass() != val.getValue().getClass()) {
+            return new StatementConfiguration(this, state, STUCK);
         }
 
-        return new StatementConfiguration(new Assignment(identifier, nextValueConfig.getNode()),
-                nextValueConfig.getState(),
-                nextValueConfig.getConfigType());
+        State newState = state.copy();
+        newState.set(id, val);
+        return new StatementConfiguration(this, newState, TERMINATED);
     }
 
     @Override
@@ -53,7 +58,8 @@ public class Assignment implements Statement {
         if (!(value instanceof Value)) {
             return value.next(state);
         }
-        return step(state);
+        StatementConfiguration stepConfiguration = step(state);
+        return new StatementConfiguration(this, stepConfiguration.getState(), stepConfiguration.getConfigType());
     }
 
     @Override

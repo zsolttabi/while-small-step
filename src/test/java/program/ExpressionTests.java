@@ -2,7 +2,17 @@ package program;
 
 import org.junit.Assert;
 import org.junit.Test;
-import program.expressions.*;
+import program.expressions.ExpressionConfiguration;
+import program.expressions.IExpression;
+import program.expressions.Identifier;
+import program.expressions.Value;
+
+import static program.Configuration.ConfigType.STUCK;
+import static program.Configuration.ConfigType.TERMINATED;
+import static program.expressions.BinOp.Arithmetic.ADD;
+import static program.expressions.BinOp.Logical.AND;
+import static program.expressions.UnOp.Arithmetic.NEG;
+import static program.expressions.UnOp.Logical.NOT;
 
 public class ExpressionTests {
 
@@ -10,132 +20,107 @@ public class ExpressionTests {
     public void testInitializedIdentifierYieldsValue() {
 
         Identifier underTest = new Identifier("x");
-        IntValue value = new IntValue(1);
+        Value<Integer> value = new Value<>(1);
         State state = new State();
         state.set(underTest, value);
 
         Configuration result = underTest.step(state);
 
-        Assert.assertEquals(result.getNode(), value);
-        Assert.assertEquals(result.getState(), state);
-        // assert whole config
-
+        Assert.assertEquals(new ExpressionConfiguration(value, state, TERMINATED), result);
     }
 
     @Test
-    public void testUninitializedIdentifierYieldsBadIdentifier() {
+    public void testUninitializedIdentifierYieldsStuckIdentifier() {
 
         Identifier underTest = new Identifier("x");
         State state = new State();
+
         Configuration result = underTest.step(state);
 
-        Assert.assertEquals(result.getNode(), underTest);
-        Assert.assertEquals(result.getState(), new State());
-
+        Assert.assertEquals(new ExpressionConfiguration(underTest, new State(), STUCK), result);
     }
 
     @Test
     public void testBinOpYieldsResult() {
 
-        Expression lhs = new IntValue(1);
-        Expression rhs = new IntValue(1);
-        Expression underTest = BinOp.add(lhs, rhs);
+        IExpression lhs = new Value<>(1);
+        IExpression rhs = new Value<>(1);
+        IExpression underTest = ADD.of(lhs, rhs);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(result.getNode(), new IntValue(2));
-        Assert.assertEquals(result.getState(), new State());
-
+        Assert.assertEquals(new ExpressionConfiguration(new Value<>(2), new State(), TERMINATED), result);
     }
 
     @Test
-    public void testBadOperandYieldsBadBinOp() {
+    public void testStuckOperandYieldsStuckBinOp() {
 
-//        Expression lhs = new IntValue(1);
-//        Expression rhs = new Identifier("x");
-//        Expression underTest = BinOp.add(lhs, rhs);
-//
-//        Configuration result = underTest.step(new State());
-//
-//        Assert.assertEquals(result.getNode(),  BinOp.add(lhs, rhs.step(new State()).getNode()));
-//
-//        result = result.step();
-//
-//        Assert.assertEquals(result.getNode(), new StuckBinOp<>("+", lhs, rhs.step(new State()).getNode()));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression lhs = new Identifier("x");
+        IExpression rhs = new Value<>(1);
+        IExpression underTest = ADD.of(lhs, rhs);
 
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(new ExpressionConfiguration(ADD.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
-    public void testMismatchedTypesYieldsBadBinOp() {
+    public void testMismatchedTypesYieldsStuckBinOp() {
 
-//        Expression lhs = new BoolValue(true);
-//        Expression rhs = new IntValue(1);
-//        Expression underTest = BinOp.add(lhs, rhs);
-//
-//        Configuration result = underTest.step(new State());
-//
-//        Assert.assertEquals(result.getNode(), new StuckBinOp<>("+", lhs, rhs));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression lhs = new Value<>(1);
+        IExpression rhs = new Value<>(true);
+        IExpression underTest = ADD.of(lhs, rhs);
 
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(new ExpressionConfiguration(ADD.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
-    public void testBadOperandTypesYieldsBadBinOp() {
+    public void testWrongOperandTypesYieldsStuckBinOp() {
 
-//        Expression lhs = new IntValue(1);
-//        Expression rhs = new IntValue(1);
-//        Expression underTest = BinOp.and(lhs, rhs);
-//
-//        ExprConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(result.getExpression(), new StuckBinOp<>("and", lhs, rhs));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression lhs = new Value<>(1);
+        IExpression rhs = new Value<>(1);
+        IExpression underTest = AND.of(lhs, rhs);
 
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(new ExpressionConfiguration(AND.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
     public void testUnOpYieldsResult() {
 
-        Expression operand = new IntValue(1);
-        Expression underTest = UnOp.neg(operand);
+        IExpression operand = new Value<>(1);
+        IExpression underTest = NEG.of(operand);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(result.getNode(), new IntValue(-1));
-        Assert.assertEquals(result.getState(), new State());
-
+        Assert.assertEquals(new ExpressionConfiguration(new Value<>(-1), new State(), TERMINATED), result);
     }
 
     @Test
-    public void testBadOperandYieldsBadUnOp() {
+    public void testStuckOperandYieldsStuckUnOp() {
 
-        Expression operand = new Identifier("x");
-        Expression underTest = UnOp.neg(operand);
+        IExpression operand = new Identifier("x");
+        IExpression underTest = NEG.of(operand);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(result.getNode(), UnOp.neg(operand.step(new State()).getNode()));
-
-        result = result.step();
-
-        Assert.assertEquals(result.getNode(), UnOp.neg(operand.step(new State()).getNode()));
-        Assert.assertEquals(result.getState(), new State());
-        // TODO: assert stuck
-
+        Assert.assertEquals(new ExpressionConfiguration(NEG.of(operand.step(new State()).getNode()),
+                new State(),
+                STUCK), result);
     }
 
     @Test
-    public void testBadOperandTypeYieldsBadUnOp() {
+    public void testWrongOperandTypeYieldsStuckUnOp() {
 
-        Expression operand = new IntValue(1);
-        Expression underTest = UnOp.not(operand);
+        IExpression operand = new Value<>(1);
+        IExpression underTest = NOT.of(operand);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(result.getNode(), UnOp.not(operand));
-        Assert.assertEquals(result.getState(), new State());
-
+        Assert.assertEquals(new ExpressionConfiguration(NOT.of(operand), new State(), STUCK), result);
     }
 
 }

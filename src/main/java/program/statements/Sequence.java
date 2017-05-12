@@ -3,6 +3,7 @@ package program.statements;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration;
 import program.Configuration.ConfigType;
 import program.State;
@@ -12,21 +13,22 @@ import viewmodel.interfaces.INodeVisitor;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Sequence implements Statement {
+@ToString
+public class Sequence implements IStatement {
 
     @Getter
-    private final Statement s1;
+    private final IStatement s1;
     @Getter
-    private final Statement s2;
+    private final IStatement s2;
 
     @Override
     public StatementConfiguration step(State state) {
 
-        StatementConfiguration nextS1Config = s1.step(state);
+        StatementConfiguration s1Conf = s1.step(state);
 
-        return nextS1Config.getConfigType() == ConfigType.TERMINATED ?
-                new StatementConfiguration(s2, nextS1Config.getState(), ConfigType.INTERMEDIATE) :
-                new StatementConfiguration(new Sequence(nextS1Config.getNode(), s2), nextS1Config.getState(), nextS1Config.getConfigType());
+        return s1Conf.getConfigType() == ConfigType.TERMINATED ?
+                new StatementConfiguration(s2, s1Conf.getState(), ConfigType.INTERMEDIATE) :
+                new StatementConfiguration(new Sequence(s1Conf.getNode(), s2), s1Conf.getState(), s1Conf.getConfigType());
     }
 
     @Override

@@ -1,18 +1,13 @@
 package program.expressions;
 
+public final class BoolValue extends Value<Boolean> implements IExpression {
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@EqualsAndHashCode
-public final class BoolValue implements Expression, Value<Boolean> {
-
-    @Getter
-    private final Boolean value;
+    public BoolValue(Boolean value) {
+        super(value);
+    }
 
     public static BoolValue of(Boolean value) {
         return new BoolValue(value);
     }
+
 }

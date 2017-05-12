@@ -1,11 +1,11 @@
 package program.statements;
 
 import program.Configuration;
-import program.IASTNode;
+import program.IProgramElement;
 import program.State;
 
 
-public interface Statement extends IASTNode {
+public interface IStatement extends IProgramElement {
 
     StatementConfiguration step(State state);
 

@@ -1,210 +1,183 @@
 package program;
 
+import org.junit.Assert;
 import org.junit.Test;
+import program.expressions.IExpression;
+import program.expressions.Identifier;
+import program.expressions.Value;
+import program.statements.*;
+
+import static program.Configuration.ConfigType.*;
+import static program.expressions.BinOp.Arithmetic.ADD;
+import static program.expressions.BinOp.Logical.AND;
 
 public class StatementTests {
 
     @Test
     public void testSkipSkips() {
 
-//        Statement underTest = new Skip();
-//        State state = new State();
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertNull(result.getStatement());
-//        Assert.assertEquals(state, result.getState());
+        IStatement underTest = new Skip();
+        State state = new State();
 
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(new Skip(), new State(), TERMINATED), result);
     }
 
     @Test
     public void testAssignmentAssignsValueToNewVariable() {
 
-//        Identifier identifier = new Identifier("x");
-//        Value<?> value = new IntValue(5);
-//
-//        State state = new State();
-//        State expectedState = new State();
-//        expectedState.set(identifier, value);
-//        Statement underTest = new Assignment(identifier, value);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertNull(result.getStatement());
-//        Assert.assertEquals(expectedState, result.getState());
+        Identifier identifier = new Identifier("x");
+        Value<?> value = new Value<>(5);
 
+        State state = new State();
+        State expectedState = new State();
+        expectedState.set(identifier, value);
+        IStatement underTest = new Assignment(identifier, value);
+
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(underTest, expectedState, TERMINATED), result);
     }
 
 
     @Test
     public void testAssignmentAssignsNewValueToExistingVariable() {
 
-//        Identifier identifier = new Identifier("x");
-//        Value<?> value = new IntValue(5);
-//
-//        State state = new State();
-//        state.set(identifier, new IntValue(1));
-//        State expectedState = new State();
-//        expectedState.set(identifier, value);
-//
-//        Statement underTest = new Assignment(identifier, value);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertNull(result.getStatement());
-//        Assert.assertEquals(expectedState, result.getState());
+        Identifier identifier = new Identifier("x");
+        Value<?> value = new Value<>(5);
 
+        State state = new State();
+        state.set(identifier, new Value<>(1));
+        State expectedState = new State();
+        expectedState.set(identifier, value);
+
+        IStatement underTest = new Assignment(identifier, value);
+
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(underTest, expectedState, TERMINATED), result);
     }
 
     @Test
-    public void testAssignNonExistingVariableYieldsBadAssignment() {
+    public void testAssignNonExistingVariableYieldsStuckAssignment() {
 
-//        Expression x = new Identifier("x");
-//        Expression y = new Identifier("y");
-//        Statement underTest = new Assignment(x, y);
-//
-//        StmConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(new Assignment(x, y.step(new State()).getNode()), result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
-//
-//        result = result.getStatement().step(result.getState());
-//
-//        Assert.assertEquals(new StuckAssignment(x, y.step(new State()).getNode()), result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
+        IExpression x = new Identifier("x");
+        IExpression y = new Identifier("y");
+        IStatement underTest = new Assignment(x, y);
 
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(new StatementConfiguration(new Assignment(x, y.step(new State()).getNode()),
+                new State(),
+                STUCK), result);
     }
 
     @Test
-    public void testAssignToBadIdentifierYieldsBadAssignment() {
-//
-//        Expression x = new StuckIdentifier("x");
-//        Expression y = new Identifier("y");
-//        Statement underTest = new Assignment(x, y);
-//
-//        StmConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(new StuckAssignment(x, y), result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
+    public void testAssignStuckValueYieldsStuckAssignment() {
 
-    }
+        IExpression x = new Identifier("x");
+        IExpression stuckVal = ADD.of(new Value<>(true), new Value<>(1)).step(new State()).getNode();
+        IStatement underTest = new Assignment(x, stuckVal);
 
+        Configuration result = underTest.step(new State());
 
-    @Test
-    public void testAssignBadValueYieldsBadAssignment() {
-
-//        Expression x = new Identifier("x");
-//        Expression badVal = new StuckUnOp<Integer, Integer>("", null);
-//        Statement underTest = new Assignment(x, badVal);
-//
-//        StmConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(new StuckAssignment(x, badVal), result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
-
+        Assert.assertEquals(new StatementConfiguration(new Assignment(x, stuckVal),new State(), STUCK), result);
     }
 
 
     @Test
     public void testSequence() {
 
-//        Statement s1 = new Skip();
-//        Statement s2 = new If(null, null, null);
-//        State state = new State();
-//        Statement underTest = new Sequence(s1, s2);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertEquals(s2, result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
+        IStatement s1 = new Skip();
+        IStatement s2 = new If(null, null, null);
+        State state = new State();
+        IStatement underTest = new Sequence(s1, s2);
 
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(s2, new State(), INTERMEDIATE), result);
     }
 
     @Test
-    public void testBadSequence() {
-//
-//        Statement s1 = new StuckAssignment(new Identifier("x"), new Identifier("y"));
-//        Statement s2 = new Skip();
-//        State state = new State();
-//        Statement underTest = new Sequence(s1, s2);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertEquals(StuckSequence.class, result.getStatement().getClass());
-//        Assert.assertEquals(new State(), result.getState());
+    public void testStuckStatementYieldsStuckSequence() {
 
+        IStatement stuckS1 = new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getNode();
+        IStatement s2 = new Skip();
+        State state = new State();
+        IStatement underTest = new Sequence(stuckS1, s2);
+
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(new Sequence(stuckS1, s2), new State(), STUCK), result);
     }
 
 
     @Test
-    public void testIfTrueBranch() {
+    public void testIfTrueConditionYieldsTrueBranch() {
 
-//        Statement s1 = new If(null, null, null);
-//        Statement s2 = new Sequence(null, null);
-//        State state = new State();
-//        Statement underTest = new If(new BoolValue(true), s1, s2);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertEquals(s1, result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        State state = new State();
+        IStatement underTest = new If(new Value<>(true), s1, s2);
 
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(s1, new State(), INTERMEDIATE), result);
     }
 
     @Test
-    public void testIfFalseBranch() {
+    public void testIfFalseConditionYieldsFalseBranch() {
 
-//        Statement s1 = new If(null, null, null);
-//        Statement s2 = new Sequence(null, null);
-//        Statement underTest = new If(new BoolValue(false), s1, s2);
-//
-//        StmConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(s2, result.getStatement());
-//        Assert.assertEquals(new State(), result.getState());
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        State state = new State();
+        IStatement underTest = new If(new Value<>(false), s1, s2);
 
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(s2, new State(), INTERMEDIATE), result);
     }
 
     @Test
-    public void testBadExprYieldsBadIf() {
+    public void testStuckExprYieldsStuckIf() {
 
-//        Expression expr = new StuckUnOp<Integer, Integer>("", null);
-//        State state = new State();
-//        Statement underTest = new If(expr, null, null);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertEquals(result.getStatement(), new StuckIf(expr, null, null));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression stuckExpr = AND.of(new Value<>(1), new Value<>(true)).step(new State()).getNode();
+        State state = new State();
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement underTest = new If(stuckExpr, s1, s2);
 
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(new If(stuckExpr, s1, s2), new State(), STUCK), result);
     }
 
     @Test
-    public void testWrongTypeExprYieldsBadIf() {
+    public void testWrongTypeExprYieldsStuckIf() {
 
-//        Expression expr = new IntValue(4);
-//        State state = new State();
-//        Statement underTest = new If(expr, null, null);
-//
-//        StmConfig result = underTest.step(state);
-//
-//        Assert.assertEquals(result.getStatement(), new StuckIf(expr, null, null));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression intExpr = new Value<>(4);
+        State state = new State();
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement underTest = new If(intExpr, s1, s2);
+
+        Configuration result = underTest.step(state);
+
+        Assert.assertEquals(new StatementConfiguration(new If(intExpr, s1, s2), new State(), STUCK), result);
     }
 
 
     @Test
     public void testWhileTurnsIntoIf() {
 
-//        Expression cond = new BoolValue(true);
-//        Statement s = new Sequence(new Skip(), new Skip());
-//        Statement underTest = new While(cond, s);
-//
-//        StmConfig result = underTest.step(new State());
-//
-//        Assert.assertEquals(result.getStatement(), new If(cond, new Sequence(s, underTest), new Skip()));
-//        Assert.assertEquals(result.getState(), new State());
+        IExpression cond = new Value<>(true);
+        IStatement s = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement underTest = new While(cond, s);
 
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(result, new StatementConfiguration(new If(cond, new Sequence(s, underTest), new Skip()), new State(), INTERMEDIATE));
     }
 
 }

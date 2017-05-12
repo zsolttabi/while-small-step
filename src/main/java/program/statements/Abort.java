@@ -1,12 +1,16 @@
 package program.statements;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import program.Configuration.ConfigType;
 import program.State;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
-public class Abort implements Statement {
+@EqualsAndHashCode
+@ToString
+public class Abort implements IStatement {
 
     @Override
     public StatementConfiguration step(State state) {

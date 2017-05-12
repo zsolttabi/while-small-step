@@ -3,7 +3,7 @@ package viewmodel;
 import lombok.val;
 import program.Configuration;
 import program.Configuration.ConfigType;
-import program.IASTNode;
+import program.IProgramElement;
 import program.Program;
 import program.expressions.BinOp;
 import program.expressions.Identifier;
@@ -26,11 +26,11 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
         return new Tree<>(new ASTVisitor().visit(program));
     }
 
-    private Node<ASTNode> createNode(String label, IASTNode element) {
+    private Node<ASTNode> createNode(String label, IProgramElement element) {
         return new Node<>(new ASTNode(label, getNodeType(element)), null);
     }
 
-    private NodeType getNodeType(IASTNode element) {
+    private NodeType getNodeType(IProgramElement element) {
         if (currentConfiguration.getConfigType() == ConfigType.STUCK && nextConfiguration.getNode() == element) {
             return NodeType.STUCK;
         }

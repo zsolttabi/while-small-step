@@ -1,6 +1,7 @@
 package program.statements;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import program.Configuration.ConfigType;
 import program.State;
 import utils.Tree;
@@ -8,11 +9,12 @@ import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 @EqualsAndHashCode
-public class Skip implements Statement {
+@ToString
+public class Skip implements IStatement {
 
     @Override
     public StatementConfiguration step(State state) {
-        return new StatementConfiguration(null, state, ConfigType.TERMINATED);
+        return new StatementConfiguration(this, state, ConfigType.TERMINATED);
     }
 
     @Override

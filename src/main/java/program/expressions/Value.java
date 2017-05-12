@@ -1,5 +1,9 @@
 package program.expressions;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration.ConfigType;
 import program.State;
 import utils.Tree.Node;
@@ -7,23 +11,27 @@ import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
-public interface Value<T> extends Expression, IVisitableNode<Node<ASTNode>> {
+@RequiredArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class Value<T> implements IExpression, IVisitableNode<Node<ASTNode>> {
 
-    T getValue();
+    @Getter
+    private final T value;
 
     @Override
-    default ExpressionConfiguration step(State state) {
+    public ExpressionConfiguration step(State state) {
         return new ExpressionConfiguration(this, state, ConfigType.TERMINATED);
     }
 
     @Override
-    default ExpressionConfiguration next(State state) {
+    public ExpressionConfiguration next(State state) {
         return step(state);
     }
 
     @Override
-    default Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
-        return  visitor.visit(this);
+    public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
+        return visitor.visit(this);
     }
 
 }

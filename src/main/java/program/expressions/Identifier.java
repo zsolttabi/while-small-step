@@ -4,6 +4,7 @@ package program.expressions;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration.ConfigType;
 import program.State;
 import utils.Tree;
@@ -13,7 +14,8 @@ import viewmodel.interfaces.IVisitableNode;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Identifier implements Expression, IVisitableNode<Tree.Node<ASTNode>> {
+@ToString
+public class Identifier implements IExpression, IVisitableNode<Tree.Node<ASTNode>> {
 
     @Getter
     private final String identifier;
@@ -30,7 +32,7 @@ public class Identifier implements Expression, IVisitableNode<Tree.Node<ASTNode>
 
     @Override
     public ExpressionConfiguration next(State state) {
-        return step(state);
+        return new ExpressionConfiguration(this, state, ConfigType.INTERMEDIATE);
     }
 
     @Override

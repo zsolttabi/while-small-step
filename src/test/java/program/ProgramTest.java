@@ -3,162 +3,101 @@ package program;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import program.expressions.Identifier;
+import program.expressions.Value;
+import program.statements.*;
 import syntax.while_parser.WhileParser;
+
+import static program.Configuration.ConfigType.STUCK;
+import static program.Configuration.ConfigType.TERMINATED;
+import static program.expressions.BinOp.Arithmetic.ADD;
+import static program.expressions.BinOp.Relational.LT;
+import static program.expressions.UnOp.Arithmetic.NEG;
+import static program.expressions.UnOp.Logical.NOT;
 
 @RunWith(DataProviderRunner.class)
 public class ProgramTest {
 
     @DataProvider
-    public static Object[][] goodCodeProvider() {
+    public static Object[][] terminatingCodeProvider() {
         return new Object[][]{
-                {
-                    "SKIP"
-                },
-
-                {
-                    "SKIP; " +
-                    "SKIP"
-                },
-
-                {
-                    "x := 1"
-                },
-
-                {
-                    "b := tt"
-                },
-
-                {
-                    "if tt then " +
-                        "SKIP " +
-                    "else " +
-                        "SKIP " +
-                    "fi"
-                },
-
-                {
-                    "b := tt; " +
-                    "if b then " +
-                        "x := 1 " +
-                    "else " +
-                        "SKIP " +
-                    "fi; " +
-                    "z := x"
-                },
-
-                {
-                    "x := 1;" +
-                    "while x < 10 do " +
-                        "x := x + 1 " +
-                    "od"
-                },
+                {"SKIP", new Skip()},
+                {"SKIP; SKIP", new Sequence(new Skip(), new Skip())},
+                {"x := 1", new Assignment(new Identifier("x"), new Value<>(1))},
+                {"b := true", new Assignment(new Identifier("b"), new Value<>(true))},
+                {"if true then SKIP else SKIP fi", new If(new Value<>(true), new Skip(), new Skip())},
+                {"b := true; if b then x := 1 else SKIP fi; z := x",
+                        new Sequence(new Sequence(new Assignment(new Identifier("b"), new Value<>(true)),
+                                new If(new Identifier("b"),
+                                        new Assignment(new Identifier("x"), new Value<>(1)),
+                                        new Skip())), new Assignment(new Identifier("z"), new Identifier("x")))},
+                {"x := 1; while x < 10 do x := x + 1 od", new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(1)), new While(
+                        LT.of(new Identifier("x"), new Value<>(10)),
+                        new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(1)))))},
         };
     }
 
     @DataProvider
-    public static Object[][] badCodeProvider() {
+    public static Object[][] stuckCodeProvider() {
         return new Object[][]{
-                {
-                    "x := 1; " +
-                    "x := !x "
-                },
-
-                {
-                    "x := tt; " +
-                    "x := -x "
-                },
-
-
-                {
-                    "x := 1; " +
-                    "y := ff; " +
-                    "z := x + y"
-                },
-
-
-                {
-                    "x := 1; " +
-                    "x := tt; " +
-                    "x := 2"
-                },
-
-                {
-                    "x := y"
-                },
-
-                {
-                    "x := 1; " +
-                    "if x then " +
-                        "SKIP " +
-                    "else " +
-                        "SKIP " +
-                    "fi"
-                },
-
-                {
-                    "if z then " +
-                        "SKIP " +
-                    "else " +
-                        "SKIP " +
-                    "fi"
-                },
-
-                {
-                    "x := tt; " +
-                    "if x then " +
-                        "x := 1 " +
-                    "else " +
-                        "SKIP " +
-                    "fi"
-                },
-
-                {
-                    "x := ff; " +
-                    "if x then " +
-                        "SKIP " +
-                    "else " +
-                        "x := 1 " +
-                    "fi"
-                },
-
-                {
-                    "while 2 do " +
-                        "SKIP" +
-                    " od"
-                },
-
-                {
-                    "while z do " +
-                        "SKIP " +
-                    "od"
-                },
-
-                {
-                    "x := tt; " +
-                    "while x do " +
-                        "x := x + 1 " +
-                    "od"
-                },
+                {"x := 1; x := not x", new Sequence(new Assignment(new Identifier("x"), new Value<>(1)),
+                        new Assignment(new Identifier("x"), NOT.of(new Identifier("x"))))},
+                {"x := true; x := -x", new Sequence(new Assignment(new Identifier("x"), new Value<>(true)),
+                        new Assignment(new Identifier("x"), NEG.of(new Identifier("x"))))},
+                {"x := 1; y := false; z := x + y", new Sequence(new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(1)),
+                        new Assignment(new Identifier("y"), new Value<>(false))),
+                        new Assignment(new Identifier("z"),
+                                ADD.of(new Identifier("x"), new Identifier("y"))))},
+                {"x := 1; x := true; x := 2", new Sequence(new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(1)), new Assignment(new Identifier("x"), new Value<>(true))),
+                        new Assignment(new Identifier("x"), new Value<>(2)))},
+                {"x := y", new Assignment(new Identifier("x"), new Identifier("y"))},
+                {"x := 1; if x then SKIP else SKIP fi", new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(1)), new If(new Identifier("x"), new Skip(), new Skip()))},
+                {"if z then SKIP else SKIP fi", new If(new Identifier("z"), new Skip(), new Skip())},
+                {"x := true; if x then x := 1 else SKIP fi", new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(true)),
+                        new If(new Identifier("x"), new Assignment(new Identifier("x"), new Value<>(1)), new Skip()))},
+                {"x := false; if x then SKIP else x := 1 fi", new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(false)),
+                        new If(new Identifier("x"), new Skip(), new Assignment(new Identifier("x"), new Value<>(1))))},
+                {"while 2 do SKIP od", new While(new Value<>(2), new Skip())},
+                {"while z do SKIP od", new While(new Identifier("z"), new Skip())},
+                {"x := true; while x do x := x + 1 od", new Sequence(new Assignment(new Identifier("x"),
+                        new Value<>(true)),
+                        new While(new Identifier("x"),
+                                new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(1)))))},
         };
     }
 
     @Test
-    @UseDataProvider("goodCodeProvider")
-    public void testGoodAST(String code) {
+    @UseDataProvider("terminatingCodeProvider")
+    public void testTerminatingProgram(String code, IStatement statement) {
 
-//        Program program = WhileParser.parse(code);
-//        Assert.assertTrue(program.reduce() instanceof ReducedAST);
+        Program program = new Program(WhileParser.parse(code), 100);
+        Assert.assertEquals(statement, program.getCurrentConfiguration().getNode());
+
+        program.reduce();
+        System.out.println(program.getReductionChain().size()); // TODO: assert reduction steps
+        Assert.assertEquals(TERMINATED, program.getCurrentConfiguration().getConfigType());
 
     }
 
     @Test
-    @UseDataProvider("badCodeProvider")
-    public void testBadAST(String code) {
+    @UseDataProvider("stuckCodeProvider")
+    public void testStuckProgram(String code, IStatement statement) {
 
-//        Program program = WhileParser.parse(code);
-//        Assert.assertTrue(program.reduce() instanceof BadAST);
+        Program program = new Program(WhileParser.parse(code), 100);
+        Assert.assertEquals(statement, program.getCurrentConfiguration().getNode());
+
+        program.reduce();
+        System.out.println(program.getReductionChain().size()); // TODO: assert reduction steps
+        Assert.assertEquals(STUCK, program.getCurrentConfiguration().getConfigType());
 
     }
 

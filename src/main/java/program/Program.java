@@ -3,14 +3,15 @@ package program;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import program.Configuration.ConfigType;
-import program.statements.Statement;
+import program.statements.IStatement;
 import program.statements.StatementConfiguration;
 import utils.Tree.Node;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode
 public class Program implements IVisitableNode<Node<ASTNode>> {
@@ -27,7 +28,7 @@ public class Program implements IVisitableNode<Node<ASTNode>> {
         this.currentConfigIndex = 0;
     }
 
-    public Program(Statement statement, int maxPrefix) {
+    public Program(IStatement statement, int maxPrefix) {
         this(new StatementConfiguration(statement, new State(), ConfigType.INTERMEDIATE), maxPrefix);
     }
 
@@ -46,9 +47,10 @@ public class Program implements IVisitableNode<Node<ASTNode>> {
     }
 
     public List<Configuration> reduce() {
-        for (int i = currentConfigIndex; i < maxPrefix - 1; i++) {
+        while (currentConfigIndex < maxPrefix-1 && getCurrentConfiguration().getConfigType() == ConfigType.INTERMEDIATE) {
             step();
         }
+
         return new ArrayList<>(reductionChain);
     }
 

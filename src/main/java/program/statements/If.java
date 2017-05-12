@@ -3,46 +3,48 @@ package program.statements;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration;
-import program.Configuration.ConfigType;
 import program.State;
-import program.expressions.BoolValue;
-import program.expressions.Expression;
 import program.expressions.ExpressionConfiguration;
+import program.expressions.IExpression;
+import program.expressions.Value;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import static program.Configuration.ConfigType.INTERMEDIATE;
+import static program.Configuration.ConfigType.STUCK;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class If implements Statement {
+@ToString
+public class If implements IStatement {
 
     @Getter
-    private final Expression condition;
+    private final IExpression condition;
     @Getter
-    private final Statement s1;
+    private final IStatement s1;
     @Getter
-    private final Statement s2;
+    private final IStatement s2;
 
     @Override
     public StatementConfiguration step(State state) {
 
-        ExpressionConfiguration nextCondConfig = condition.step(state);
-
-        if (nextCondConfig.getConfigType() == ConfigType.TERMINATED) {
-            if (nextCondConfig.getNode() instanceof BoolValue) {
-                return new StatementConfiguration(((BoolValue) nextCondConfig.getNode()).getValue() ? s1 : s2,
-                        nextCondConfig.getState(),
-                        ConfigType.INTERMEDIATE);
-            }
-            return new StatementConfiguration(new If(nextCondConfig.getNode(), s1, s2),
-                    nextCondConfig.getState(),
-                    ConfigType.STUCK);
+        if (!(condition instanceof Value)) {
+            ExpressionConfiguration condConf = condition.step(state);
+            return new StatementConfiguration(new If(condConf.getNode(), s1, s2),
+                    condConf.getState(),
+                    condConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
 
-        return new StatementConfiguration(new If(nextCondConfig.getNode(), s1, s2),
-                nextCondConfig.getState(),
-                nextCondConfig.getConfigType());
+        Object condValue = ((Value) condition).getValue();
+
+        if (!(condValue instanceof Boolean)) {
+            return new StatementConfiguration(this, state, STUCK);
+        }
+
+        return new StatementConfiguration((Boolean) condValue ? s1 : s2, state, INTERMEDIATE);
     }
 
     @Override

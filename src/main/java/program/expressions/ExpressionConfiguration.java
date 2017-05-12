@@ -6,13 +6,13 @@ import program.State;
 
 public class ExpressionConfiguration extends Configuration {
 
-    public ExpressionConfiguration(Expression node, State state, ConfigType configType) {
+    public ExpressionConfiguration(IExpression node, State state, ConfigType configType) {
         super(node, state, configType);
     }
 
     @Override
-    public Expression getNode() {
-        return (Expression) super.getNode();
+    public IExpression getNode() {
+        return (IExpression) super.getNode();
     }
 
 }

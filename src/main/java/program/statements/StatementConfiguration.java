@@ -6,13 +6,13 @@ import program.State;
 
 public class StatementConfiguration extends Configuration {
 
-    public StatementConfiguration(Statement node, State state, ConfigType configType) {
+    public StatementConfiguration(IStatement node, State state, ConfigType configType) {
         super(node, state, configType);
     }
 
     @Override
-    public Statement getNode() {
-        return (Statement) super.getNode();
+    public IStatement getNode() {
+        return (IStatement) super.getNode();
     }
 
 }

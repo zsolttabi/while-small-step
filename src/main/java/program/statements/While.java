@@ -3,21 +3,23 @@ package program.statements;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import program.Configuration.ConfigType;
 import program.State;
-import program.expressions.Expression;
+import program.expressions.IExpression;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class While implements Statement {
+@ToString
+public class While implements IStatement {
 
     @Getter
-    private final Expression condition;
+    private final IExpression condition;
     @Getter
-    private final Statement stm;
+    private final IStatement stm;
 
     @Override
     public StatementConfiguration step(State state) {

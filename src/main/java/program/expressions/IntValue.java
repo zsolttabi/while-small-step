@@ -1,16 +1,10 @@
 package program.expressions;
 
+public final class IntValue extends Value<Integer> implements IExpression {
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@EqualsAndHashCode
-public final class IntValue implements Expression, Value<Integer> {
-
-    @Getter
-    private final Integer value;
+    public IntValue(Integer value) {
+        super(value);
+    }
 
     public static IntValue of(Integer value) {
         return new IntValue(value);

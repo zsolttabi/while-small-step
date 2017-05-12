@@ -3,7 +3,7 @@ package program.expressions;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import program.Configuration.ConfigType;
+import lombok.ToString;
 import program.State;
 import utils.Tree;
 import viewmodel.ASTNode;
@@ -11,66 +11,51 @@ import viewmodel.interfaces.INodeVisitor;
 
 import java.util.function.Function;
 
+import static program.Configuration.ConfigType.*;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class UnOp<T, R> implements Expression {
-
-    public static <T, R> UnOp<T, R> of(String operator,
-                                        Expression operand,
-                                        Class<? extends Value<T>> operandClass,
-                                        Function<R, Value<R>> resultCtor,
-                                        Function<T, R> evalFun) {
-
-        return new UnOp<>(operator,
-                operand,
-                operandClass,
-                resultCtor,
-                evalFun);
-    }
-
-    public static UnOp<Integer, Integer> intOp(String operator, Expression operand, Function<Integer, Integer> evalFun) {
-        return UnOp.of(operator, operand, IntValue.class, IntValue::of, evalFun);
-    }
-
-    public static UnOp<Integer, Integer> neg(Expression operand) {
-        return UnOp.intOp("-", operand, i -> 0 - i);
-    }
-
-    public static UnOp<Boolean, Boolean> boolOp(String operator, Expression operand, Function<Boolean, Boolean> evalFun) {
-        return UnOp.of(operator, operand, BoolValue.class, BoolValue::of, evalFun);
-    }
-
-    public static UnOp<Boolean, Boolean> not(Expression operand) {
-        return UnOp.boolOp("not", operand, b -> !b);
-    }
+@ToString
+public class UnOp<T, R> implements IExpression {
 
     @Getter
     private final String operator;
     @Getter
-    private final Expression operand;
+    private final IExpression operand;
+    private final Class<T> operandClass;
+    private final Function<T, R> operatorFunction;
 
-    private final Class<? extends Value<T>> operandClass;
-    private final Function<R, Value<R>> resultCtor;
-    private final Function<T, R> evalFun;
+    public static <T, R> UnOp<T, R> of(String operator, IExpression operand, Class<T> operandClass, Function<T, R> operatorFunction) {
+        return new UnOp<>(operator, operand, operandClass, operatorFunction);
+    }
+
+    public static UnOp<Integer, Integer> arithmetic(String operator, IExpression operand, Function<Integer, Integer> operatorFunction) {
+        return UnOp.of(operator, operand, Integer.class, operatorFunction);
+    }
+
+    public static UnOp<Boolean, Boolean> logical(String operator, IExpression operand, Function<Boolean, Boolean> operatorFunction) {
+        return UnOp.of(operator, operand, Boolean.class, operatorFunction);
+    }
 
     @Override
     public ExpressionConfiguration step(State state) {
 
-//        if (operand instanceof StuckExpression) {
-//            return new ExpressionConfiguration(this, state, ConfigType.STUCK);
-//        }
-
         if (!(operand instanceof Value)) {
-            return new ExpressionConfiguration(new UnOp<>(operator, operand.step(state).getNode(), operandClass, resultCtor, evalFun), state, ConfigType.INTERMEDIATE);
+            ExpressionConfiguration operandConf = operand.step(state);
+            return new ExpressionConfiguration(new UnOp<>(operator,
+                    operandConf.getNode(),
+                    operandClass,
+                    operatorFunction), operandConf.getState(), operandConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
 
-        Value val = (Value) operand;
-
-        if ((operandClass.isAssignableFrom(val.getClass()))) {
-            return new ExpressionConfiguration(resultCtor.apply(evalFun.apply(operandClass.cast(val).getValue())), state, ConfigType.INTERMEDIATE);
+        Object operandValue = ((Value) operand).getValue();
+        if (!operandValue.getClass().equals(operandClass)) {
+            return new ExpressionConfiguration(this, state, STUCK);
         }
 
-        return new ExpressionConfiguration(this, state, ConfigType.STUCK);
+        return new ExpressionConfiguration(new Value<>(operatorFunction.apply(operandClass.cast(operandValue))),
+                state,
+                TERMINATED);
     }
 
     @Override
@@ -78,12 +63,42 @@ public class UnOp<T, R> implements Expression {
         if (!(operand instanceof Value)) {
             return operand.next(state);
         }
-        return new ExpressionConfiguration(this, state, ConfigType.INTERMEDIATE);
+        return new ExpressionConfiguration(this, state, INTERMEDIATE);
     }
 
     @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
+    }
+
+    public enum Arithmetic {
+
+        NEG(o -> UnOp.arithmetic("-", o, a -> -a));
+
+        private final Function<IExpression, UnOp<Integer, Integer>> operationProvider;
+
+        Arithmetic(Function<IExpression, UnOp<Integer, Integer>> operationProvider) {
+            this.operationProvider = operationProvider;
+        }
+
+        public UnOp<Integer, Integer> of(IExpression operand) {
+            return operationProvider.apply(operand);
+        }
+    }
+
+    public enum Logical {
+
+        NOT(o -> UnOp.logical("not", o, a -> !a));
+
+        private final Function<IExpression, UnOp<Boolean, Boolean>> operationProvider;
+
+        Logical(Function<IExpression, UnOp<Boolean, Boolean>> operationProvider) {
+            this.operationProvider = operationProvider;
+        }
+
+        public UnOp<Boolean, Boolean> of(IExpression operand) {
+            return operationProvider.apply(operand);
+        }
     }
 
 }

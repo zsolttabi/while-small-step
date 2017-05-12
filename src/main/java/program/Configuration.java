@@ -1,13 +1,17 @@
 package program;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
+@ToString
 public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>> {
 
     public enum ConfigType {
@@ -15,7 +19,7 @@ public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>
     }
 
     @Getter
-    private final IASTNode node;
+    private final IProgramElement node;
     @Getter
     private final State state;
     @Getter

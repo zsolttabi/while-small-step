@@ -1,10 +1,10 @@
 package program.expressions;
 
 
-import program.IASTNode;
+import program.IProgramElement;
 import program.State;
 
-public interface Expression extends IASTNode {
+public interface IExpression extends IProgramElement {
 
     ExpressionConfiguration step(State state);
 
