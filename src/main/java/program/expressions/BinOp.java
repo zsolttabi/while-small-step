@@ -117,9 +117,9 @@ public class BinOp<T, R> implements IExpression {
 
     public enum Logical {
 
-        AND((lhs, rhs) -> BinOp.logical("and", lhs, rhs, (a, b) -> a && b)),
-        OR((lhs, rhs) -> BinOp.logical("or", lhs, rhs, (a, b) -> a || b)),
-        XOR((lhs, rhs) -> BinOp.logical("xor", lhs, rhs, (a, b) -> a ^ b));
+        AND((lhs, rhs) -> BinOp.logical("&&", lhs, rhs, (a, b) -> a && b)),
+        OR((lhs, rhs) -> BinOp.logical("||" , lhs, rhs, (a, b) -> a || b)),
+        XOR((lhs, rhs) -> BinOp.logical("^" , lhs, rhs, (a, b) -> a ^ b));
 
         private final BiFunction<IExpression, IExpression, BinOp<Boolean, Boolean>> operationProvider;
 
@@ -134,10 +134,11 @@ public class BinOp<T, R> implements IExpression {
 
     public enum Relational {
 
-        EQ((lhs, rhs) -> BinOp.relational("=", lhs, rhs, Integer::equals)),
-        LT((lhs, rhs) -> BinOp.relational("<", lhs, rhs, (a, b) -> a < b)),
+        EQ((lhs, rhs) -> BinOp.relational("=" , lhs, rhs, Object::equals)),
+        NE((lhs, rhs) -> BinOp.relational("=" , lhs, rhs, (a,b) -> !a.equals(b))),
+        LT((lhs, rhs) -> BinOp.relational("<" , lhs, rhs, (a, b) -> a < b)),
         LE((lhs, rhs) -> BinOp.relational("<=", lhs, rhs, (a, b) -> a <= b)),
-        GT((lhs, rhs) -> BinOp.relational(">", lhs, rhs, (a, b) -> a > b)),
+        GT((lhs, rhs) -> BinOp.relational(">" , lhs, rhs, (a, b) -> a > b)),
         GE((lhs, rhs) -> BinOp.relational(">=", lhs, rhs, (a, b) -> a >= b));
 
         private final BiFunction<IExpression, IExpression, BinOp<Integer, Boolean>> operationProvider;

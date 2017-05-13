@@ -23,4 +23,6 @@ public interface INodeVisitor<T> {
     T visit(Identifier element);
     T visit(Abort element);
     T visit(Or element);
+    T visit(Par element);
+
 }

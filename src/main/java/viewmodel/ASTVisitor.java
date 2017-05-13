@@ -53,13 +53,13 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
     @Override
     public Node<ASTNode> visit(Configuration element) {
         return element.getConfigType() == TERMINATED ?
-                new Node<>(new ASTNode("TERMINATED", NodeType.TERMINATED), null) :
+                new Node<>(new ASTNode("[terminated]", NodeType.TERMINATED), null) :
                 element.getNode().accept(this);
     }
 
     @Override
     public Node<ASTNode> visit(Skip element) {
-        return createNode("SKIP", element);
+        return createNode("skip", element);
     }
 
     @Override
@@ -146,12 +146,20 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
 
     @Override
     public Node<ASTNode> visit(Abort element) {
-        return createNode("ABORT", element);
+        return createNode("abort", element);
     }
 
     @Override
     public Node<ASTNode> visit(Or element) {
-        val node = createNode("OR", element);
+        val node = createNode("or", element);
+        node.addChild(element.getS1().accept(this));
+        node.addChild(element.getS2().accept(this));
+        return node;
+    }
+
+    @Override
+    public Node<ASTNode> visit(Par element) {
+        val node = createNode("par", element);
         node.addChild(element.getS1().accept(this));
         node.addChild(element.getS2().accept(this));
         return node;

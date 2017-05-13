@@ -88,7 +88,7 @@ public class UnOp<T, R> implements IExpression {
 
     public enum Logical {
 
-        NOT(o -> UnOp.logical("not", o, a -> !a));
+        NOT(o -> UnOp.logical("!", o, a -> !a));
 
         private final Function<IExpression, UnOp<Boolean, Boolean>> operationProvider;
 

@@ -15,93 +15,111 @@ grammar While;
 
 }
 
-start returns [IStatement value]:
-    s = statement { $value = $s.value; }
+start returns [IStatement value]
+ : s = statement { $value = $s.value; } EOF
 ;
 
-statement returns [IStatement value]:
+statement returns [IStatement value]
+ : s1 = statement  SEQ    s2 = statement { $value = new Sequence($s1.value, $s2.value); }
+ | s1 = statement  NDET   s2 = statement { $value = new Or($s1.value, $s2.value); }
+ | s1 = statement  PAR    s2 = statement { $value = new Par($s1.value, $s2.value); }
 
-    id = expression Assign e  = expression     { $value = new Assignment($id.value, $e.value); } |
-    s1 = statement  Seq    s2 = statement      { $value = new Sequence($s1.value, $s2.value);  } |
-    s1 = statement  OR     s2 = statement      { $value = new Or($s1.value, $s2.value);        } |
+ | id = expression ASSIGN e = expression { $value = new Assignment($id.value, $e.value); }
+ | WHILE expression DO statement OD { $value = new While($expression.value, $statement.value); }
+ | IF expression THEN s1 = statement Else s2 = statement FI { $value = new If($expression.value, $s1.value, $s2.value); }
 
-    WHILE e = expression  Do     s  = statement Od                     { $value = new While($e.value, $s.value);          } |
-    IF    e = expression  Then   s1 = statement Else s2 = statement Fi { $value = new If($e.value, $s1.value, $s2.value); } |
+ | Skip  { $value  = new Skip(); }
+ | ABORT { $value = new Abort(); }
+ | OTHER {System.err.println("unknown char: " + $OTHER.text);}
+ ;
 
-    Skip  { $value  = new Skip(); } |
-    Abort { $value = new Abort(); }
+expression returns [IExpression value]
+locals [BinOp.Arithmetic arit, BinOp.Relational rel, BinOp.Logical log]
 
-;
+ : MINUS expression { $value = UnOp.Arithmetic.NEG.of($expression.value); }
+ | NOT   expression { $value = UnOp.Logical.NOT.of($expression.value); }
 
-expression returns [IExpression value]:
+ | e1 = expression ( MUL { $arit = BinOp.Arithmetic.MUL; }
+                   | DIV { $arit = BinOp.Arithmetic.DIV; }
+                   | REM { $arit = BinOp.Arithmetic.REM; }
+                   ) e2 = expression { $value = $arit.of($e1.value, $e2.value); }
+ | e1 = expression ( PLUS  { $arit = BinOp.Arithmetic.ADD; }
+                   | MINUS { $arit = BinOp.Arithmetic.SUB; }
+                   ) e2 = expression { $value = $arit.of($e1.value, $e2.value); }
 
-    Identifier { $value = new Identifier($Identifier.text); } |
-    Int        { $value = new Value<>($Int.int);     } |
-    True       { $value = new Value<>(true);         } |
-    False      { $value = new Value<>(false);        } |
+ | e1 = expression ( LT { $rel = BinOp.Relational.LT; }
+                   | LE { $rel = BinOp.Relational.LE; }
+                   | GT { $rel = BinOp.Relational.GT; }
+                   | GE { $rel = BinOp.Relational.GE; }
+                   ) e2 = expression { $value = $rel.of($e1.value, $e2.value); }
+ | e1 = expression ( EQ { $rel = BinOp.Relational.EQ; }
+                   | NE { $rel = BinOp.Relational.NE; }
+                   ) e2 = expression { $value = $rel.of($e1.value, $e2.value); }
 
-    e1 = expression Plus     e2 = expression { $value = BinOp.Arithmetic.ADD.of($e1.value, $e2.value); } |
-    e1 = expression Minus    e2 = expression { $value = BinOp.Arithmetic.SUB.of($e1.value, $e2.value); } |
-    e1 = expression Asterisk e2 = expression { $value = BinOp.Arithmetic.MUL.of($e1.value, $e2.value); } |
-    e1 = expression Slash    e2 = expression { $value = BinOp.Arithmetic.DIV.of($e1.value, $e2.value); } |
-    e1 = expression Percent  e2 = expression { $value = BinOp.Arithmetic.REM.of($e1.value, $e2.value); } |
+ | e1 = expression AND e2 = expression { $value = BinOp.Logical.AND.of($e1.value, $e2.value); }
+ | e1 = expression ( OR  { $log = BinOp.Logical.OR; }
+                   | XOR { $log = BinOp.Logical.XOR; }
+                   ) e2 = expression { $value = $log.of($e1.value, $e2.value); }
 
-    e1 = expression Equals        e2 = expression { $value = BinOp.Relational.EQ.of($e1.value, $e2.value); } |
-    e1 = expression LessThen      e2 = expression { $value = BinOp.Relational.LT.of($e1.value, $e2.value); } |
-    e1 = expression LessThenEq    e2 = expression { $value = BinOp.Relational.LE.of($e1.value, $e2.value); } |
-    e1 = expression GreaterThen   e2 = expression { $value = BinOp.Relational.GT.of($e1.value, $e2.value); } |
-    e1 = expression GreaterThenEq e2 = expression { $value = BinOp.Relational.GE.of($e1.value, $e2.value); } |
+ | atom { $value = $atom.value; }
+ ;
 
-    e1 = expression And e2 = expression { $value = BinOp.Logical.AND.of($e1.value, $e2.value); } |
-    e1 = expression Or  e2 = expression { $value = BinOp.Logical.OR.of($e1.value, $e2.value);  } |
-    e1 = expression Xor e2 = expression { $value = BinOp.Logical.XOR.of($e1.value, $e2.value); } |
-
-    Minus a = expression { $value = UnOp.Arithmetic.NEG.of($a.value); } |
-    Not   e = expression { $value = UnOp.Logical.NOT.of($e.value);    }
-;
+atom returns [IExpression value]
+ : OPAR e = expression CPAR { $value = $e.value; }
+ | INT { $value = new Value<>($INT.int); }
+ | (TRUE { $value = new Value<>(true); } | FALSE  { $value = new Value<>(false); } )
+ | ID { $value = new Identifier($ID.text); }
+ ;
 
 IF: 'if';
-Then: 'then';
+THEN: 'then';
 Else: 'else';
-Fi: 'fi';
-
+FI: 'fi';
 WHILE: 'while';
-Do: 'do' ;
-Od: 'od';
+DO: 'do' ;
+OD: 'od';
+SEQ: ';';
+ASSIGN: ':=';
+Skip: 'skip';
+ABORT: 'abort';
+NDET: 'or';
+PAR: 'par';
 
-Seq: ';';
+TRUE: 'true';
+FALSE: 'false';
 
-Assign: ':=';
+OPAR : '(';
+CPAR : ')';
 
-Skip: 'SKIP';
+POW: '^';
+PLUS: '+';
+MINUS: '-';
+MUL: '*';
+DIV: '/';
+REM: '%';
 
-Abort: 'abort';
+EQ: '=';
+NE: '!=';
+LT: '<';
+LE: '<=';
+GT: '>';
+GE: '>=';
 
-OR: 'OR';
+AND: '&&';
+OR:  '||';
+XOR: '^';
+NOT: '!';
 
-True: 'true';
-False: 'false';
+ID: [a-zA-Z_] [a-zA-Z_0-9]*;
 
-Plus: '+';
-Minus: '-';
-Asterisk: '*';
-Slash: '/';
-Percent: '%';
+INT: '0' | (('1'..'9') ('0'..'9')*) ;
 
-Equals: '=';
-LessThen: '<';
-LessThenEq: '<=';
-GreaterThen: '>';
-GreaterThenEq: '>=';
+//FLOAT: [0-9]+ '.' [0-9]* | '.' [0-9]+;
 
-And: 'and';
-Or: 'or';
-Xor: 'xor';
+//STRING: '"' (~["\r\n] | '""')* '"';
 
-Not: 'not';
-
-Int: '0' | ('-'? ('1'..'9') ('0'..'9')*) ;
-
-Identifier: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ;
+//COMMENT: '//' ~[\r\n]* -> skip;
 
 WS: [ \t|\r\n] -> channel(HIDDEN);
+
+OTHER: .;
