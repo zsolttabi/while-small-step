@@ -149,4 +149,12 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
         return createNode("ABORT", element);
     }
 
+    @Override
+    public Node<ASTNode> visit(Or element) {
+        val node = createNode("OR", element);
+        node.addChild(element.getS1().accept(this));
+        node.addChild(element.getS2().accept(this));
+        return node;
+    }
+
 }

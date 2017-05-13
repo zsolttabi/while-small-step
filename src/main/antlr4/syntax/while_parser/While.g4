@@ -21,17 +21,16 @@ start returns [IStatement value]:
 
 statement returns [IStatement value]:
 
-    id = expression Assign e = expression { $value = new Assignment($id.value, $e.value); }
-|
-    s1 = statement Seq s2 = statement { $value = new Sequence($s1.value, $s2.value); }
-|
-    IF e = expression Then s1 = statement Else s2 = statement Fi { $value = new If($e.value, $s1.value, $s2.value); }
-|
-    WHILE e = expression Do s = statement Od { $value = new While($e.value, $s.value); }
-|
-    Skip { $value  = new Skip(); }
-|
+    id = expression Assign e  = expression     { $value = new Assignment($id.value, $e.value); } |
+    s1 = statement  Seq    s2 = statement      { $value = new Sequence($s1.value, $s2.value);  } |
+    s1 = statement  OR     s2 = statement      { $value = new Or($s1.value, $s2.value);        } |
+
+    WHILE e = expression  Do     s  = statement Od                     { $value = new While($e.value, $s.value);          } |
+    IF    e = expression  Then   s1 = statement Else s2 = statement Fi { $value = new If($e.value, $s1.value, $s2.value); } |
+
+    Skip  { $value  = new Skip(); } |
     Abort { $value = new Abort(); }
+
 ;
 
 expression returns [IExpression value]:
@@ -77,6 +76,8 @@ Assign: ':=';
 Skip: 'SKIP';
 
 Abort: 'abort';
+
+OR: 'OR';
 
 True: 'true';
 False: 'false';
