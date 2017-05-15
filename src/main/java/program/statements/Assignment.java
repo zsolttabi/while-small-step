@@ -14,6 +14,9 @@ import utils.Tree.Node;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static program.Configuration.ConfigType.*;
 
 @RequiredArgsConstructor
@@ -54,12 +57,14 @@ public class Assignment implements IStatement {
     }
 
     @Override
-    public Configuration next(State state) {
+    public Set<Configuration> peek(State state) {
         if (!(value instanceof Value)) {
-            return value.next(state);
+            return value.peek(state);
         }
         StatementConfiguration stepConfiguration = step(state);
-        return new StatementConfiguration(this, stepConfiguration.getState(), stepConfiguration.getConfigType());
+        return Collections.singleton(new StatementConfiguration(this,
+                stepConfiguration.getState(),
+                stepConfiguration.getConfigType()));
     }
 
     @Override

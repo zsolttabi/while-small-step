@@ -4,12 +4,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import program.Configuration;
 import program.Configuration.ConfigType;
 import program.State;
 import program.expressions.IExpression;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
+
+import java.util.Collections;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
@@ -27,8 +31,8 @@ public class While implements IStatement {
     }
 
     @Override
-    public StatementConfiguration next(State state) {
-        return new StatementConfiguration(this, state, ConfigType.INTERMEDIATE);
+    public Set<Configuration> peek(State state) {
+        return Collections.singleton(new StatementConfiguration(this, state, ConfigType.INTERMEDIATE));
     }
 
     @Override

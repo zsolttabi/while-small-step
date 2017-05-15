@@ -4,11 +4,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import program.Configuration;
 import program.State;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import static program.Configuration.ConfigType.*;
@@ -81,14 +84,14 @@ public class BinOp<T, R> implements IExpression {
     }
 
     @Override
-    public ExpressionConfiguration next(State state) {
+    public Set<Configuration> peek(State state) {
         if (!(lhs instanceof Value)) {
-            return lhs.next(state);
+            return lhs.peek(state);
         }
         if (!(rhs instanceof Value)) {
-            return rhs.next(state);
+            return rhs.peek(state);
         }
-        return new ExpressionConfiguration(this, state, INTERMEDIATE);
+        return Collections.singleton(new ExpressionConfiguration(this, state, INTERMEDIATE));
     }
 
     @Override

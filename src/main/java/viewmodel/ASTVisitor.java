@@ -15,12 +15,18 @@ import utils.Tree.Node;
 import viewmodel.ASTNode.NodeType;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Set;
+
 import static program.Configuration.ConfigType.TERMINATED;
 
 public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
 
     private Configuration currentConfiguration;
-    private Configuration nextConfiguration;
+    private Set<Configuration> nextConfigurations;
+
+    private boolean isNext(IProgramElement element) {
+        return nextConfigurations.stream().anyMatch(c -> c.getNode() == element);
+    }
 
     public static Tree<ASTNode> visitAST(Program program) {
         return new Tree<>(new ASTVisitor().visit(program));
@@ -31,13 +37,13 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
     }
 
     private NodeType getNodeType(IProgramElement element) {
-        if (currentConfiguration.getConfigType() == ConfigType.STUCK && nextConfiguration.getNode() == element) {
+        if (currentConfiguration.getConfigType() == ConfigType.STUCK && isNext(element)) {
             return NodeType.STUCK;
         }
-        if (currentConfiguration.getConfigType() == ConfigType.TERMINATED && nextConfiguration.getNode() == element) {
+        if (currentConfiguration.getConfigType() == ConfigType.TERMINATED && isNext(element)) {
             return NodeType.TERMINATED;
         }
-        if (currentConfiguration.getConfigType() == ConfigType.INTERMEDIATE && nextConfiguration.getNode() == element) {
+        if (currentConfiguration.getConfigType() == ConfigType.INTERMEDIATE && isNext(element)) {
             return NodeType.NEXT;
         }
         return NodeType.NORMAL;
@@ -46,7 +52,7 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
     @Override
     public Node<ASTNode> visit(Program element) {
         this.currentConfiguration = element.getCurrentConfiguration();
-        this.nextConfiguration = element.next();
+        this.nextConfigurations = element.next();
         return element.getCurrentConfiguration().accept(this);
     }
 

@@ -4,11 +4,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import program.Configuration;
 import program.State;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Function;
 
 import static program.Configuration.ConfigType.*;
@@ -59,11 +62,11 @@ public class UnOp<T, R> implements IExpression {
     }
 
     @Override
-    public ExpressionConfiguration next(State state) {
+    public Set<Configuration> peek(State state) {
         if (!(operand instanceof Value)) {
-            return operand.next(state);
+            return operand.peek(state);
         }
-        return new ExpressionConfiguration(this, state, INTERMEDIATE);
+        return Collections.singleton(new ExpressionConfiguration(this, state, INTERMEDIATE));
     }
 
     @Override

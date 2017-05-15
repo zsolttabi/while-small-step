@@ -9,6 +9,8 @@ import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
+import java.util.Set;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
@@ -29,8 +31,8 @@ public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>
         return node.step(state);
     }
 
-    public Configuration next() {
-        return node.next(state);
+    public Set<Configuration> next() {
+        return node.peek(state);
     }
 
 

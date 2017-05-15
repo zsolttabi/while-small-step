@@ -12,6 +12,7 @@ import viewmodel.interfaces.IVisitableNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode
 public class Program implements IVisitableNode<Node<ASTNode>> {
@@ -42,7 +43,7 @@ public class Program implements IVisitableNode<Node<ASTNode>> {
         return getCurrentConfiguration();
     }
 
-    public Configuration next() {
+    public Set<Configuration> next() {
         return getCurrentConfiguration().next();
     }
 

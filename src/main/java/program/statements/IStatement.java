@@ -4,14 +4,14 @@ import program.Configuration;
 import program.IProgramElement;
 import program.State;
 
-import java.util.Random;
+import java.util.Set;
 
 
 public interface IStatement extends IProgramElement {
 
     StatementConfiguration step(State state);
 
-    Configuration next(State state);
+    Set<Configuration> peek(State state);
 
 
 }

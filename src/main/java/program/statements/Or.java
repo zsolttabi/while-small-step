@@ -11,7 +11,8 @@ import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
 import static program.Configuration.ConfigType.INTERMEDIATE;
 
@@ -31,8 +32,11 @@ public class Or implements IStatement {
     }
 
     @Override
-    public Configuration next(State state) {
-        return new StatementConfiguration(this, state, INTERMEDIATE);
+    public Set<Configuration> peek(State state) {
+        Set<Configuration> next = new HashSet<>();
+        next.addAll(s1.peek(state));
+        next.addAll(s2.peek(state));
+        return next;
     }
 
     @Override

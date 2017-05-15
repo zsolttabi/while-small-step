@@ -5,12 +5,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import program.Configuration;
 import program.Configuration.ConfigType;
 import program.State;
 import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
+
+import java.util.Collections;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
@@ -31,8 +35,8 @@ public class Identifier implements IExpression, IVisitableNode<Tree.Node<ASTNode
     }
 
     @Override
-    public ExpressionConfiguration next(State state) {
-        return new ExpressionConfiguration(this, state, ConfigType.INTERMEDIATE);
+    public Set<Configuration> peek(State state) {
+        return Collections.singleton(new ExpressionConfiguration(this, state, ConfigType.INTERMEDIATE));
     }
 
     @Override

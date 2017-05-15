@@ -11,6 +11,8 @@ import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Set;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
@@ -32,8 +34,8 @@ public class Sequence implements IStatement {
     }
 
     @Override
-    public Configuration next(State state) {
-        return s1.next(state);
+    public Set<Configuration> peek(State state) {
+        return s1.peek(state);
     }
 
     @Override

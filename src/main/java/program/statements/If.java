@@ -13,6 +13,8 @@ import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.util.Set;
+
 import static program.Configuration.ConfigType.INTERMEDIATE;
 import static program.Configuration.ConfigType.STUCK;
 
@@ -48,8 +50,8 @@ public class If implements IStatement {
     }
 
     @Override
-    public Configuration next(State state) {
-        return condition.next(state);
+    public Set<Configuration> peek(State state) {
+        return condition.peek(state);
     }
 
     @Override
