@@ -4,6 +4,7 @@ grammar While;
     import program.*;
     import program.statements.*;
     import program.expressions.*;
+    import static program.ParserHelper.*;
 }
 
 @parser::members {
@@ -20,46 +21,45 @@ start returns [IStatement value]
 ;
 
 statement returns [IStatement value]
- : s1 = statement  SEQ    s2 = statement { $value = new Sequence($s1.value, $s2.value); }
- | s1 = statement  NDET   s2 = statement { $value = new Or($s1.value, $s2.value); }
- | s1 = statement  PAR    s2 = statement { $value = new Par($s1.value, $s2.value); }
+ : s1 = statement SEQ  s2 = statement { $value = makeStm(Sequence::new, $ctx.s1, $ctx.s2); }
+ | s1 = statement NDET s2 = statement { $value = makeStm(Or::new, $ctx.s1, $ctx.s2); }
+ | s1 = statement PAR  s2 = statement { $value = makeStm(Par::new, $ctx.s1, $ctx.s2); }
 
- | id = expression ASSIGN e = expression { $value = new Assignment($id.value, $e.value); }
- | WHILE expression DO statement OD { $value = new While($expression.value, $statement.value); }
- | IF expression THEN s1 = statement Else s2 = statement FI { $value = new If($expression.value, $s1.value, $s2.value); }
+ | id = expression ASSIGN e = expression { $value = makeStm(Assignment::new, $ctx.id, $ctx.e); }
+ | WHILE e = expression DO s = statement OD { $value = makeStm(While::new, $ctx.e, $ctx.s); }
+ | IF e = expression THEN s1 = statement Else s2 = statement FI { $value = makeStm(If::new, $ctx.e, $ctx.s1, $ctx.s2); }
 
- | Skip  { $value  = new Skip(); }
+ | Skip  { $value = new Skip(); }
  | ABORT { $value = new Abort(); }
- | OTHER {System.err.println("unknown char: " + $OTHER.text);}
  ;
 
 expression returns [IExpression value]
 locals [BinOp.Arithmetic arit, BinOp.Relational rel, BinOp.Logical log]
 
- : MINUS expression { $value = UnOp.Arithmetic.NEG.of($expression.value); }
- | NOT   expression { $value = UnOp.Logical.NOT.of($expression.value); }
+ : MINUS e = expression { $value = makeExpr(UnOp.Arithmetic.NEG::of, $ctx.e); }
+ | NOT   e = expression { $value = makeExpr(UnOp.Logical.NOT::of, $ctx.e); }
 
  | e1 = expression ( MUL { $arit = BinOp.Arithmetic.MUL; }
                    | DIV { $arit = BinOp.Arithmetic.DIV; }
                    | REM { $arit = BinOp.Arithmetic.REM; }
-                   ) e2 = expression { $value = $arit.of($e1.value, $e2.value); }
+                   ) e2 = expression { $value = makeExpr($ctx.arit::of, $ctx.e1, $ctx.e2); }
  | e1 = expression ( PLUS  { $arit = BinOp.Arithmetic.ADD; }
                    | MINUS { $arit = BinOp.Arithmetic.SUB; }
-                   ) e2 = expression { $value = $arit.of($e1.value, $e2.value); }
+                   ) e2 = expression { $value = makeExpr($ctx.arit::of, $ctx.e1, $ctx.e2); }
 
  | e1 = expression ( LT { $rel = BinOp.Relational.LT; }
                    | LE { $rel = BinOp.Relational.LE; }
                    | GT { $rel = BinOp.Relational.GT; }
                    | GE { $rel = BinOp.Relational.GE; }
-                   ) e2 = expression { $value = $rel.of($e1.value, $e2.value); }
+                   ) e2 = expression { $value = makeExpr($ctx.rel::of, $ctx.e1, $ctx.e2); }
  | e1 = expression ( EQ { $rel = BinOp.Relational.EQ; }
                    | NE { $rel = BinOp.Relational.NE; }
-                   ) e2 = expression { $value = $rel.of($e1.value, $e2.value); }
+                   ) e2 = expression { $value = makeExpr($ctx.rel::of, $ctx.e1, $ctx.e2); }
 
- | e1 = expression AND e2 = expression { $value = BinOp.Logical.AND.of($e1.value, $e2.value); }
+ | e1 = expression AND e2 = expression { $value = makeExpr(BinOp.Logical.AND::of, $ctx.e1, $ctx.e2); }
  | e1 = expression ( OR  { $log = BinOp.Logical.OR; }
                    | XOR { $log = BinOp.Logical.XOR; }
-                   ) e2 = expression { $value = $log.of($e1.value, $e2.value); }
+                   ) e2 = expression { $value = makeExpr($ctx.log::of, $ctx.e1, $ctx.e2); }
 
  | atom { $value = $atom.value; }
  ;
@@ -70,6 +70,8 @@ atom returns [IExpression value]
  | (TRUE { $value = new Value<>(true); } | FALSE  { $value = new Value<>(false); } )
  | ID { $value = new Identifier($ID.text); }
  ;
+
+other: OTHER+;
 
 IF: 'if';
 THEN: 'then';

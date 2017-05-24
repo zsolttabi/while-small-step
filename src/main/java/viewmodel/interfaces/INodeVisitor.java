@@ -2,6 +2,7 @@ package viewmodel.interfaces;
 
 import program.Configuration;
 import program.Program;
+import program.SyntaxError;
 import program.expressions.BinOp;
 import program.expressions.Identifier;
 import program.expressions.UnOp;
@@ -24,5 +25,6 @@ public interface INodeVisitor<T> {
     T visit(Abort element);
     T visit(Or element);
     T visit(Par element);
+    T visit(SyntaxError element);
 
 }

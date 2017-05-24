@@ -35,7 +35,6 @@ public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>
         return node.peek(state);
     }
 
-
     @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);

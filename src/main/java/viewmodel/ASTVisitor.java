@@ -5,6 +5,7 @@ import program.Configuration;
 import program.Configuration.ConfigType;
 import program.IProgramElement;
 import program.Program;
+import program.SyntaxError;
 import program.expressions.BinOp;
 import program.expressions.Identifier;
 import program.expressions.UnOp;
@@ -18,6 +19,7 @@ import viewmodel.interfaces.INodeVisitor;
 import java.util.Set;
 
 import static program.Configuration.ConfigType.TERMINATED;
+import static viewmodel.ASTNode.NodeType.SYNTAX_ERROR;
 
 public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
 
@@ -169,6 +171,11 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
         node.addChild(element.getS1().accept(this));
         node.addChild(element.getS2().accept(this));
         return node;
+    }
+
+    @Override
+    public Node<ASTNode> visit(SyntaxError element) {
+        return new Node<>(new ASTNode(element.getText(), SYNTAX_ERROR), null);
     }
 
 }

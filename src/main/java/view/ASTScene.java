@@ -44,6 +44,7 @@ public class ASTScene extends Scene {
         NODE_TYPE_TO_COLOR.put(NodeType.NEXT, "#3F92EA");
         NODE_TYPE_TO_COLOR.put(NodeType.STUCK, "#FF0000");
         NODE_TYPE_TO_COLOR.put(NodeType.TERMINATED, "#4CEA3F");
+        NODE_TYPE_TO_COLOR.put(NodeType.SYNTAX_ERROR, "#c429ba");
     }
 
     public ASTScene(String initialInput) {
