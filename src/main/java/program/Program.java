@@ -2,7 +2,6 @@ package program;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import program.Configuration.ConfigType;
 import program.statements.IStatement;
 import program.statements.StatementConfiguration;
 import utils.Tree.Node;
@@ -14,45 +13,72 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static program.Configuration.ConfigType.INTERMEDIATE;
+
 @EqualsAndHashCode
 public class Program implements IVisitableNode<Node<ASTNode>> {
 
     @Getter
     private final List<Configuration> reductionChain;
-    private int currentConfigIndex;
+    private int index;
     private final int maxPrefix;
 
     public Program(Configuration startConfiguration, int maxPrefix) {
         this.maxPrefix = maxPrefix;
         this.reductionChain = new ArrayList<>(maxPrefix);
         this.reductionChain.add(startConfiguration);
-        this.currentConfigIndex = 0;
+        this.index = 0;
     }
 
     public Program(IStatement statement, int maxPrefix) {
-        this(new StatementConfiguration(statement, new State(), ConfigType.INTERMEDIATE), maxPrefix);
+        this(new StatementConfiguration(statement, new State(), INTERMEDIATE), maxPrefix);
     }
 
-    public Configuration getCurrentConfiguration() {
-        return getReductionChain().get(currentConfigIndex);
+    public Configuration current() {
+        return getReductionChain().get(index);
     }
 
-    public Configuration step() {
-        reductionChain.add(getCurrentConfiguration().step());
-        currentConfigIndex++;
-        return getCurrentConfiguration();
+    public Set<Configuration> peek() {
+        return current().peek();
     }
 
-    public Set<Configuration> next() {
-        return getCurrentConfiguration().next();
+    public boolean hasNext() {
+        return reductionChain.size() < maxPrefix && current().getConfigType() == INTERMEDIATE;
     }
 
-    public List<Configuration> reduce() {
-        while (currentConfigIndex < maxPrefix-1 && getCurrentConfiguration().getConfigType() == ConfigType.INTERMEDIATE) {
-            step();
+    public void next() {
+
+        if (reductionChain.size() == maxPrefix) {
+            throw new RuntimeException("Max prefix reached. Cannot step further.");
         }
 
-        return new ArrayList<>(reductionChain);
+        if (reductionChain.size() <= index + 1) {
+            reductionChain.add(current().step());
+        }
+        ++index;
+    }
+
+    public boolean hasPrev() {
+        return index > 0;
+    }
+
+    public void prev() {
+        if (index == 0) {
+            throw new RuntimeException("No previous configuration exists.");
+        }
+        --index;
+    }
+
+    public void first() {
+        while (hasPrev()) {
+            prev();
+        }
+    }
+
+    public void last() {
+        while (hasNext() && current().getConfigType() == INTERMEDIATE) {
+            next();
+        }
     }
 
     @Override

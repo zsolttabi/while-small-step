@@ -53,9 +53,9 @@ public class ASTVisitor implements INodeVisitor<Node<ASTNode>> {
 
     @Override
     public Node<ASTNode> visit(Program element) {
-        this.currentConfiguration = element.getCurrentConfiguration();
-        this.nextConfigurations = element.next();
-        return element.getCurrentConfiguration().accept(this);
+        this.currentConfiguration = element.current();
+        this.nextConfigurations = element.peek();
+        return element.current().accept(this);
     }
 
     @Override

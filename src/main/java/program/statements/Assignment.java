@@ -68,6 +68,11 @@ public class Assignment implements IStatement {
     }
 
     @Override
+    public IStatement copy() {
+        return new Assignment(identifier.copy(), value.copy());
+    }
+
+    @Override
     public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

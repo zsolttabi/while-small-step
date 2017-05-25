@@ -95,6 +95,11 @@ public class BinOp<T, R> implements IExpression {
     }
 
     @Override
+    public IExpression copy() {
+        return new BinOp<>(operator, lhs.copy(), rhs.copy(), operandClass, operatorFunction);
+    }
+
+    @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

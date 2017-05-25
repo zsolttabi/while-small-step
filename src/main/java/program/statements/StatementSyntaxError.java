@@ -15,4 +15,9 @@ public class StatementSyntaxError extends SyntaxError implements IStatement {
         return new StatementConfiguration(this, state, STUCK);
     }
 
+    @Override
+    public IStatement copy() {
+        return new StatementSyntaxError(getText());
+    }
+
 }

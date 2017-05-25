@@ -70,6 +70,11 @@ public class UnOp<T, R> implements IExpression {
     }
 
     @Override
+    public IExpression copy() {
+        return new UnOp<>(operator, operand.copy(), operandClass, operatorFunction);
+    }
+
+    @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

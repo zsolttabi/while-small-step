@@ -31,7 +31,7 @@ public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>
         return node.step(state);
     }
 
-    public Set<Configuration> next() {
+    public Set<Configuration> peek() {
         return node.peek(state);
     }
 

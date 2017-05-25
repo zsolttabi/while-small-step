@@ -34,6 +34,11 @@ public class Value<T> implements IExpression, IVisitableNode<Node<ASTNode>> {
     }
 
     @Override
+    public IExpression copy() {
+        return new Value<>(value);
+    }
+
+    @Override
     public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

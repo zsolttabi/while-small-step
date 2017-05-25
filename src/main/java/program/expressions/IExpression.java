@@ -13,4 +13,6 @@ public interface IExpression extends IProgramElement {
 
     Set<Configuration> peek(State state);
 
+    IExpression copy();
+
 }

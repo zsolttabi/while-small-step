@@ -40,6 +40,11 @@ public class Identifier implements IExpression, IVisitableNode<Tree.Node<ASTNode
     }
 
     @Override
+    public IExpression copy() {
+        return new Identifier(identifier);
+    }
+
+    @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

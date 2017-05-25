@@ -11,6 +11,8 @@ import program.expressions.Value;
 import program.statements.*;
 import syntax.while_parser.WhileParser;
 
+import java.util.logging.Logger;
+
 import static program.Configuration.ConfigType.STUCK;
 import static program.Configuration.ConfigType.TERMINATED;
 import static program.expressions.BinOp.Arithmetic.ADD;
@@ -20,6 +22,8 @@ import static program.expressions.UnOp.Logical.NOT;
 
 @RunWith(DataProviderRunner.class)
 public class ProgramTest {
+
+    private Logger logger = Logger.getLogger("ProgramTest");
 
     @DataProvider
     public static Object[][] terminatingCodeProvider() {
@@ -79,26 +83,24 @@ public class ProgramTest {
     @UseDataProvider("terminatingCodeProvider")
     public void testTerminatingProgram(String code, IStatement statement) {
 
-        Program program = new Program(WhileParser.parse(code), 100);
-        Assert.assertEquals(statement, program.getCurrentConfiguration().getNode());
+        Program okProgram = new Program(WhileParser.parse(code), 100);
+        Assert.assertEquals(statement, okProgram.current().getNode());
 
-        program.reduce();
-        System.out.println(program.getReductionChain().size()); // TODO: assert reduction steps
-        Assert.assertEquals(TERMINATED, program.getCurrentConfiguration().getConfigType());
-
+        okProgram.last();
+        logger.info("Steps: " + okProgram.getReductionChain().size()); // TODO: assert reduction steps
+        Assert.assertEquals(TERMINATED, okProgram.current().getConfigType());
     }
 
     @Test
     @UseDataProvider("stuckCodeProvider")
     public void testStuckProgram(String code, IStatement statement) {
 
-        Program program = new Program(WhileParser.parse(code), 100);
-        Assert.assertEquals(statement, program.getCurrentConfiguration().getNode());
+        Program stuckProgram = new Program(WhileParser.parse(code), 100);
+        Assert.assertEquals(statement, stuckProgram.current().getNode());
 
-        program.reduce();
-        System.out.println(program.getReductionChain().size()); // TODO: assert reduction steps
-        Assert.assertEquals(STUCK, program.getCurrentConfiguration().getConfigType());
-
+        stuckProgram.last();
+        logger.info("Steps: " + stuckProgram.getReductionChain().size()); // TODO: assert reduction steps
+        Assert.assertEquals(STUCK, stuckProgram.current().getConfigType());
     }
 
 }

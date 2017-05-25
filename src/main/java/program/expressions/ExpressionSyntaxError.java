@@ -12,7 +12,12 @@ public class ExpressionSyntaxError extends SyntaxError implements IExpression {
 
     @Override
     public ExpressionConfiguration step(State state) {
-        return new ExpressionConfiguration(this, state, STUCK);
+        return new ExpressionConfiguration(copy(), state, STUCK);
+    }
+
+    @Override
+    public IExpression copy() {
+        return new ExpressionSyntaxError(getText());
     }
 
 }

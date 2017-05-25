@@ -13,5 +13,6 @@ public interface IStatement extends IProgramElement {
 
     Set<Configuration> peek(State state);
 
+    IStatement copy();
 
 }

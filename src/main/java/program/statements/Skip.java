@@ -27,6 +27,11 @@ public class Skip implements IStatement {
     }
 
     @Override
+    public IStatement copy() {
+        return new Skip();
+    }
+
+    @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

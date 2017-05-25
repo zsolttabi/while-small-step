@@ -40,6 +40,11 @@ public class Or implements IStatement {
     }
 
     @Override
+    public IStatement copy() {
+        return new Or(s1.copy(), s2.copy());
+    }
+
+    @Override
     public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
         return visitor.visit(this);
     }

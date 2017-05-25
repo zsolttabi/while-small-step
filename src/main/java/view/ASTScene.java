@@ -79,16 +79,8 @@ public class ASTScene extends Scene {
         return tree;
     }
 
-    private void stepAst() {
-        program.step();
-    }
-
     private void setProgram(String input) {
         program = new Program(WhileParser.parse(input), 1000);
-    }
-
-    private void reduceAST() {
-        program.reduce();
     }
 
     private HBox top() {
@@ -114,7 +106,7 @@ public class ASTScene extends Scene {
         vBox.getChildren().add(values);
         hbox.getChildren().add(vBox);
 
-        program.getCurrentConfiguration().getState().entrySet().forEach(e -> {
+        program.current().getState().entrySet().forEach(e -> {
 
             Label var = new Label(e.getKey().getIdentifier());
             var.setTextFill(Paint.valueOf("#d8d8d8"));
@@ -139,18 +131,38 @@ public class ASTScene extends Scene {
 
     private VBox left(String initialInput) {
 
-        Button stepButton = new Button("Step");
-        stepButton.setPrefSize(120, 20);
-        stepButton.setOnAction(e -> {
-            stepAst();
+        Button firstButton = new Button("First");
+        firstButton.setPrefSize(50, 20);
+        firstButton.setOnAction(e -> {
+            program.first();
             refreshCenter();
             mainPane.setTop(top());
         });
 
-        Button reduceButton = new Button("Reduce");
-        reduceButton.setPrefSize(120, 20);
+        Button stepButton = new Button("Next");
+        stepButton.setPrefSize(50, 20);
+        stepButton.setOnAction(e -> {
+            if (program.hasNext()) {
+                program.next();
+            }
+            refreshCenter();
+            mainPane.setTop(top());
+        });
+
+        Button stepBackButton = new Button("Prev");
+        stepBackButton.setPrefSize(50, 20);
+        stepBackButton.setOnAction(e -> {
+            if (program.hasPrev()) {
+                program.prev();
+            }
+            refreshCenter();
+            mainPane.setTop(top());
+        });
+
+        Button reduceButton = new Button("Last");
+        reduceButton.setPrefSize(50, 20);
         reduceButton.setOnAction(e -> {
-            reduceAST();
+            program.last();
             refreshCenter();
             mainPane.setTop(top());
         });
@@ -158,7 +170,7 @@ public class ASTScene extends Scene {
         HBox buttonBox = new HBox();
         buttonBox.setPadding(new Insets(10, 15, 10, 15));
         buttonBox.setSpacing(10);
-        buttonBox.getChildren().addAll(stepButton, reduceButton);
+        buttonBox.getChildren().addAll(firstButton, stepBackButton, stepButton, reduceButton);
 
         TextArea textArea = new TextArea();
         textArea.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
@@ -198,7 +210,7 @@ public class ASTScene extends Scene {
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         vbox.setStyle(
-                "-fx-background-color: " + BACK_COLOR + ";  -fx-border-width: 0 3 0 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
+                "-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 3 0 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
         vbox.getChildren().addAll(buttonBox, textArea);
 
         return vbox;
