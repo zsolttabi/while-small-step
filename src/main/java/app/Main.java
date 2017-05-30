@@ -15,8 +15,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage aStage) throws Exception {
-        aStage.setMinWidth(1200);
-        aStage.setMinHeight(700);
+
+        aStage.setWidth(1000);
+        aStage.setHeight(700);
+
+        aStage.setMinWidth(600);
+        aStage.setMinHeight(400);
+
         aStage.setTitle(getClass().getSimpleName());
         aStage.setScene(ASTScene.of(EXAMPLE));
         aStage.show();
