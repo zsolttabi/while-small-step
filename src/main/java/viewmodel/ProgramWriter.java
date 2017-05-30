@@ -12,6 +12,8 @@ import viewmodel.interfaces.INodeVisitor;
 
 public class ProgramWriter implements INodeVisitor<String> {
 
+    public static final String INDENT = "    ";
+
     @Override
     public String visit(Program element) {
         return element.current().accept(this);
@@ -41,16 +43,16 @@ public class ProgramWriter implements INodeVisitor<String> {
     @Override
     public String visit(If element) {
         return "if " + element.getCondition().accept(this) + " then\n" +
-                    "\t" + element.getS1().accept(this) + "\n" +
+                    INDENT + element.getS1().accept(this) + "\n" +
                 "else\n" +
-                    "\t"+ element.getS2().accept(this) + "\n" +
+                    INDENT + element.getS2().accept(this) + "\n" +
                 "fi";
     }
 
     @Override
     public String visit(While element) {
         return "while " + element.getCondition().accept(this) + " do\n" +
-                    "\t" + element.getStm().accept(this) + "\n" +
+                    INDENT + element.getStm().accept(this) + "\n" +
                 "od";
     }
 

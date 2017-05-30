@@ -27,6 +27,7 @@ import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.ASTNodeExtentProvider;
 import viewmodel.ASTVisitor;
+import viewmodel.ProgramWriter;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -68,6 +69,16 @@ public class ASTScene extends Scene {
 
     private void refreshLeft(String initialInput) {
 
+        Font codeEditorFont = Font.font("Courier New", FontWeight.BOLD, 14);
+
+        TextArea codeEditorTextArea = new TextArea();
+        codeEditorTextArea.setFont(codeEditorFont);
+        codeEditorTextArea.setWrapText(false);
+        codeEditorTextArea.setPrefColumnCount(30);
+        codeEditorTextArea.setPrefRowCount(35);
+        codeEditorTextArea.setText(initialInput);
+        codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEdtiorBehavior(codeEditorTextArea, e));
+
         Button startButton = makeButton("Start", null);
         Button stopButton = makeButton("Stop", null);
 
@@ -78,12 +89,14 @@ public class ASTScene extends Scene {
 
         Button firstButton = makeButton("First", e -> {
             program.first();
+            codeEditorTextArea.setText(new ProgramWriter().visit(program));
             refreshCenter();
             refreshTop();
         });
         Button stepButton = makeButton("Next", e -> {
             if (program.hasNext()) {
                 program.next();
+                codeEditorTextArea.setText(new ProgramWriter().visit(program));
             }
             refreshCenter();
             refreshTop();
@@ -91,12 +104,14 @@ public class ASTScene extends Scene {
         Button stepBackButton = makeButton("Prev", e -> {
             if (program.hasPrev()) {
                 program.prev();
+                codeEditorTextArea.setText(new ProgramWriter().visit(program));
             }
             refreshCenter();
             refreshTop();
         });
         Button reduceButton = makeButton("Last", e -> {
             program.last();
+            codeEditorTextArea.setText(new ProgramWriter().visit(program));
             refreshCenter();
             refreshTop();
         });
@@ -105,16 +120,6 @@ public class ASTScene extends Scene {
         stepButtons.setPadding(new Insets(5, 15, 10, 15));
         stepButtons.setSpacing(10);
         stepButtons.getChildren().addAll(firstButton, stepBackButton, stepButton, reduceButton);
-
-        Font codeEditorFont = Font.font("Courier New", FontWeight.BOLD, 14);
-
-        TextArea codeEditorTextArea = new TextArea();
-        codeEditorTextArea.setFont(codeEditorFont);
-        codeEditorTextArea.setWrapText(false);
-        codeEditorTextArea.setPrefColumnCount(30);
-        codeEditorTextArea.setPrefRowCount(35);
-        codeEditorTextArea.setText(initialInput);
-        codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEdtiorBehavior(codeEditorTextArea, e));
 
         codeEditorTextArea.setEditable(true);
         stopButton.setDisable(true);
