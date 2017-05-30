@@ -10,8 +10,6 @@ import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
-import utils.Tree.Node;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Collections;
@@ -73,7 +71,7 @@ public class Assignment implements IStatement {
     }
 
     @Override
-    public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
 

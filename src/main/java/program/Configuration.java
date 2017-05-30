@@ -4,8 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import utils.Tree;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
@@ -14,7 +12,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>> {
+public abstract class Configuration implements IVisitableNode {
 
     public enum ConfigType {
         INTERMEDIATE, STUCK, TERMINATED
@@ -36,7 +34,7 @@ public abstract class Configuration implements IVisitableNode<Tree.Node<ASTNode>
     }
 
     @Override
-    public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
 

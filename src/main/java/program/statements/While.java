@@ -8,8 +8,6 @@ import program.Configuration;
 import program.Configuration.ConfigType;
 import program.State;
 import program.expressions.IExpression;
-import utils.Tree;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Collections;
@@ -41,8 +39,7 @@ public class While implements IStatement {
     }
 
     @Override
-    public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
-
 }

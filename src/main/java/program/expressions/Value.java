@@ -7,10 +7,7 @@ import lombok.ToString;
 import program.Configuration;
 import program.Configuration.ConfigType;
 import program.State;
-import utils.Tree.Node;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
-import viewmodel.interfaces.IVisitableNode;
 
 import java.util.Collections;
 import java.util.Set;
@@ -18,7 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Value<T> implements IExpression, IVisitableNode<Node<ASTNode>> {
+public class Value<T> implements IExpression {
 
     @Getter
     private final T value;
@@ -39,7 +36,7 @@ public class Value<T> implements IExpression, IVisitableNode<Node<ASTNode>> {
     }
 
     @Override
-    public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
 

@@ -4,8 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import program.statements.IStatement;
 import program.statements.StatementConfiguration;
-import utils.Tree.Node;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
@@ -16,7 +14,7 @@ import java.util.Set;
 import static program.Configuration.ConfigType.INTERMEDIATE;
 
 @EqualsAndHashCode
-public class Program implements IVisitableNode<Node<ASTNode>> {
+public class Program implements IVisitableNode {
 
     @Getter
     private final List<Configuration> reductionChain;
@@ -85,7 +83,7 @@ public class Program implements IVisitableNode<Node<ASTNode>> {
     }
 
     @Override
-    public Node<ASTNode> accept(INodeVisitor<Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
 

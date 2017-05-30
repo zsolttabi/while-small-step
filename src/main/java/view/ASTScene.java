@@ -106,8 +106,10 @@ public class ASTScene extends Scene {
         stepButtons.setSpacing(10);
         stepButtons.getChildren().addAll(firstButton, stepBackButton, stepButton, reduceButton);
 
+        Font codeEditorFont = Font.font("Courier New", FontWeight.BOLD, 14);
+
         TextArea codeEditorTextArea = new TextArea();
-        codeEditorTextArea.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
+        codeEditorTextArea.setFont(codeEditorFont);
         codeEditorTextArea.setWrapText(false);
         codeEditorTextArea.setPrefColumnCount(30);
         codeEditorTextArea.setPrefRowCount(35);

@@ -1,13 +1,11 @@
 package program;
 
-import utils.Tree.Node;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.IVisitableNode;
 
 import java.util.Random;
 import java.util.Set;
 
-public interface IProgramElement extends IVisitableNode<Node<ASTNode>> {
+public interface IProgramElement extends IVisitableNode {
 
     Random RANDOM = new Random();
 

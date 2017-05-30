@@ -9,8 +9,6 @@ import program.State;
 import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Value;
-import utils.Tree;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Set;
@@ -60,7 +58,7 @@ public class If implements IStatement {
     }
 
     @Override
-    public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
 

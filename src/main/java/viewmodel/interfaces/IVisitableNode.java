@@ -1,6 +1,6 @@
 package viewmodel.interfaces;
 
-public interface IVisitableNode<T> {
+public interface IVisitableNode {
 
-    T accept(INodeVisitor<T> visitor);
+    <V> V accept(INodeVisitor<V> visitor);
 }

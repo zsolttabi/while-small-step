@@ -4,8 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import utils.Tree;
-import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Collections;
@@ -25,8 +23,7 @@ public abstract class SyntaxError implements IProgramElement {
     }
 
     @Override
-    public Tree.Node<ASTNode> accept(INodeVisitor<Tree.Node<ASTNode>> visitor) {
+    public <V> V accept(INodeVisitor<V> visitor) {
         return visitor.visit(this);
     }
-
 }
