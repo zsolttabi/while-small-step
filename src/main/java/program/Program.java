@@ -24,6 +24,9 @@ public class Program implements IVisitableNode<Node<ASTNode>> {
     private final int maxPrefix;
 
     public Program(Configuration startConfiguration, int maxPrefix) {
+        if (maxPrefix < 1) {
+            throw new RuntimeException("Maximum program evaluation prefix cannot be less then 1.");
+        }
         this.maxPrefix = maxPrefix;
         this.reductionChain = new ArrayList<>(maxPrefix);
         this.reductionChain.add(startConfiguration);

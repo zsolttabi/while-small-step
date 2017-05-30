@@ -5,6 +5,7 @@ grammar While;
     import program.statements.*;
     import program.expressions.*;
     import static program.ParserHelper.*;
+    import java.math.BigInteger;
 }
 
 @parser::members {
@@ -66,7 +67,7 @@ locals [BinOp.Arithmetic arit, BinOp.Relational rel, BinOp.Logical log]
 
 atom returns [IExpression value]
  : OPAR e = expression CPAR { $value = $e.value; }
- | INT { $value = new Value<>($INT.int); }
+ | INT { $value = new Value<>(new BigInteger($INT.text)); }
  | (TRUE { $value = new Value<>(true); } | FALSE  { $value = new Value<>(false); } )
  | ID { $value = new Identifier($ID.text); }
  ;

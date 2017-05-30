@@ -10,6 +10,7 @@ import utils.Tree;
 import viewmodel.ASTNode;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -34,16 +35,20 @@ public class BinOp<T, R> implements IExpression {
         return new BinOp<>(operator, lhs, rhs, operandClass, operatorFunction);
     }
 
-    public static BinOp<Integer, Integer> arithmetic(String operator, IExpression lhs, IExpression rhs, BiFunction<Integer, Integer, Integer> operatorFunction) {
-        return BinOp.of(operator, lhs, rhs, Integer.class, operatorFunction);
+    public static BinOp<BigInteger, BigInteger> arithmetic(String operator, IExpression lhs, IExpression rhs, BiFunction<BigInteger, BigInteger, BigInteger> operatorFunction) {
+        return BinOp.of(operator, lhs, rhs, BigInteger.class, operatorFunction);
     }
 
     public static BinOp<Boolean, Boolean> logical(String operator, IExpression lhs, IExpression rhs, BiFunction<Boolean, Boolean, Boolean> operatorFunction) {
         return BinOp.of(operator, lhs, rhs, Boolean.class, operatorFunction);
     }
 
-    public static BinOp<Integer, Boolean> relational(String operator, IExpression lhs, IExpression rhs, BiFunction<Integer, Integer, Boolean> operatorFunction) {
-        return BinOp.of(operator, lhs, rhs, Integer.class, operatorFunction);
+    public static BinOp<BigInteger, Boolean> relational(String operator, IExpression lhs, IExpression rhs, BiFunction<BigInteger, BigInteger, Boolean> operatorFunction) {
+        return BinOp.of(operator, lhs, rhs, BigInteger.class, operatorFunction);
+    }
+
+    public static BinOp<BigInteger, Boolean> relational2(String operator, IExpression lhs, IExpression rhs, BiFunction<BigInteger, BigInteger, Boolean> operatorFunction) {
+        return BinOp.of(operator, lhs, rhs, BigInteger.class, operatorFunction);
     }
 
     @Override
@@ -106,19 +111,19 @@ public class BinOp<T, R> implements IExpression {
 
     public enum Arithmetic {
 
-        ADD((lhs, rhs) -> BinOp.arithmetic("+", lhs, rhs, (a, b) -> a + b)),
-        SUB((lhs, rhs) -> BinOp.arithmetic("-", lhs, rhs, (a, b) -> a - b)),
-        MUL((lhs, rhs) -> BinOp.arithmetic("*", lhs, rhs, (a, b) -> a * b)),
-        DIV((lhs, rhs) -> BinOp.arithmetic("/", lhs, rhs, (a, b) -> a / b)),
-        REM((lhs, rhs) -> BinOp.arithmetic("%", lhs, rhs, (a, b) -> a % b));
+        ADD((lhs, rhs) -> BinOp.arithmetic("+", lhs, rhs, BigInteger::add)),
+        SUB((lhs, rhs) -> BinOp.arithmetic("-", lhs, rhs, BigInteger::subtract)),
+        MUL((lhs, rhs) -> BinOp.arithmetic("*", lhs, rhs, BigInteger::multiply)),
+        DIV((lhs, rhs) -> BinOp.arithmetic("/", lhs, rhs, BigInteger::divide)),
+        REM((lhs, rhs) -> BinOp.arithmetic("%", lhs, rhs, BigInteger::mod));
 
-        private final BiFunction<IExpression, IExpression, BinOp<Integer, Integer>> operationProvider;
+        private final BiFunction<IExpression, IExpression, BinOp<BigInteger, BigInteger>> operationProvider;
 
-        Arithmetic(BiFunction<IExpression, IExpression, BinOp<Integer, Integer>> operationProvider) {
+        Arithmetic(BiFunction<IExpression, IExpression, BinOp<BigInteger, BigInteger>> operationProvider) {
             this.operationProvider = operationProvider;
         }
 
-        public BinOp<Integer, Integer> of(IExpression e1, IExpression e2) {
+        public BinOp<BigInteger, BigInteger> of(IExpression e1, IExpression e2) {
             return operationProvider.apply(e1, e2);
         }
     }
@@ -142,20 +147,20 @@ public class BinOp<T, R> implements IExpression {
 
     public enum Relational {
 
-        EQ((lhs, rhs) -> BinOp.relational("=" , lhs, rhs, Object::equals)),
-        NE((lhs, rhs) -> BinOp.relational("=" , lhs, rhs, (a,b) -> !a.equals(b))),
-        LT((lhs, rhs) -> BinOp.relational("<" , lhs, rhs, (a, b) -> a < b)),
-        LE((lhs, rhs) -> BinOp.relational("<=", lhs, rhs, (a, b) -> a <= b)),
-        GT((lhs, rhs) -> BinOp.relational(">" , lhs, rhs, (a, b) -> a > b)),
-        GE((lhs, rhs) -> BinOp.relational(">=", lhs, rhs, (a, b) -> a >= b));
+        EQ((lhs, rhs) -> BinOp.relational2("=" , lhs, rhs, (a, b) -> a.compareTo(b) == 0)),
+        NE((lhs, rhs) -> BinOp.relational2("!=", lhs, rhs, (a, b) -> a.compareTo(b) != 0)),
+        LT((lhs, rhs) -> BinOp.relational2("<" , lhs, rhs, (a, b) -> a.compareTo(b)  < 0)),
+        LE((lhs, rhs) -> BinOp.relational2("<=", lhs, rhs, (a, b) -> a.compareTo(b) <= 0)),
+        GT((lhs, rhs) -> BinOp.relational2(">" , lhs, rhs, (a, b) -> a.compareTo(b)  > 0)),
+        GE((lhs, rhs) -> BinOp.relational2(">=", lhs, rhs, (a, b) -> a.compareTo(b) >= 0));
 
-        private final BiFunction<IExpression, IExpression, BinOp<Integer, Boolean>> operationProvider;
+        private final BiFunction<IExpression, IExpression, BinOp<BigInteger, Boolean>> operationProvider;
 
-        Relational(BiFunction<IExpression, IExpression, BinOp<Integer, Boolean>> operationProvider) {
+        Relational(BiFunction<IExpression, IExpression, BinOp<BigInteger, Boolean>> operationProvider) {
             this.operationProvider = operationProvider;
         }
 
-        public BinOp<Integer, Boolean> of(IExpression e1, IExpression e2) {
+        public BinOp<BigInteger, Boolean> of(IExpression e1, IExpression e2) {
             return operationProvider.apply(e1, e2);
         }
     }
