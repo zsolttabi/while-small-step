@@ -12,15 +12,19 @@ public class Main extends Application {
             "while x < 5 do\n " +
                 "  x :=  x + 1\n" +
             "od";
+    public static final int START_WIDTH = 1000;
+    public static final int START_HEIGHT = 700;
+    public static final int MIN_WIDTH = 600;
+    public static final int MIN_HEIGHT = 400;
 
     @Override
     public void start(Stage aStage) throws Exception {
 
-        aStage.setWidth(1000);
-        aStage.setHeight(700);
+        aStage.setWidth(START_WIDTH);
+        aStage.setHeight(START_HEIGHT);
 
-        aStage.setMinWidth(600);
-        aStage.setMinHeight(400);
+        aStage.setMinWidth(MIN_WIDTH);
+        aStage.setMinHeight(MIN_HEIGHT);
 
         aStage.setTitle(getClass().getSimpleName());
         aStage.setScene(ASTScene.of(EXAMPLE));

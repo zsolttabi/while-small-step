@@ -6,6 +6,7 @@ import program.expressions.Identifier;
 import program.expressions.Value;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class State {
     }
 
     public State copy() {
-        return new State(new HashMap<>(state));
+        return new State(new LinkedHashMap<>(state));
     }
 
     private State(Map<Identifier, Value<?>> state) {

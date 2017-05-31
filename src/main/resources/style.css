@@ -10,3 +10,16 @@
 .scroll-pane > .viewport {
    -fx-background-color: #686c6d;
 }
+
+.table-view{
+    -fx-background-color: #686c6d;
+    -fx-table-cell-border-color:#b8bbc1;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #686c6d;
+}

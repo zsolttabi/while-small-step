@@ -1,19 +1,18 @@
 package view;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.abego.treelayout.TreeForTreeLayout;
@@ -32,6 +31,7 @@ import viewmodel.CodeWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static viewmodel.SimpleAstNode.NodeType;
 
@@ -40,6 +40,7 @@ public class ASTScene extends Scene {
     private static final String BACK_COLOR = "#2c2e33";
     private static final String BORDER_COLOR = "#ccc7cb";
     private static final String LIGHT_BACK_COLOR = "#686c6d";
+    private static final String LIGHT_GRAY_COLOR = "#bec0c4";
     private Program program;
     private BorderPane mainPane;
 
@@ -52,12 +53,13 @@ public class ASTScene extends Scene {
         NODE_TYPE_TO_COLOR.put(NodeType.SYNTAX_ERROR, "#c429ba");
     }
 
+    private TableView<Variable> variableTable = new TableView<>();
+
     public ASTScene(String initialInput) {
         super(new BorderPane());
         setProgram(initialInput);
 
         mainPane = (BorderPane) getRoot();
-        refreshTop();
         refreshLeft(initialInput);
         refreshCenter();
 
@@ -77,7 +79,7 @@ public class ASTScene extends Scene {
         codeEditorTextArea.setPrefColumnCount(30);
         codeEditorTextArea.setPrefRowCount(35);
         codeEditorTextArea.setText(initialInput);
-        codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEdtiorBehavior(codeEditorTextArea, e));
+        codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEditorBehavior(codeEditorTextArea, e));
 
         Button startButton = makeButton("Start", null);
         Button stopButton = makeButton("Stop", null);
@@ -91,7 +93,7 @@ public class ASTScene extends Scene {
             program.first();
             codeEditorTextArea.setText(new CodeWriter().write(program));
             refreshCenter();
-            refreshTop();
+            updateVariableTable();
         });
         Button stepButton = makeButton("Next", e -> {
             if (program.hasNext()) {
@@ -99,7 +101,7 @@ public class ASTScene extends Scene {
                 codeEditorTextArea.setText(new CodeWriter().write(program));
             }
             refreshCenter();
-            refreshTop();
+            updateVariableTable();
         });
         Button stepBackButton = makeButton("Prev", e -> {
             if (program.hasPrev()) {
@@ -107,13 +109,13 @@ public class ASTScene extends Scene {
                 codeEditorTextArea.setText(new CodeWriter().write(program));
             }
             refreshCenter();
-            refreshTop();
+            updateVariableTable();
         });
         Button reduceButton = makeButton("Last", e -> {
             program.last();
             codeEditorTextArea.setText(new CodeWriter().write(program));
             refreshCenter();
-            refreshTop();
+            updateVariableTable();
         });
 
         HBox stepButtons = new HBox();
@@ -141,16 +143,32 @@ public class ASTScene extends Scene {
             startButton.setDisable(false);
         });
 
+        final Label tableLabel = new Label("Variables");
+        tableLabel.setFont(new Font("Arial", 20));
+
+        TableColumn<Variable, String> identifierCol = new TableColumn<>("Identifier");
+        identifierCol.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+        TableColumn<Variable, String> valueCol = new TableColumn<>("Value");
+        valueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+
+        variableTable.setEditable(false);
+        variableTable.setSelectionModel(null);
+        variableTable.getColumns().add(identifierCol);
+        variableTable.getColumns().add(valueCol);
+        variableTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        variableTable.setPlaceholder(new Label("Empty state"));
+        updateVariableTable();
+
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         vbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 3 0 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
-        vbox.getChildren().addAll(startStopButtons, stepButtons, codeEditorTextArea);
+        vbox.getChildren().addAll(startStopButtons, stepButtons, codeEditorTextArea, variableTable);
 
         mainPane.setLeft(vbox);
     }
 
-    private static void customEdtiorBehavior(TextArea codeEditorTextArea, KeyEvent e) {
+    private static void customEditorBehavior(TextArea codeEditorTextArea, KeyEvent e) {
         int tabWidth = 2;
 
         if (e.getCode() == KeyCode.TAB) {
@@ -182,12 +200,6 @@ public class ASTScene extends Scene {
         return new ASTScene(initialInput);
     }
 
-    private static void setDisableOn(boolean value, Node... nodes) {
-        for (Node node : nodes) {
-            node.setDisable(value);
-        }
-    }
-
     private static <T> void addChildren(DefaultTreeForTreeLayout<T> tree, Tree.Node<T> parent) {
         parent.getChildren().forEach(c -> {
             tree.addChild(parent.getData(), c.getData());
@@ -205,50 +217,39 @@ public class ASTScene extends Scene {
         program = new Program(WhileParser.parse(input), 1000);
     }
 
-    private void refreshTop() {
 
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(10, 12, 10, 12));
-        hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 3 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
+    public static class Variable {
 
-        VBox vBox = new VBox();
-        vBox.setPadding(new Insets(5, 10, 5, 10));
-        vBox.setSpacing(15);
+        private final SimpleStringProperty identifier;
+        private final SimpleStringProperty value;
 
-        Label vars = new Label("Variables:");
-        vars.setTextFill(Paint.valueOf("#ffffff"));
-        vars.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
+        public Variable(String identifier, String value) {
+            this.identifier = new SimpleStringProperty(identifier);
+            this.value = new SimpleStringProperty(value);
+        }
 
-        Label values = new Label("Values:");
-        values.setTextFill(Paint.valueOf("#ffffff"));
-        values.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
+        public String getIdentifier() {
+            return identifier.get();
+        }
 
-        vBox.getChildren().add(vars);
-        vBox.getChildren().add(values);
-        hbox.getChildren().add(vBox);
+        public void setIdentifier(String identifier) {
+            this.identifier.set(identifier);
+        }
 
-        program.current().getState().entrySet().forEach(e -> {
+        public String getValue() {
+            return value.get();
+        }
 
-            Label var = new Label(e.getKey().getIdentifier());
-            var.setTextFill(Paint.valueOf("#d8d8d8"));
-            var.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
+        public void setValue(String value) {
+            this.value.set(value);
+        }
 
-            Label value = new Label(e.getValue().getValue().toString());
-            value.setTextFill(Paint.valueOf("#d8d8d8"));
-            value.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
+    }
 
-            VBox varBox = new VBox();
-            varBox.setPadding(new Insets(5, 10, 5, 10));
-            varBox.setSpacing(15);
-            varBox.getChildren().add(var);
-            varBox.getChildren().add(value);
-
-            hbox.getChildren().add(varBox);
-
-        });
-
-        mainPane.setTop(hbox);
+    private void updateVariableTable() {
+        variableTable.setItems(FXCollections.observableList(program.current().getState().entrySet()
+                .stream().map(e -> new Variable(e.getKey().getIdentifier(), e.getValue() == null ? "NA" : e.getValue().getValue().toString()))
+                .collect(Collectors.toList())));
     }
 
     private void refreshCenter() {

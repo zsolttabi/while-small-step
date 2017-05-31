@@ -1,5 +1,6 @@
 package program;
 
+import org.antlr.v4.runtime.misc.Interval;
 import program.expressions.ExpressionSyntaxError;
 import program.expressions.IExpression;
 import program.statements.IStatement;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 public class ParserHelper {
 
     public static IStatement convertError(StatementContext sc) {
-        return sc.value == null ? new StatementSyntaxError(sc.getText()) : sc.value;
+        return sc.value == null ? new StatementSyntaxError(sc.getStart().getInputStream().getText(new Interval(sc.getStart().getStartIndex(), sc.getStop().getStopIndex()))) : sc.value;
     }
 
     public static IExpression convertError(ExpressionContext ec) {
