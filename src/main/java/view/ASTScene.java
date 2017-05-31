@@ -24,16 +24,16 @@ import org.sonatype.inject.Nullable;
 import program.Program;
 import syntax.while_parser.WhileParser;
 import utils.Tree;
-import viewmodel.ASTNode;
+import viewmodel.SimpleAstNode;
 import viewmodel.ASTNodeExtentProvider;
-import viewmodel.ASTVisitor;
-import viewmodel.ProgramWriter;
+import viewmodel.SimpleAstBuilder;
+import viewmodel.CodeWriter;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static viewmodel.ASTNode.NodeType;
+import static viewmodel.SimpleAstNode.NodeType;
 
 public class ASTScene extends Scene {
 
@@ -89,14 +89,14 @@ public class ASTScene extends Scene {
 
         Button firstButton = makeButton("First", e -> {
             program.first();
-            codeEditorTextArea.setText(new ProgramWriter().visit(program));
+            codeEditorTextArea.setText(new CodeWriter().write(program));
             refreshCenter();
             refreshTop();
         });
         Button stepButton = makeButton("Next", e -> {
             if (program.hasNext()) {
                 program.next();
-                codeEditorTextArea.setText(new ProgramWriter().visit(program));
+                codeEditorTextArea.setText(new CodeWriter().write(program));
             }
             refreshCenter();
             refreshTop();
@@ -104,14 +104,14 @@ public class ASTScene extends Scene {
         Button stepBackButton = makeButton("Prev", e -> {
             if (program.hasPrev()) {
                 program.prev();
-                codeEditorTextArea.setText(new ProgramWriter().visit(program));
+                codeEditorTextArea.setText(new CodeWriter().write(program));
             }
             refreshCenter();
             refreshTop();
         });
         Button reduceButton = makeButton("Last", e -> {
             program.last();
-            codeEditorTextArea.setText(new ProgramWriter().visit(program));
+            codeEditorTextArea.setText(new CodeWriter().write(program));
             refreshCenter();
             refreshTop();
         });
@@ -253,13 +253,13 @@ public class ASTScene extends Scene {
 
     private void refreshCenter() {
 
-        TreeForTreeLayout<ASTNode> tree = ASTScene.createTreeLayout(ASTVisitor.visitAST(program).getRoot());
-        TreeLayout<ASTNode> treeLayout = new TreeLayout<>(tree,
+        TreeForTreeLayout<SimpleAstNode> tree = ASTScene.createTreeLayout(SimpleAstBuilder.visitAST(program).getRoot());
+        TreeLayout<SimpleAstNode> treeLayout = new TreeLayout<>(tree,
                 new ASTNodeExtentProvider(30, 30),
                 new DefaultConfiguration<>(50.0, 10.0));
 
         mainPane.setCenter(new ASTPane<>(treeLayout,
-                ASTNode::toString,
+                SimpleAstNode::toString,
                 s -> NODE_TYPE_TO_COLOR.get(s.getNodeType()),
                 Font.font("Courier New", FontWeight.BOLD, 14))
         );

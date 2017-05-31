@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ASTNode {
+public class SimpleAstNode {
 
     public enum NodeType {
         NORMAL, NEXT, STUCK, TERMINATED, SYNTAX_ERROR
