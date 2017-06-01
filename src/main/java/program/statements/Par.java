@@ -1,6 +1,8 @@
 package program.statements;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import program.Configuration;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
@@ -12,7 +14,8 @@ import static program.Configuration.ConfigType.INTERMEDIATE;
 import static program.Configuration.ConfigType.STUCK;
 import static program.IProgramElement.choose;
 
-
+@EqualsAndHashCode(exclude = "stuck")
+@ToString
 public class Par implements IStatement {
 
     @Getter

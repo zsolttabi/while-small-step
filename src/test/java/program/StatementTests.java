@@ -7,6 +7,9 @@ import program.expressions.Identifier;
 import program.expressions.Value;
 import program.statements.*;
 
+import java.math.BigInteger;
+
+import static org.hamcrest.CoreMatchers.*;
 import static program.Configuration.ConfigType.*;
 import static program.expressions.BinOp.Arithmetic.ADD;
 import static program.expressions.BinOp.Logical.AND;
@@ -14,7 +17,7 @@ import static program.expressions.BinOp.Logical.AND;
 public class StatementTests {
 
     @Test
-    public void testSkipSkips() {
+    public void When_SkipStmSteps_Then_ConfigIsTerminated() {
 
         IStatement underTest = new Skip();
         State state = new State();
@@ -25,7 +28,7 @@ public class StatementTests {
     }
 
     @Test
-    public void testAssignmentAssignsValueToNewVariable() {
+    public void Given_IdWithoutValue_When_AssignStmSteps_Then_ConfigIsTerminated_And_IdHasValue() {
 
         Identifier identifier = new Identifier("x");
         Value<?> value = new Value<>(5);
@@ -42,13 +45,13 @@ public class StatementTests {
 
 
     @Test
-    public void testAssignmentAssignsNewValueToExistingVariable() {
+    public void Given_IdWithOldValue_When_AssignStmStepsWithNewValue_Then_ConfigIsTerminated_And_IdHasNewValue() {
 
         Identifier identifier = new Identifier("x");
-        Value<?> value = new Value<>(5);
+        Value<?> value = new Value<>(new BigInteger("5"));
 
         State state = new State();
-        state.set(identifier, new Value<>(1));
+        state.set(identifier, new Value<>(new BigInteger("1")));
         State expectedState = new State();
         expectedState.set(identifier, value);
 
@@ -60,7 +63,7 @@ public class StatementTests {
     }
 
     @Test
-    public void testAssignNonExistingVariableYieldsStuckAssignment() {
+    public void Given_UninitializedVar_When_VarIsReadByAssignStm_Then_ConfigIsStuck() {
 
         IExpression x = new Identifier("x");
         IExpression y = new Identifier("y");
@@ -74,20 +77,20 @@ public class StatementTests {
     }
 
     @Test
-    public void testAssignStuckValueYieldsStuckAssignment() {
+    public void Given_StuckExpr_When_ExprIsReadByAssignStm_Then_ConfigIsStuck() {
 
         IExpression x = new Identifier("x");
-        IExpression stuckVal = ADD.of(new Value<>(true), new Value<>(1)).step(new State()).getNode();
+        IExpression stuckVal = ADD.of(new Value<>(true), new Value<>(new BigInteger("1"))).step(new State()).getNode();
         IStatement underTest = new Assignment(x, stuckVal);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new StatementConfiguration(new Assignment(x, stuckVal),new State(), STUCK), result);
+        Assert.assertEquals(new StatementConfiguration(new Assignment(x, stuckVal), new State(), STUCK), result);
     }
 
 
     @Test
-    public void testSequence() {
+    public void Given_SeqStmWithSkipAsS1_When_SeqStmSteps_Then_ConfigIsIntermediateWithS2() {
 
         IStatement s1 = new Skip();
         IStatement s2 = new If(null, null, null);
@@ -100,7 +103,7 @@ public class StatementTests {
     }
 
     @Test
-    public void testStuckStatementYieldsStuckSequence() {
+    public void Given_S1IsStuck_When_SeqStmSteps_Then_ConfigIsStuckWithSeqStm() {
 
         IStatement stuckS1 = new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getNode();
         IStatement s2 = new Skip();
@@ -114,10 +117,10 @@ public class StatementTests {
 
 
     @Test
-    public void testIfTrueConditionYieldsTrueBranch() {
+    public void Given_FalseCond_When_IfSamSteps_Then_ConfigIsIntermediateWithS1() {
 
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         State state = new State();
         IStatement underTest = new If(new Value<>(true), s1, s2);
 
@@ -127,10 +130,10 @@ public class StatementTests {
     }
 
     @Test
-    public void testIfFalseConditionYieldsFalseBranch() {
+    public void Given_FalseCond_When_IfSamSteps_Then_ConfigIsIntermediateWithS2() {
 
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         State state = new State();
         IStatement underTest = new If(new Value<>(false), s1, s2);
 
@@ -140,12 +143,12 @@ public class StatementTests {
     }
 
     @Test
-    public void testStuckExprYieldsStuckIf() {
+    public void Given_StuckIfStmWithExpr_When_StmSteps_Then_ConfigIsStuck() {
 
-        IExpression stuckExpr = AND.of(new Value<>(1), new Value<>(true)).step(new State()).getNode();
+        IExpression stuckExpr = AND.of(new Value<>(new BigInteger("1")), new Value<>(true)).step(new State()).getNode();
         State state = new State();
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         IStatement underTest = new If(stuckExpr, s1, s2);
 
         Configuration result = underTest.step(state);
@@ -154,12 +157,12 @@ public class StatementTests {
     }
 
     @Test
-    public void testWrongTypeExprYieldsStuckIf() {
+    public void Given_IfStmWithWrongTypeExpr_When_StmSteps_Then_ConfigIsStuck() {
 
         IExpression intExpr = new Value<>(4);
         State state = new State();
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(1));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(2));
+        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         IStatement underTest = new If(intExpr, s1, s2);
 
         Configuration result = underTest.step(state);
@@ -169,15 +172,98 @@ public class StatementTests {
 
 
     @Test
-    public void testWhileTurnsIntoIf() {
+    public void Given_WhileStm_When_StmSteps_Then_ConfigWithIfStmIsCreated() {
 
         IExpression cond = new Value<>(true);
-        IStatement s = new Assignment(new Identifier("x"), new Value<>(1));
+        IStatement s = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
         IStatement underTest = new While(cond, s);
 
         Configuration result = underTest.step(new State());
 
         Assert.assertEquals(result, new StatementConfiguration(new If(cond, new Sequence(s, underTest), new Skip()), new State(), INTERMEDIATE));
+    }
+
+    @Test
+    public void Given_AbortStm_When_StmSteps_Then_ConfigIsStuck() {
+
+        IStatement underTest = new Abort();
+
+        Configuration result = underTest.step(new State());
+
+        Assert.assertEquals(result, new StatementConfiguration(new Abort(), new State(), STUCK));
+    }
+
+
+    @Test
+    public void When_OrStmSteps_Then_ConfigIsIntermediateWithEitherS1OrS2() {
+
+        IStatement s1 = new If(new Value<>(true), new Skip(), new Skip());
+        IStatement s2 = new While(new Value<>(false), new Skip());
+        IStatement underTest = new Or(s1, s2);
+
+        StatementConfiguration result = underTest.step(new State());
+
+        Assert.assertThat(result,
+                either(equalTo(new StatementConfiguration(s1, new State(), INTERMEDIATE)))
+                        .or(equalTo(new StatementConfiguration(s2, new State(), INTERMEDIATE))));
+    }
+
+    @Test
+    public void Given_IntermediateS1_And_IntermediateS2_When_ParStmSteps_Then_ConfigIsIntermediateWithParStm() {
+
+        IStatement s1 = new If(new Value<>(true), new Skip(), new Skip());
+        IStatement s2 = new While(new Value<>(false), new Skip());
+        IStatement underTest = new Par(s1, s2);
+
+        StatementConfiguration result = underTest.step(new State());
+        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
+        Assert.assertThat((Par) result.getNode(),
+                either(equalTo(new Par(s1.step(new State()).getNode(), s2)))
+                        .or(equalTo(new Par(s1, s2.step(new State()).getNode()))));
+    }
+
+    @Test
+    public void Given_TerminatedS1_And_TerminatedS2_When_ParSteps_Then_ConfigIsIntermediateWithEitherS1OrS2() {
+
+        IStatement s1 = new Skip();
+        IStatement s2 = new Skip();
+        IStatement underTest = new Par(s1, s2);
+
+        StatementConfiguration result = underTest.step(new State());
+
+        Assert.assertThat(result.getNode(), instanceOf(Skip.class));
+        Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
+        Assert.assertThat(result.getNode(), equalTo(new Skip()));
+
+    }
+
+    @Test
+    public void Given_StuckS1_And_StuckS2_When_ParSteps_Then_ConfigIsIntermediateWithPar() {
+
+        IStatement s1 = new Abort();
+        IStatement s2 = new Abort();
+        IStatement underTest = new Par(s1, s2);
+
+        StatementConfiguration result = underTest.step(new State());
+
+        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
+        Assert.assertThat(result.getNode(), equalTo(underTest));
+    }
+
+    @Test
+    public void Given_StuckS1_And_StuckS2_When_ParStepsTwice_Then_ConfigIsStuckWithPar() {
+
+        IStatement s1 = new Abort();
+        IStatement s2 = new Abort();
+        IStatement underTest = new Par(s1, s2);
+
+        StatementConfiguration result = underTest.step(new State()).getNode().step(new State());
+
+        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getConfigType(), equalTo(STUCK));
+        Assert.assertThat(result.getNode(), equalTo(underTest));
     }
 
 }
