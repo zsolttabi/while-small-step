@@ -19,14 +19,14 @@ public class Program implements IVisitableNode {
     @Getter
     private final List<Configuration> reductionChain;
     private int index;
-    private final int maxPrefix;
+    private final int allowedPrefix;
 
-    public Program(Configuration startConfiguration, int maxPrefix) {
-        if (maxPrefix < 1) {
-            throw new RuntimeException("Maximum program evaluation prefix cannot be less then 1.");
+    public Program(Configuration startConfiguration, int allowedPrefix) {
+        if (allowedPrefix < 1) {
+            throw new RuntimeException("Allowed prefix cannot be less then 1.");
         }
-        this.maxPrefix = maxPrefix;
-        this.reductionChain = new ArrayList<>(maxPrefix);
+        this.allowedPrefix = allowedPrefix;
+        this.reductionChain = new ArrayList<>(allowedPrefix);
         this.reductionChain.add(startConfiguration);
         this.index = 0;
     }
@@ -44,12 +44,12 @@ public class Program implements IVisitableNode {
     }
 
     public boolean hasNext() {
-        return reductionChain.size() < maxPrefix && current().getConfigType() == INTERMEDIATE;
+        return reductionChain.size() < allowedPrefix && current().getConfigType() == INTERMEDIATE;
     }
 
     public void next() {
 
-        if (reductionChain.size() == maxPrefix) {
+        if (reductionChain.size() == allowedPrefix) {
             throw new RuntimeException("Max prefix reached. Cannot step further.");
         }
 

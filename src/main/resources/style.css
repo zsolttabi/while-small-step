@@ -23,3 +23,11 @@
 .table-row-cell{
     -fx-background-color: -fx-table-cell-border-color, #686c6d;
 }
+
+.table-row-cell:empty {
+    -fx-background-color: #686c6d;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}

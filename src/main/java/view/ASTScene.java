@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.abego.treelayout.TreeForTreeLayout;
@@ -23,10 +24,10 @@ import org.sonatype.inject.Nullable;
 import program.Program;
 import syntax.while_parser.WhileParser;
 import utils.Tree;
-import viewmodel.SimpleAstNode;
 import viewmodel.ASTNodeExtentProvider;
-import viewmodel.SimpleAstBuilder;
 import viewmodel.CodeWriter;
+import viewmodel.SimpleAstBuilder;
+import viewmodel.SimpleAstNode;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -38,9 +39,10 @@ import static viewmodel.SimpleAstNode.NodeType;
 public class ASTScene extends Scene {
 
     private static final String BACK_COLOR = "#2c2e33";
-    private static final String BORDER_COLOR = "#ccc7cb";
+    private static final String BORDER_COLOR = "#b8bbc1";
     private static final String LIGHT_BACK_COLOR = "#686c6d";
     private static final String LIGHT_GRAY_COLOR = "#bec0c4";
+    public static final int DEFAULT_ALLOWED_PREFIX = 100;
     private Program program;
     private BorderPane mainPane;
 
@@ -54,6 +56,7 @@ public class ASTScene extends Scene {
     }
 
     private TableView<Variable> variableTable = new TableView<>();
+    private int allowedPrefix = DEFAULT_ALLOWED_PREFIX;
 
     public ASTScene(String initialInput) {
         super(new BorderPane());
@@ -85,7 +88,7 @@ public class ASTScene extends Scene {
         Button stopButton = makeButton("Stop", null);
 
         HBox startStopButtons = new HBox();
-        startStopButtons.setPadding(new Insets(10, 15, 5, 15));
+        startStopButtons.setPadding(new Insets(5, 15, 5, 15));
         startStopButtons.setSpacing(10);
         startStopButtons.getChildren().addAll(startButton, stopButton);
 
@@ -143,13 +146,14 @@ public class ASTScene extends Scene {
             startButton.setDisable(false);
         });
 
-        final Label tableLabel = new Label("Variables");
-        tableLabel.setFont(new Font("Arial", 20));
+        final Label tableLabel = makeLabel("Variables");
 
         TableColumn<Variable, String> identifierCol = new TableColumn<>("Identifier");
         identifierCol.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+        identifierCol.setSortable(false);
         TableColumn<Variable, String> valueCol = new TableColumn<>("Value");
         valueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+        valueCol.setSortable(false);
 
         variableTable.setEditable(false);
         variableTable.setSelectionModel(null);
@@ -159,13 +163,32 @@ public class ASTScene extends Scene {
         variableTable.setPlaceholder(new Label("Empty state"));
         updateVariableTable();
 
+
+        Spinner<Integer> spinner = new Spinner<>(1, 1000, DEFAULT_ALLOWED_PREFIX);
+        spinner.setEditable(true);
+        spinner.valueProperty().addListener((observable, oldValue, newValue) -> setAllowedPrefix(newValue));
+        spinner.setMaxWidth(100);
+        Label spinnerCaption = makeLabel("Allowed prefix:");
+
+        HBox spinnerBox = new HBox();
+        spinnerBox.getChildren().addAll(spinnerCaption, spinner);
+        spinnerBox.setPadding(new Insets(10, 10, 5, 20));
+        spinnerBox.setSpacing(15);
+
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
-        vbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 3 0 0; -fx-border-color: " + BORDER_COLOR + " #ccc7cb #ccc7cb #ccc7cb;");
-        vbox.getChildren().addAll(startStopButtons, stepButtons, codeEditorTextArea, variableTable);
+        vbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 0 0; ");
+        vbox.getChildren().addAll(spinnerBox, startStopButtons, stepButtons, codeEditorTextArea, /*tableLabel,*/ variableTable);
 
         mainPane.setLeft(vbox);
+    }
+
+    private static Label makeLabel(String text) {
+        final Label tableLabel = new Label(text);
+        tableLabel.setFont(Font.font("System Regular", FontWeight.BOLD, 14));
+        tableLabel.setTextFill(Color.WHITE);
+        return tableLabel;
     }
 
     private static void customEditorBehavior(TextArea codeEditorTextArea, KeyEvent e) {
@@ -214,9 +237,12 @@ public class ASTScene extends Scene {
     }
 
     private void setProgram(String input) {
-        program = new Program(WhileParser.parse(input), 1000);
+        program = new Program(WhileParser.parse(input), allowedPrefix);
     }
 
+    public void setAllowedPrefix(int allowedPrefix) {
+        this.allowedPrefix = allowedPrefix;
+    }
 
     public static class Variable {
 
@@ -259,10 +285,16 @@ public class ASTScene extends Scene {
                 new ASTNodeExtentProvider(30, 30),
                 new DefaultConfiguration<>(50.0, 10.0));
 
-        mainPane.setCenter(new ASTPane<>(treeLayout,
+        ASTPane<SimpleAstNode> treePane = new ASTPane<>(treeLayout,
                 SimpleAstNode::toString,
                 s -> NODE_TYPE_TO_COLOR.get(s.getNodeType()),
-                Font.font("Courier New", FontWeight.BOLD, 14))
-        );
+                Font.font("Courier New", FontWeight.BOLD, 14));
+
+        treePane.setPadding(new Insets(10, 10, 10,0));
+        treePane.setStyle(
+                "  -fx-background-color: " + BACK_COLOR +
+                "; -fx-border-width: 0 0 0 0 ");
+
+        mainPane.setCenter(treePane);
     }
 }
