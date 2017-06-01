@@ -7,6 +7,8 @@ import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
 
+import java.math.BigInteger;
+
 import static program.Configuration.ConfigType.STUCK;
 import static program.Configuration.ConfigType.TERMINATED;
 import static program.expressions.BinOp.Arithmetic.ADD;
@@ -20,7 +22,7 @@ public class ExpressionTests {
     public void testInitializedIdentifierYieldsValue() {
 
         Identifier underTest = new Identifier("x");
-        Value<Integer> value = new Value<>(1);
+        Value<BigInteger> value = new Value<>(new BigInteger("1"));
         State state = new State();
         state.set(underTest, value);
 
@@ -43,20 +45,20 @@ public class ExpressionTests {
     @Test
     public void testBinOpYieldsResult() {
 
-        IExpression lhs = new Value<>(1);
-        IExpression rhs = new Value<>(1);
+        IExpression lhs = new Value<>(new BigInteger("1"));
+        IExpression rhs = new Value<>(new BigInteger("1"));
         IExpression underTest = ADD.of(lhs, rhs);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(new Value<>(2), new State(), TERMINATED), result);
+        Assert.assertEquals(new ExpressionConfiguration(new Value<>(new BigInteger("2")), new State(), TERMINATED), result);
     }
 
     @Test
     public void testStuckOperandYieldsStuckBinOp() {
 
         IExpression lhs = new Identifier("x");
-        IExpression rhs = new Value<>(1);
+        IExpression rhs = new Value<>(new BigInteger("1"));
         IExpression underTest = ADD.of(lhs, rhs);
 
         Configuration result = underTest.step(new State());
@@ -67,7 +69,7 @@ public class ExpressionTests {
     @Test
     public void testMismatchedTypesYieldsStuckBinOp() {
 
-        IExpression lhs = new Value<>(1);
+        IExpression lhs = new Value<>(new BigInteger("1"));
         IExpression rhs = new Value<>(true);
         IExpression underTest = ADD.of(lhs, rhs);
 
@@ -79,8 +81,8 @@ public class ExpressionTests {
     @Test
     public void testWrongOperandTypesYieldsStuckBinOp() {
 
-        IExpression lhs = new Value<>(1);
-        IExpression rhs = new Value<>(1);
+        IExpression lhs = new Value<>(new BigInteger("1"));
+        IExpression rhs = new Value<>(new BigInteger("1"));
         IExpression underTest = AND.of(lhs, rhs);
 
         Configuration result = underTest.step(new State());
@@ -91,12 +93,12 @@ public class ExpressionTests {
     @Test
     public void testUnOpYieldsResult() {
 
-        IExpression operand = new Value<>(1);
+        IExpression operand = new Value<>(new BigInteger("1"));
         IExpression underTest = NEG.of(operand);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(new Value<>(-1), new State(), TERMINATED), result);
+        Assert.assertEquals(new ExpressionConfiguration(new Value<>(new BigInteger("-1")), new State(), TERMINATED), result);
     }
 
     @Test
@@ -115,7 +117,7 @@ public class ExpressionTests {
     @Test
     public void testWrongOperandTypeYieldsStuckUnOp() {
 
-        IExpression operand = new Value<>(1);
+        IExpression operand = new Value<>(new BigInteger("1"));
         IExpression underTest = NOT.of(operand);
 
         Configuration result = underTest.step(new State());

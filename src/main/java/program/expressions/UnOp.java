@@ -8,6 +8,7 @@ import program.Configuration;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
@@ -30,8 +31,8 @@ public class UnOp<T, R> implements IExpression {
         return new UnOp<>(operator, operand, operandClass, operatorFunction);
     }
 
-    public static UnOp<Integer, Integer> arithmetic(String operator, IExpression operand, Function<Integer, Integer> operatorFunction) {
-        return UnOp.of(operator, operand, Integer.class, operatorFunction);
+    public static UnOp<BigInteger, BigInteger> arithmetic(String operator, IExpression operand, Function<BigInteger, BigInteger> operatorFunction) {
+        return UnOp.of(operator, operand, BigInteger.class, operatorFunction);
     }
 
     public static UnOp<Boolean, Boolean> logical(String operator, IExpression operand, Function<Boolean, Boolean> operatorFunction) {
@@ -79,15 +80,15 @@ public class UnOp<T, R> implements IExpression {
 
     public enum Arithmetic {
 
-        NEG(o -> UnOp.arithmetic("-", o, a -> -a));
+        NEG(o -> UnOp.arithmetic("-", o, BigInteger::negate));
 
-        private final Function<IExpression, UnOp<Integer, Integer>> operationProvider;
+        private final Function<IExpression, UnOp<BigInteger, BigInteger>> operationProvider;
 
-        Arithmetic(Function<IExpression, UnOp<Integer, Integer>> operationProvider) {
+        Arithmetic(Function<IExpression, UnOp<BigInteger, BigInteger>> operationProvider) {
             this.operationProvider = operationProvider;
         }
 
-        public UnOp<Integer, Integer> of(IExpression operand) {
+        public UnOp<BigInteger, BigInteger> of(IExpression operand) {
             return operationProvider.apply(operand);
         }
     }
