@@ -1,9 +1,13 @@
 package viewmodel;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.abego.treelayout.NodeExtentProvider;
 
 public class ASTNodeExtentProvider implements NodeExtentProvider<SimpleAstNode> {
+
+    public static final Font TREE_NODE_FONT = Font.font("Courier New", FontWeight.BOLD, 14);
 
     private final double baseWidth;
     private final double baseHeight;
@@ -15,12 +19,16 @@ public class ASTNodeExtentProvider implements NodeExtentProvider<SimpleAstNode> 
 
     @Override
 	public double getWidth(SimpleAstNode node) {
-		return baseWidth + new Text(node.toString()).getBoundsInLocal().getWidth();
+        Text text = new Text(node.toString());
+        text.setFont(TREE_NODE_FONT);
+        return baseWidth + text.getBoundsInLocal().getWidth();
 	}
 
 	@Override
 	public double getHeight(SimpleAstNode node) {
-		return baseHeight + new Text(node.toString()).getBoundsInLocal().getHeight();
+        Text text = new Text(node.toString());
+        text.setFont(TREE_NODE_FONT);
+        return baseHeight + text.getBoundsInLocal().getHeight();
 	}
 
 }

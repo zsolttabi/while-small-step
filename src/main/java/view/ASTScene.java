@@ -47,6 +47,7 @@ public class ASTScene extends Scene {
     private BorderPane mainPane;
 
     private static Map<NodeType, String> NODE_TYPE_TO_COLOR = new HashMap<>();
+
     static {
         NODE_TYPE_TO_COLOR.put(NodeType.NORMAL, "#000000");
         NODE_TYPE_TO_COLOR.put(NodeType.NEXT, "#3F92EA");
@@ -213,7 +214,7 @@ public class ASTScene extends Scene {
     private static Button makeButton(String first, @Nullable EventHandler<ActionEvent> actionEventEventHandler) {
         Button firstButton = new Button(first);
         firstButton.setPrefSize(50, 20);
-        if (actionEventEventHandler != null ){
+        if (actionEventEventHandler != null) {
             firstButton.setOnAction(actionEventEventHandler);
         }
         return firstButton;
@@ -288,12 +289,12 @@ public class ASTScene extends Scene {
         ASTPane<SimpleAstNode> treePane = new ASTPane<>(treeLayout,
                 SimpleAstNode::toString,
                 s -> NODE_TYPE_TO_COLOR.get(s.getNodeType()),
-                Font.font("Courier New", FontWeight.BOLD, 14));
+                ASTNodeExtentProvider.TREE_NODE_FONT);
 
-        treePane.setPadding(new Insets(10, 10, 10,0));
+        treePane.setPadding(new Insets(10, 10, 10, 0));
         treePane.setStyle(
                 "  -fx-background-color: " + BACK_COLOR +
-                "; -fx-border-width: 0 0 0 0 ");
+                        "; -fx-border-width: 0 0 0 0 ");
 
         mainPane.setCenter(treePane);
     }
