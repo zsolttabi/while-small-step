@@ -24,7 +24,6 @@ import org.sonatype.inject.Nullable;
 import parser.WhileProgramParser;
 import program.Program;
 import utils.Tree;
-import viewmodel.ASTNodeExtentProvider;
 import viewmodel.CodeWriter;
 import viewmodel.SimpleAstBuilder;
 import viewmodel.SimpleAstNode;
@@ -146,8 +145,6 @@ public class ASTScene extends Scene {
             stepButtons.setDisable(true);
             startButton.setDisable(false);
         });
-
-        final Label tableLabel = makeLabel("Variables");
 
         TableColumn<Variable, String> identifierCol = new TableColumn<>("Identifier");
         identifierCol.setCellValueFactory(new PropertyValueFactory<>("identifier"));

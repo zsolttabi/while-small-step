@@ -119,6 +119,10 @@ public class WhileProgramVisitor extends WhileBaseVisitor<IProgramElement> {
 
     @Override
     public IProgramElement visitStart(WhileParser.StartContext ctx) {
+
+        if (isErrorous(ctx)) {
+            return new StatementSyntaxError(MISSING_STATEMENT);
+        }
         return visit(ctx.s);
     }
 

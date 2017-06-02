@@ -12,6 +12,8 @@ import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Arrays;
 
+import static program.Configuration.ConfigType.TERMINATED;
+
 public class CodeWriter implements INodeVisitor<String> {
 
     public static final String NEWLINE = System.lineSeparator();
@@ -66,7 +68,7 @@ public class CodeWriter implements INodeVisitor<String> {
 
     @Override
     public String visit(Configuration element) {
-        return element.getNode().accept(this);
+        return element.getConfigType() == TERMINATED ? "" : element.getNode().accept(this);
     }
 
     @Override

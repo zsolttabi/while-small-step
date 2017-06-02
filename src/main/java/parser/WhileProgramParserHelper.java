@@ -24,6 +24,7 @@ public class WhileProgramParserHelper {
     public static final Map<Integer, BinOp.Arithmetic> ARITHMETIC_BIN_OPS = new HashMap<>();
     public static final String MISSING = "missing";
     public static final String MISSING_ELEMENT = "<missing element>";
+    public static final String MISSING_STATEMENT = "<missing statement>";
 
     static {
         ARITHMETIC_BIN_OPS.put(WhileParser.DIV, BinOp.Arithmetic.DIV);
@@ -79,12 +80,16 @@ public class WhileProgramParserHelper {
         return (IExpression) element;
     }
 
-    private static String getErrorText(ParserRuleContext ctx) {
+    public static String getErrorText(ParserRuleContext ctx) {
         int startIndex = ctx.getStart().getStartIndex();
         int stopIndex = ctx.getStop().getStopIndex();
-        return startIndex < stopIndex ?
-                ctx.getStart().getInputStream().getText(new Interval(startIndex, stopIndex)) :
-                MISSING_ELEMENT;
+        return isErrorous(ctx) ?
+                MISSING_ELEMENT :
+                ctx.getStart().getInputStream().getText(new Interval(startIndex, stopIndex));
+    }
+
+    public static boolean isErrorous(ParserRuleContext ctx) {
+        return ctx.getStart().getStartIndex() > ctx.getStop().getStopIndex();
     }
 
     public IStatement makeStm(StmContext ctx, BiFunction<IStatement, IStatement, IStatement> ctor, StmContext sc1, StmContext sc2) {
@@ -99,7 +104,7 @@ public class WhileProgramParserHelper {
         return handleError(ctx, () -> ctor.apply(handleError(ec1), handleError(ec2)));
     }
 
-    public IStatement makeStm(StmContext ctx, TriFunction<IExpression, IStatement, IStatement, IStatement> ctor, WhileParser.ExprContext ec, StmContext sc1, StmContext sc2) {
+    public IStatement makeStm(StmContext ctx, TriFunction<IExpression, IStatement, IStatement, IStatement> ctor, ExprContext ec, StmContext sc1, StmContext sc2) {
         return handleError(ctx, () -> ctor.apply(handleError(ec), handleError(sc1), handleError(sc2)));
     }
 
@@ -107,7 +112,7 @@ public class WhileProgramParserHelper {
         return handleError(ctx, () -> ctor.apply(handleError(ec)));
     }
 
-    public IExpression makeExpr(WhileParser.ExprContext ctx, BiFunction<IExpression, IExpression, IExpression> ctor, WhileParser.ExprContext ec1, ExprContext ec2) {
+    public IExpression makeExpr(ExprContext ctx, BiFunction<IExpression, IExpression, IExpression> ctor, ExprContext ec1, ExprContext ec2) {
         return handleError(ctx, () -> ctor.apply(handleError(ec1), handleError(ec2)));
     }
 

@@ -1,9 +1,10 @@
-package viewmodel;
+package view;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.abego.treelayout.NodeExtentProvider;
+import viewmodel.SimpleAstNode;
 
 public class ASTNodeExtentProvider implements NodeExtentProvider<SimpleAstNode> {
 
