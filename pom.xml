@@ -52,6 +52,9 @@
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.7</version>
+                <configuration>
+                    <visitor>true</visitor>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -89,6 +92,7 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-maven-plugin</artifactId>
             <version>4.7</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.abego.treelayout/org.abego.treelayout.core -->

@@ -1,78 +1,41 @@
 grammar While;
 
-@parser::header {
-    import program.*;
-    import program.statements.*;
-    import program.expressions.*;
-    import static program.ParserHelper.*;
-    import java.math.BigInteger;
-}
-
-@parser::members {
-
-    public static IStatement parse(String input) {
-        WhileParser parser = new WhileParser(new CommonTokenStream(new WhileLexer(CharStreams.fromString(input))));
-        return parser.start().value;
-    }
-
-}
-
-start returns [IStatement value]
- : s = statement { $value = $s.value; } EOF
-;
-
-statement returns [IStatement value]
- : s1 = statement SEQ  s2 = statement { $value = makeStm(Sequence::new, $ctx.s1, $ctx.s2); }
- | s1 = statement NDET s2 = statement { $value = makeStm(Or::new, $ctx.s1, $ctx.s2); }
- | s1 = statement PAR  s2 = statement { $value = makeStm(Par::new, $ctx.s1, $ctx.s2); }
-
- | id = expression ASSIGN e = expression { $value = makeStm(Assignment::new, $ctx.id, $ctx.e); }
- | WHILE e = expression DO s = statement OD { $value = makeStm(While::new, $ctx.e, $ctx.s); }
- | IF e = expression THEN s1 = statement Else s2 = statement FI { $value = makeStm(If::new, $ctx.e, $ctx.s1, $ctx.s2); }
-
- | Skip  { $value = new Skip(); }
- | ABORT { $value = new Abort(); }
+start
+ : s = stm EOF
  ;
 
-expression returns [IExpression value]
-locals [BinOp.Arithmetic arit, BinOp.Relational rel, BinOp.Logical log]
-
- : MINUS e = expression { $value = makeExpr(UnOp.Arithmetic.NEG::of, $ctx.e); }
- | NOT   e = expression { $value = makeExpr(UnOp.Logical.NOT::of, $ctx.e); }
-
- | e1 = expression ( MUL { $arit = BinOp.Arithmetic.MUL; }
-                   | DIV { $arit = BinOp.Arithmetic.DIV; }
-                   | REM { $arit = BinOp.Arithmetic.REM; }
-                   ) e2 = expression { $value = makeExpr($ctx.arit::of, $ctx.e1, $ctx.e2); }
- | e1 = expression ( PLUS  { $arit = BinOp.Arithmetic.ADD; }
-                   | MINUS { $arit = BinOp.Arithmetic.SUB; }
-                   ) e2 = expression { $value = makeExpr($ctx.arit::of, $ctx.e1, $ctx.e2); }
-
- | e1 = expression ( LT { $rel = BinOp.Relational.LT; }
-                   | LE { $rel = BinOp.Relational.LE; }
-                   | GT { $rel = BinOp.Relational.GT; }
-                   | GE { $rel = BinOp.Relational.GE; }
-                   ) e2 = expression { $value = makeExpr($ctx.rel::of, $ctx.e1, $ctx.e2); }
- | e1 = expression ( EQ { $rel = BinOp.Relational.EQ; }
-                   | NE { $rel = BinOp.Relational.NE; }
-                   ) e2 = expression { $value = makeExpr($ctx.rel::of, $ctx.e1, $ctx.e2); }
-
- | e1 = expression AND e2 = expression { $value = makeExpr(BinOp.Logical.AND::of, $ctx.e1, $ctx.e2); }
- | e1 = expression ( OR  { $log = BinOp.Logical.OR; }
-                   | XOR { $log = BinOp.Logical.XOR; }
-                   ) e2 = expression { $value = makeExpr($ctx.log::of, $ctx.e1, $ctx.e2); }
-
- | atom { $value = $atom.value; }
+stm
+ : s1 = stm SEQ  s2 = stm                           # Sequence
+ | s1 = stm NDET s2 = stm                           # Or
+ | s1 = stm PAR  s2 = stm                           # Par
+ | id = expr ASSIGN e = expr            # Assignment
+ | WHILE e = expr DO s = stm OD               # While
+ | IF e = expr THEN s1 = stm Else s2 = stm FI # If
+ | Skip                                             # Skip
+ | ABORT                                            # Abort
+ | OTHER+                                           # OtherStm
  ;
 
-atom returns [IExpression value]
- : OPAR e = expression CPAR { $value = $e.value; }
- | INT { $value = new Value<>(new BigInteger($INT.text)); }
- | (TRUE { $value = new Value<>(true); } | FALSE  { $value = new Value<>(false); } )
- | ID { $value = new Identifier($ID.text); }
+expr
+ : MINUS e = expr # Minus
+ | NOT   e = expr # Not
+
+ | e1 = expr op = ( MUL | DIV | REM ) e2 = expr   # MulDivRem
+ | e1 = expr op = ( PLUS | MINUS )    e2 = expr   # AddSub
+ | e1 = expr op = ( LT | LE | GT | GE ) e2 = expr # Rel1
+ | e1 = expr op = ( EQ | NE ) e2 = expr           # Rel2
+ | e1 = expr AND e2 = expr                        # And
+ | e1 = expr op = ( OR | XOR ) e2 = expr          # OrXor
+ | atom                                                       # AtomExpr
+ | OTHER+                                                     # OtherExpr
  ;
 
-other: OTHER+;
+atom
+ : OPAR e = expr CPAR # Parenthesis
+ | INT                      # Integer
+ | tf = (TRUE | FALSE )     # Bool
+ | ID                       # Identifier
+ ;
 
 IF: 'if';
 THEN: 'then';

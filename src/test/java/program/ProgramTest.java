@@ -6,10 +6,10 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import parser.WhileProgramParser;
 import program.expressions.Identifier;
 import program.expressions.Value;
 import program.statements.*;
-import syntax.while_parser.WhileParser;
 
 import java.math.BigInteger;
 import java.util.logging.Logger;
@@ -84,7 +84,7 @@ public class ProgramTest {
     @UseDataProvider("terminatingCodeProvider")
     public void testTerminatingProgram(String code, IStatement statement) {
 
-        Program okProgram = new Program(WhileParser.parse(code), 100);
+        Program okProgram = new Program(WhileProgramParser.parse(code), 100);
         Assert.assertEquals(statement, okProgram.current().getNode());
 
         okProgram.last();
@@ -96,7 +96,7 @@ public class ProgramTest {
     @UseDataProvider("stuckCodeProvider")
     public void testStuckProgram(String code, IStatement statement) {
 
-        Program stuckProgram = new Program(WhileParser.parse(code), 100);
+        Program stuckProgram = new Program(WhileProgramParser.parse(code), 100);
         Assert.assertEquals(statement, stuckProgram.current().getNode());
 
         stuckProgram.last();

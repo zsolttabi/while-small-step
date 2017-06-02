@@ -21,8 +21,8 @@ import org.abego.treelayout.TreeLayout;
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 import org.sonatype.inject.Nullable;
+import parser.WhileProgramParser;
 import program.Program;
-import syntax.while_parser.WhileParser;
 import utils.Tree;
 import viewmodel.ASTNodeExtentProvider;
 import viewmodel.CodeWriter;
@@ -237,7 +237,7 @@ public class ASTScene extends Scene {
     }
 
     private void setProgram(String input) {
-        program = new Program(WhileParser.parse(input), allowedPrefix);
+        program = new Program(WhileProgramParser.parse(input), allowedPrefix);
     }
 
     public void setAllowedPrefix(int allowedPrefix) {
