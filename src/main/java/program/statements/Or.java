@@ -5,14 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
-import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static program.Configuration.ConfigType.INTERMEDIATE;
+import static program.IProgramElement.choose;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
@@ -26,7 +25,7 @@ public class Or implements IStatement {
 
     @Override
     public StatementConfiguration step(State state) {
-        return new StatementConfiguration(IProgramElement.choose(s1, s2), state, INTERMEDIATE);
+        return choose(s1, s2).step(state);
     }
 
     @Override

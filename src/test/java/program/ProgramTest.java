@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import parser.WhileProgramParser;
+import program.Configuration.ConfigType;
 import program.expressions.Identifier;
 import program.expressions.Value;
 import program.statements.*;
@@ -24,84 +25,81 @@ import static program.expressions.UnOp.Logical.NOT;
 @RunWith(DataProviderRunner.class)
 public class ProgramTest {
 
+
+    private static final int MAX_PREFIX = 100;
     private Logger logger = Logger.getLogger("ProgramTest");
 
     @DataProvider
-    public static Object[][] terminatingCodeProvider() {
+    public static Object[][] correctCodeProvider() {
         return new Object[][]{
-                {"skip", new Skip()},
-                {"skip; skip", new Sequence(new Skip(), new Skip())},
-                {"x := 1", new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")))},
-                {"b := true", new Assignment(new Identifier("b"), new Value<>(true))},
-                {"if true then skip else skip fi", new If(new Value<>(true), new Skip(), new Skip())},
+
+                {"skip", new Skip(), TERMINATED},
+                {"skip; skip", new Sequence(new Skip(), new Skip()), TERMINATED},
+                {"x := 1", new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))), TERMINATED},
+                {"b := true", new Assignment(new Identifier("b"), new Value<>(true)), TERMINATED},
+                {"if true then skip else skip fi", new If(new Value<>(true), new Skip(), new Skip()), TERMINATED},
                 {"b := true; if b then x := 1 else skip fi; z := x",
                         new Sequence(new Sequence(new Assignment(new Identifier("b"), new Value<>(true)),
                                 new If(new Identifier("b"),
                                         new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))),
-                                        new Skip())), new Assignment(new Identifier("z"), new Identifier("x")))},
+                                        new Skip())), new Assignment(new Identifier("z"), new Identifier("x"))), TERMINATED},
                 {"x := 1; while x < 10 do x := x + 1 od", new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(new BigInteger("1"))), new While(
                         LT.of(new Identifier("x"), new Value<>(new BigInteger("10"))),
-                        new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(new BigInteger("1"))))))},
-        };
-    }
+                        new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(new BigInteger("1")))))), TERMINATED},
+                {"skip or skip", new Or(new Skip(), new Skip()), TERMINATED},
+                {"x := 1 par x := 2", new Par(new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))), new Assignment(new Identifier("x"), new Value<>(new BigInteger("2")))), TERMINATED},
 
-    @DataProvider
-    public static Object[][] stuckCodeProvider() {
-        return new Object[][]{
                 {"x := 1; x := !x", new Sequence(new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))),
-                        new Assignment(new Identifier("x"), NOT.of(new Identifier("x"))))},
+                        new Assignment(new Identifier("x"), NOT.of(new Identifier("x")))), STUCK},
                 {"x := true; x := -x", new Sequence(new Assignment(new Identifier("x"), new Value<>(true)),
-                        new Assignment(new Identifier("x"), NEG.of(new Identifier("x"))))},
+                        new Assignment(new Identifier("x"), NEG.of(new Identifier("x")))), STUCK},
                 {"x := 1; y := false; z := x + y", new Sequence(new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(new BigInteger("1"))),
                         new Assignment(new Identifier("y"), new Value<>(false))),
                         new Assignment(new Identifier("z"),
-                                ADD.of(new Identifier("x"), new Identifier("y"))))},
+                                ADD.of(new Identifier("x"), new Identifier("y")))), STUCK},
                 {"x := 1; x := true; x := 2", new Sequence(new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(new BigInteger("1"))), new Assignment(new Identifier("x"), new Value<>(true))),
-                        new Assignment(new Identifier("x"), new Value<>(new BigInteger("2"))))},
-                {"x := y", new Assignment(new Identifier("x"), new Identifier("y"))},
+                        new Assignment(new Identifier("x"), new Value<>(new BigInteger("2")))), STUCK},
+                {"x := y", new Assignment(new Identifier("x"), new Identifier("y")), STUCK},
                 {"x := 1; if x then skip else skip fi", new Sequence(new Assignment(new Identifier("x"),
-                        new Value<>(new BigInteger("1"))), new If(new Identifier("x"), new Skip(), new Skip()))},
-                {"if z then skip else skip fi", new If(new Identifier("z"), new Skip(), new Skip())},
+                        new Value<>(new BigInteger("1"))), new If(new Identifier("x"), new Skip(), new Skip())), STUCK},
+                {"if z then skip else skip fi", new If(new Identifier("z"), new Skip(), new Skip()), STUCK},
                 {"x := true; if x then x := 1 else skip fi", new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(true)),
-                        new If(new Identifier("x"), new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))), new Skip()))},
+                        new If(new Identifier("x"), new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))), new Skip())), STUCK},
                 {"x := false; if x then skip else x := 1 fi", new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(false)),
-                        new If(new Identifier("x"), new Skip(), new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")))))},
-                {"while 2 do skip od", new While(new Value<>(new BigInteger("2")), new Skip())},
-                {"while z do skip od", new While(new Identifier("z"), new Skip())},
+                        new If(new Identifier("x"), new Skip(), new Assignment(new Identifier("x"), new Value<>(new BigInteger("1"))))), STUCK},
+                {"while 2 do skip od", new While(new Value<>(new BigInteger("2")), new Skip()), STUCK},
+                {"while z do skip od", new While(new Identifier("z"), new Skip()), STUCK},
                 {"x := true; while x do x := x + 1 od", new Sequence(new Assignment(new Identifier("x"),
                         new Value<>(true)),
                         new While(new Identifier("x"),
-                                new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(new BigInteger("1"))))))},
+                                new Assignment(new Identifier("x"), ADD.of(new Identifier("x"), new Value<>(new BigInteger("1")))))), STUCK},
+                {"abort", new Abort(), STUCK},
+                {"abort or abort", new Or(new Abort(), new Abort()), STUCK},
+                {"abort par skip", new Par(new Abort(), new Skip()), STUCK}
         };
     }
 
     @Test
-    @UseDataProvider("terminatingCodeProvider")
-    public void testTerminatingProgram(String code, IStatement statement) {
+    @UseDataProvider("correctCodeProvider")
+    public void Given_SyntacticallyCorrectCode_When_CodeIsParsed_Then_ParsedProgramMatchesExpectedProgram(String code, IStatement expectedProgram, ConfigType expectedOutcome) {
 
-        Program okProgram = new Program(WhileProgramParser.parse(code), 100);
-        Assert.assertEquals(statement, okProgram.current().getNode());
-
-        okProgram.last();
-        logger.info("Steps: " + okProgram.getReductionChain().size()); // TODO: assert reduction steps
-        Assert.assertEquals(TERMINATED, okProgram.current().getConfigType());
+        Program parsed = new Program(WhileProgramParser.parse(code), MAX_PREFIX);
+        Assert.assertEquals(expectedProgram, parsed.current().getNode());
     }
 
     @Test
-    @UseDataProvider("stuckCodeProvider")
-    public void testStuckProgram(String code, IStatement statement) {
+    @UseDataProvider("correctCodeProvider")
+    public void Given_SyntacticallyCorrectCode_When_CodeIsRun_Then_ConfigTypeMatchesExpectedOutcome(String code, IStatement expectedProgram, ConfigType expectedOutcome) {
 
-        Program stuckProgram = new Program(WhileProgramParser.parse(code), 100);
-        Assert.assertEquals(statement, stuckProgram.current().getNode());
-
-        stuckProgram.last();
-        logger.info("Steps: " + stuckProgram.getReductionChain().size()); // TODO: assert reduction steps
-        Assert.assertEquals(STUCK, stuckProgram.current().getConfigType());
+        Program parsed = new Program(WhileProgramParser.parse(code), MAX_PREFIX);
+        parsed.last();
+        logger.info("Steps: " + parsed.getReductionChain().size()); // TODO: assert reduction steps
+        Assert.assertEquals(expectedOutcome, parsed.current().getConfigType());
     }
 
 }

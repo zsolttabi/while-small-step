@@ -5,36 +5,35 @@ start
  ;
 
 stm
- : s1 = stm SEQ  s2 = stm                           # Sequence
- | s1 = stm NDET s2 = stm                           # Or
- | s1 = stm PAR  s2 = stm                           # Par
- | id = expr ASSIGN e = expr            # Assignment
+ : s1 = stm SEQ  s2 = stm                     # Sequence
+ | s1 = stm NDET s2 = stm                     # Or
+ | s1 = stm PAR  s2 = stm                     # Par
+ | id = expr ASSIGN e = expr                  # Assignment
  | WHILE e = expr DO s = stm OD               # While
  | IF e = expr THEN s1 = stm Else s2 = stm FI # If
- | Skip                                             # Skip
- | ABORT                                            # Abort
- | OTHER+                                           # OtherStm
+ | Skip                                       # Skip
+ | ABORT                                      # Abort
+ | OTHER+                                     # OtherStm
  ;
 
 expr
  : MINUS e = expr # Minus
  | NOT   e = expr # Not
-
  | e1 = expr op = ( MUL | DIV | REM ) e2 = expr   # MulDivRem
  | e1 = expr op = ( PLUS | MINUS )    e2 = expr   # AddSub
  | e1 = expr op = ( LT | LE | GT | GE ) e2 = expr # Rel1
  | e1 = expr op = ( EQ | NE ) e2 = expr           # Rel2
  | e1 = expr AND e2 = expr                        # And
  | e1 = expr op = ( OR | XOR ) e2 = expr          # OrXor
- | atom                                                       # AtomExpr
- | OTHER+                                                     # OtherExpr
+ | atom                                           # AtomExpr
+ | OTHER+                                         # OtherExpr
  ;
 
 atom
- : OPAR e = expr CPAR # Parenthesis
- | INT                      # Integer
- | tf = (TRUE | FALSE )     # Bool
- | ID                       # Identifier
+ : OPAR e = expr CPAR   # Parenthesis
+ | INT                  # Integer
+ | tf = (TRUE | FALSE ) # Bool
+ | ID                   # Identifier
  ;
 
 IF: 'if';

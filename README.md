@@ -8,13 +8,13 @@ It only serves educational purposes.
 ```
 $ git clone https://github.com/zsolttabi/while_small_step.git
 $ cd while_small_step
-$ mvn package
+$ mvn clean package
 ```
 
 ## Run
 
 ```
-$ ./target/while-small-step-1.1-jar-with-dependencies.jar
+$ ./target/while-small-step-1.2-full.jar
 ```
 
 ## Use

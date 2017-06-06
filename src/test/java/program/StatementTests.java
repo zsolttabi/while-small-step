@@ -195,17 +195,18 @@ public class StatementTests {
 
 
     @Test
-    public void When_OrStmSteps_Then_ConfigIsIntermediateWithEitherS1OrS2() {
+    public void Given_SomeS1S2_When_OrStmSteps_Then_EitherS1OrS2Steps() {
 
         IStatement s1 = new If(new Value<>(true), new Skip(), new Skip());
         IStatement s2 = new While(new Value<>(false), new Skip());
         IStatement underTest = new Or(s1, s2);
 
-        StatementConfiguration result = underTest.step(new State());
+        State state = new State();
+        StatementConfiguration result = underTest.step(state);
 
         Assert.assertThat(result,
-                either(equalTo(new StatementConfiguration(s1, new State(), INTERMEDIATE)))
-                        .or(equalTo(new StatementConfiguration(s2, new State(), INTERMEDIATE))));
+                either(equalTo(s1.step(state)))
+                        .or(equalTo(s2.step(state))));
     }
 
     @Test
