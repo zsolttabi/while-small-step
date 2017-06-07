@@ -61,10 +61,16 @@ public class WhileProgramParserHelper {
 
     @SuppressWarnings("unchecked")
     private static <T extends IProgramElement> T handleError(ParserRuleContext ctx, Supplier<T> stmSupp) {
+        if (ctx.exception != null) {
+            return (T) new StatementSyntaxError(getErrorText(ctx));
+        }
         return ctx.getText().contains(MISSING) ? (T) new StatementSyntaxError(getErrorText(ctx)) : stmSupp.get();
     }
 
-    private IStatement handleError(StmContext ctx) {
+    public IStatement handleError(StmContext ctx) {
+        if (ctx == null) {
+            return new StatementSyntaxError(MISSING_ELEMENT);
+        }
         IProgramElement element = visitor.visit(ctx);
         if (element == null || !(element instanceof IStatement)) {
             return new StatementSyntaxError(getErrorText(ctx));
@@ -72,7 +78,10 @@ public class WhileProgramParserHelper {
         return (IStatement) element;
     }
 
-    private IExpression handleError(WhileParser.ExprContext ctx) {
+    public IExpression handleError(WhileParser.ExprContext ctx) {
+        if (ctx == null) {
+            return new ExpressionSyntaxError(MISSING_ELEMENT);
+        }
         IProgramElement element = visitor.visit(ctx);
         if (element == null || !(element instanceof IExpression)) {
             return new ExpressionSyntaxError(getErrorText(ctx));

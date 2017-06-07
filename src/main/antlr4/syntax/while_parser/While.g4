@@ -5,35 +5,33 @@ start
  ;
 
 stm
- : s1 = stm SEQ  s2 = stm                     # Sequence
- | s1 = stm NDET s2 = stm                     # Or
- | s1 = stm PAR  s2 = stm                     # Par
- | id = expr ASSIGN e = expr                  # Assignment
- | WHILE e = expr DO s = stm OD               # While
- | IF e = expr THEN s1 = stm Else s2 = stm FI # If
- | Skip                                       # Skip
- | ABORT                                      # Abort
- | OTHER+                                     # OtherStm
+ : stm ';'   stm                        # Sequence
+ | stm 'or'  stm                        # Or
+ | stm 'par' stm                        # Par
+ | expr ':=' expr                       # Assignment
+ | 'while' expr 'do' stm 'od'           # While
+ | 'if' expr 'then' stm 'else' stm 'fi' # If
+ | 'skip'                               # Skip
+ | 'abort'                              # Abort
  ;
 
 expr
- : MINUS e = expr # Minus
- | NOT   e = expr # Not
- | e1 = expr op = ( MUL | DIV | REM ) e2 = expr   # MulDivRem
- | e1 = expr op = ( PLUS | MINUS )    e2 = expr   # AddSub
- | e1 = expr op = ( LT | LE | GT | GE ) e2 = expr # Rel1
- | e1 = expr op = ( EQ | NE ) e2 = expr           # Rel2
- | e1 = expr AND e2 = expr                        # And
- | e1 = expr op = ( OR | XOR ) e2 = expr          # OrXor
- | atom                                           # AtomExpr
- | OTHER+                                         # OtherExpr
+ : atom                             # AtomExpr
+ | '-' expr                         # Minus
+ | '!' expr                         # Not
+ | expr op=('*'|'/'|'%') expr       # MulDivRem
+ | expr op=('+'|'-') expr           # AddSub
+ | expr op=('<'|'<='|'>'|'>=') expr # Rel1
+ | expr op=('='|'!=') expr          # Rel2
+ | expr '&&' expr                   # And
+ | expr op=('||'|'\\^') expr        # OrXor
  ;
 
 atom
- : OPAR e = expr CPAR   # Parenthesis
- | INT                  # Integer
- | tf = (TRUE | FALSE ) # Bool
- | ID                   # Identifier
+ : '(' expr ')'        # Parenthesis
+ | Integer             # Integer
+ | tf=('true'|'false') # Bool
+ | Identifier          # Identifier
  ;
 
 IF: 'if';
@@ -75,16 +73,31 @@ OR:  '||';
 XOR: '^';
 NOT: '!';
 
-ID: [a-zA-Z_] [a-zA-Z_0-9]*;
+Identifier
+ : Letter LetterOrDigit*
+ ;
 
-INT: '0' | (('1'..'9') ('0'..'9')*) ;
+fragment
+Letter
+ : [a-zA-Z_]
+ ;
 
-//FLOAT: [0-9]+ '.' [0-9]* | '.' [0-9]+;
+fragment
+LetterOrDigit
+ : [a-zA-Z0-9_]
+ ;
 
-//STRING: '"' (~["\r\n] | '""')* '"';
+Integer: '0' | NonZeroDigit Digit* ;
 
-//COMMENT: '//' ~[\r\n]* -> skip;
+fragment
+Digit
+ : '0'
+ | NonZeroDigit
+ ;
 
-WS: [ \t|\r\n] -> channel(HIDDEN);
+fragment
+NonZeroDigit
+ : [1-9]
+ ;
 
-OTHER: .;
+WS: [ \t\r\n\u000C]+ -> skip;
