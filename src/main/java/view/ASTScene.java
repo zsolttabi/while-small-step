@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,7 +43,10 @@ public class ASTScene extends Scene {
     private static final String BORDER_COLOR = "#b8bbc1";
     private static final String LIGHT_BACK_COLOR = "#686c6d";
     private static final String LIGHT_GRAY_COLOR = "#bec0c4";
-    public static final int DEFAULT_ALLOWED_PREFIX = 100;
+    private static final int DEFAULT_ALLOWED_PREFIX = 100;
+    private static final Font REGULAR_BOLD = Font.font("System Regular", FontWeight.BOLD, 14);
+    private static final Font REGULAR_FONT = Font.font("System Regular", 13);
+
     private Program program;
     private BorderPane mainPane;
 
@@ -60,11 +65,9 @@ public class ASTScene extends Scene {
 
     public ASTScene(String initialInput) {
         super(new BorderPane());
-        setProgram(initialInput);
-
         mainPane = (BorderPane) getRoot();
         refreshLeft(initialInput);
-        refreshCenter();
+        clearCenter();
 
         URL style = getClass().getClassLoader().getResource("style.css");
         if (style != null) {
@@ -72,7 +75,31 @@ public class ASTScene extends Scene {
         }
     }
 
-    private void refreshLeft(String initialInput) {
+    private void clearCenter() {
+        program = null;
+
+        Label label = new Label("No program loaded");
+        label.setFont(REGULAR_FONT);
+        label.setTextFill(Color.valueOf(BACK_COLOR));
+        label.setAlignment(Pos.CENTER);
+
+        HBox textBox = new HBox(label);
+        textBox.setAlignment(Pos.CENTER);
+
+
+        HBox hbox = new HBox(textBox);
+        hbox.setStyle("-fx-background-color: " + LIGHT_BACK_COLOR);
+        hbox.setAlignment(Pos.CENTER);
+
+        VBox vbox = new VBox(hbox);
+        vbox.setPadding(new Insets(10, 10, 10, 0));
+        vbox.setStyle("-fx-background-color: " + BACK_COLOR);
+        VBox.setVgrow(hbox, Priority.ALWAYS);
+
+        mainPane.setCenter(vbox);
+    }
+
+    private void refreshLeft(String input) {
 
         Font codeEditorFont = Font.font("Courier New", FontWeight.BOLD, 14);
 
@@ -81,7 +108,7 @@ public class ASTScene extends Scene {
         codeEditorTextArea.setWrapText(false);
         codeEditorTextArea.setPrefColumnCount(30);
         codeEditorTextArea.setPrefRowCount(35);
-        codeEditorTextArea.setText(initialInput);
+        codeEditorTextArea.setText(input);
         codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEditorBehavior(codeEditorTextArea, e));
 
         Button startButton = makeButton("Start", null);
@@ -95,7 +122,7 @@ public class ASTScene extends Scene {
         Button firstButton = makeButton("First", e -> {
             program.first();
             codeEditorTextArea.setText(new CodeWriter().write(program));
-            refreshCenter();
+            setCenter();
             updateVariableTable();
         });
         Button stepButton = makeButton("Next", e -> {
@@ -103,7 +130,7 @@ public class ASTScene extends Scene {
                 program.next();
                 codeEditorTextArea.setText(new CodeWriter().write(program));
             }
-            refreshCenter();
+            setCenter();
             updateVariableTable();
         });
         Button stepBackButton = makeButton("Prev", e -> {
@@ -111,13 +138,13 @@ public class ASTScene extends Scene {
                 program.prev();
                 codeEditorTextArea.setText(new CodeWriter().write(program));
             }
-            refreshCenter();
+            setCenter();
             updateVariableTable();
         });
         Button reduceButton = makeButton("Last", e -> {
             program.last();
             codeEditorTextArea.setText(new CodeWriter().write(program));
-            refreshCenter();
+            setCenter();
             updateVariableTable();
         });
 
@@ -130,13 +157,26 @@ public class ASTScene extends Scene {
         stopButton.setDisable(true);
         stepButtons.setDisable(true);
 
+
+        Spinner<Integer> spinner = new Spinner<>(1, 1000, DEFAULT_ALLOWED_PREFIX);
+        spinner.setEditable(true);
+        spinner.valueProperty().addListener((observable, oldValue, newValue) -> setAllowedPrefix(newValue));
+        spinner.setMaxWidth(100);
+        Label spinnerCaption = makeLabel("Allowed prefix:");
+
+        HBox spinnerBox = new HBox();
+        spinnerBox.getChildren().addAll(spinnerCaption, spinner);
+        spinnerBox.setPadding(new Insets(10, 10, 5, 20));
+        spinnerBox.setSpacing(15);
+
         startButton.setOnAction(e -> {
             startButton.setDisable(true);
             codeEditorTextArea.setEditable(false);
             stopButton.setDisable(false);
             stepButtons.setDisable(false);
-            setProgram(codeEditorTextArea.getText());
-            refreshCenter();
+            spinner.setDisable(true);
+            createProgram(codeEditorTextArea.getText());
+            setCenter();
         });
 
         stopButton.setOnAction(e -> {
@@ -144,6 +184,8 @@ public class ASTScene extends Scene {
             codeEditorTextArea.setEditable(true);
             stepButtons.setDisable(true);
             startButton.setDisable(false);
+            spinner.setDisable(false);
+            clearCenter();
         });
 
         TableColumn<Variable, String> identifierCol = new TableColumn<>("Identifier");
@@ -161,18 +203,6 @@ public class ASTScene extends Scene {
         variableTable.setPlaceholder(new Label("Empty state"));
         updateVariableTable();
 
-
-        Spinner<Integer> spinner = new Spinner<>(1, 1000, DEFAULT_ALLOWED_PREFIX);
-        spinner.setEditable(true);
-        spinner.valueProperty().addListener((observable, oldValue, newValue) -> setAllowedPrefix(newValue));
-        spinner.setMaxWidth(100);
-        Label spinnerCaption = makeLabel("Allowed prefix:");
-
-        HBox spinnerBox = new HBox();
-        spinnerBox.getChildren().addAll(spinnerCaption, spinner);
-        spinnerBox.setPadding(new Insets(10, 10, 5, 20));
-        spinnerBox.setSpacing(15);
-
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
@@ -183,8 +213,8 @@ public class ASTScene extends Scene {
     }
 
     private static Label makeLabel(String text) {
-        final Label tableLabel = new Label(text);
-        tableLabel.setFont(Font.font("System Regular", FontWeight.BOLD, 14));
+        Label tableLabel = new Label(text);
+        tableLabel.setFont(REGULAR_BOLD);
         tableLabel.setTextFill(Color.WHITE);
         return tableLabel;
     }
@@ -234,7 +264,7 @@ public class ASTScene extends Scene {
         return tree;
     }
 
-    private void setProgram(String input) {
+    private void createProgram(String input) {
         program = new Program(WhileProgramParser.parse(input), allowedPrefix);
     }
 
@@ -271,12 +301,15 @@ public class ASTScene extends Scene {
     }
 
     private void updateVariableTable() {
+        if (program == null) {
+            return;
+        }
         variableTable.setItems(FXCollections.observableList(program.current().getState().entrySet()
                 .stream().map(e -> new Variable(e.getKey().getIdentifier(), e.getValue() == null ? "NA" : e.getValue().getValue().toString()))
                 .collect(Collectors.toList())));
     }
 
-    private void refreshCenter() {
+    private void setCenter() {
 
         TreeForTreeLayout<SimpleAstNode> tree = ASTScene.createTreeLayout(SimpleAstBuilder.visitAST(program).getRoot());
         TreeLayout<SimpleAstNode> treeLayout = new TreeLayout<>(tree,
@@ -289,9 +322,7 @@ public class ASTScene extends Scene {
                 ASTNodeExtentProvider.TREE_NODE_FONT);
 
         treePane.setPadding(new Insets(10, 10, 10, 0));
-        treePane.setStyle(
-                "  -fx-background-color: " + BACK_COLOR +
-                        "; -fx-border-width: 0 0 0 0 ");
+        treePane.setStyle("  -fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 0 0 ");
 
         mainPane.setCenter(treePane);
     }
