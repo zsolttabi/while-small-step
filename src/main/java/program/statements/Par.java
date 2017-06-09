@@ -37,7 +37,7 @@ public class Par implements IStatement {
     }
 
     private static IStatement getS(IStatement chosen, StatementConfiguration chosenConf, IStatement s) {
-        return s == chosen ? chosenConf.getNode() : s;
+        return s == chosen ? chosenConf.getElement() : s;
     }
 
     @Override

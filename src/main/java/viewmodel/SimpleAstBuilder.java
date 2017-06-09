@@ -24,7 +24,7 @@ public class SimpleAstBuilder implements INodeVisitor<Node<SimpleAstNode>> {
     private Set<Configuration> nextConfigurations;
 
     private boolean isNext(IProgramElement element) {
-        return nextConfigurations.stream().anyMatch(c -> c.getNode() == element);
+        return nextConfigurations.stream().anyMatch(c -> c.getElement() == element);
     }
 
     public static Tree<SimpleAstNode> visitAST(Program program) {
@@ -59,7 +59,7 @@ public class SimpleAstBuilder implements INodeVisitor<Node<SimpleAstNode>> {
     public Node<SimpleAstNode> visit(Configuration element) {
         return element.getConfigType() == TERMINATED ?
                 new Node<>(new SimpleAstNode("[terminated]", NodeType.TERMINATED), null) :
-                element.getNode().accept(this);
+                element.getElement().accept(this);
     }
 
     @Override

@@ -11,8 +11,8 @@ public class ExpressionConfiguration extends Configuration {
     }
 
     @Override
-    public IExpression getNode() {
-        return (IExpression) super.getNode();
+    public IExpression getElement() {
+        return (IExpression) super.getElement();
     }
 
 }

@@ -36,7 +36,7 @@ public class Assignment implements IStatement {
 
         if (!(value instanceof Value)) {
             ExpressionConfiguration valueConf = value.step(state);
-            return new StatementConfiguration(new Assignment(identifier, valueConf.getNode()),
+            return new StatementConfiguration(new Assignment(identifier, valueConf.getElement()),
                     valueConf.getState(),
                     valueConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }

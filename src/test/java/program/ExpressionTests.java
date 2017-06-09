@@ -109,7 +109,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(NEG.of(operand.step(new State()).getNode()),
+        Assert.assertEquals(new ExpressionConfiguration(NEG.of(operand.step(new State()).getElement()),
                 new State(),
                 STUCK), result);
     }

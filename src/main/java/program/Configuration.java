@@ -19,18 +19,18 @@ public abstract class Configuration implements IVisitableNode {
     }
 
     @Getter
-    private final IProgramElement node;
+    private final IProgramElement element;
     @Getter
     private final State state;
     @Getter
     private final ConfigType configType;
 
     public Configuration step() {
-        return node.step(state);
+        return element.step(state);
     }
 
     public Set<Configuration> peek() {
-        return node.peek(state);
+        return element.peek(state);
     }
 
     @Override

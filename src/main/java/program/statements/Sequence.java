@@ -28,7 +28,7 @@ public class Sequence implements IStatement {
 
         return s1Conf.getConfigType() == ConfigType.TERMINATED ?
                 new StatementConfiguration(s2, s1Conf.getState(), ConfigType.INTERMEDIATE) :
-                new StatementConfiguration(new Sequence(s1Conf.getNode(), s2), s1Conf.getState(), s1Conf.getConfigType());
+                new StatementConfiguration(new Sequence(s1Conf.getElement(), s2), s1Conf.getState(), s1Conf.getConfigType());
     }
 
     @Override

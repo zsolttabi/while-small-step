@@ -65,7 +65,7 @@ public class CodeWriter implements INodeVisitor<String> {
 
     @Override
     public String visit(Configuration element) {
-        return element.getConfigType() == TERMINATED ? "" : element.getNode().accept(this);
+        return element.getConfigType() == TERMINATED ? "" : element.getElement().accept(this);
     }
 
     @Override

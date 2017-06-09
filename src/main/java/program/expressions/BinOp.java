@@ -55,7 +55,7 @@ public class BinOp<T, R> implements IExpression {
         if (!(lhs instanceof Value)) {
             ExpressionConfiguration lhsConf = lhs.step(state);
             return new ExpressionConfiguration(BinOp.of(operator,
-                    lhsConf.getNode(),
+                    lhsConf.getElement(),
                     rhs,
                     operandClass,
                     operatorFunction), lhsConf.getState(), lhsConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
@@ -65,7 +65,7 @@ public class BinOp<T, R> implements IExpression {
             ExpressionConfiguration rhsConf = rhs.step(state);
             return new ExpressionConfiguration(BinOp.of(operator,
                     lhs,
-                    rhsConf.getNode(),
+                    rhsConf.getElement(),
                     operandClass,
                     operatorFunction), rhsConf.getState(), rhsConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }

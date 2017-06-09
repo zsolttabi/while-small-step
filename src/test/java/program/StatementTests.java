@@ -71,7 +71,7 @@ public class StatementTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new StatementConfiguration(new Assignment(x, y.step(new State()).getNode()),
+        Assert.assertEquals(new StatementConfiguration(new Assignment(x, y.step(new State()).getElement()),
                 new State(),
                 STUCK), result);
     }
@@ -80,7 +80,7 @@ public class StatementTests {
     public void Given_StuckExpr_When_ExprIsReadByAssignStm_Then_ConfigIsStuck() {
 
         IExpression x = new Identifier("x");
-        IExpression stuckVal = ADD.of(new Value<>(true), new Value<>(new BigInteger("1"))).step(new State()).getNode();
+        IExpression stuckVal = ADD.of(new Value<>(true), new Value<>(new BigInteger("1"))).step(new State()).getElement();
         IStatement underTest = new Assignment(x, stuckVal);
 
         Configuration result = underTest.step(new State());
@@ -105,7 +105,7 @@ public class StatementTests {
     @Test
     public void Given_S1IsStuck_When_SeqStmSteps_Then_ConfigIsStuckWithSeqStm() {
 
-        IStatement stuckS1 = new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getNode();
+        IStatement stuckS1 = new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getElement();
         IStatement s2 = new Skip();
         State state = new State();
         IStatement underTest = new Sequence(stuckS1, s2);
@@ -145,7 +145,7 @@ public class StatementTests {
     @Test
     public void Given_StuckIfStmWithExpr_When_StmSteps_Then_ConfigIsStuck() {
 
-        IExpression stuckExpr = AND.of(new Value<>(new BigInteger("1")), new Value<>(true)).step(new State()).getNode();
+        IExpression stuckExpr = AND.of(new Value<>(new BigInteger("1")), new Value<>(true)).step(new State()).getElement();
         State state = new State();
         IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
         IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
@@ -217,11 +217,11 @@ public class StatementTests {
         IStatement underTest = new Par(s1, s2);
 
         StatementConfiguration result = underTest.step(new State());
-        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getElement(), instanceOf(Par.class));
         Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
-        Assert.assertThat((Par) result.getNode(),
-                either(equalTo(new Par(s1.step(new State()).getNode(), s2)))
-                        .or(equalTo(new Par(s1, s2.step(new State()).getNode()))));
+        Assert.assertThat((Par) result.getElement(),
+                either(equalTo(new Par(s1.step(new State()).getElement(), s2)))
+                        .or(equalTo(new Par(s1, s2.step(new State()).getElement()))));
     }
 
     @Test
@@ -233,9 +233,9 @@ public class StatementTests {
 
         StatementConfiguration result = underTest.step(new State());
 
-        Assert.assertThat(result.getNode(), instanceOf(Skip.class));
+        Assert.assertThat(result.getElement(), instanceOf(Skip.class));
         Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
-        Assert.assertThat(result.getNode(), equalTo(new Skip()));
+        Assert.assertThat(result.getElement(), equalTo(new Skip()));
 
     }
 
@@ -248,9 +248,9 @@ public class StatementTests {
 
         StatementConfiguration result = underTest.step(new State());
 
-        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getElement(), instanceOf(Par.class));
         Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
-        Assert.assertThat(result.getNode(), equalTo(underTest));
+        Assert.assertThat(result.getElement(), equalTo(underTest));
     }
 
     @Test
@@ -260,11 +260,11 @@ public class StatementTests {
         IStatement s2 = new Abort();
         IStatement underTest = new Par(s1, s2);
 
-        StatementConfiguration result = underTest.step(new State()).getNode().step(new State());
+        StatementConfiguration result = underTest.step(new State()).getElement().step(new State());
 
-        Assert.assertThat(result.getNode(), instanceOf(Par.class));
+        Assert.assertThat(result.getElement(), instanceOf(Par.class));
         Assert.assertThat(result.getConfigType(), equalTo(STUCK));
-        Assert.assertThat(result.getNode(), equalTo(underTest));
+        Assert.assertThat(result.getElement(), equalTo(underTest));
     }
 
 }

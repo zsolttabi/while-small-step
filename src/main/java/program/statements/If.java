@@ -33,7 +33,7 @@ public class If implements IStatement {
 
         if (!(condition instanceof Value)) {
             ExpressionConfiguration condConf = condition.step(state);
-            return new StatementConfiguration(new If(condConf.getNode(), s1, s2),
+            return new StatementConfiguration(new If(condConf.getElement(), s1, s2),
                     condConf.getState(),
                     condConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }

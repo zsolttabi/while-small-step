@@ -45,7 +45,7 @@ public class UnOp<T, R> implements IExpression {
         if (!(operand instanceof Value)) {
             ExpressionConfiguration operandConf = operand.step(state);
             return new ExpressionConfiguration(new UnOp<>(operator,
-                    operandConf.getNode(),
+                    operandConf.getElement(),
                     operandClass,
                     operatorFunction), operandConf.getState(), operandConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }

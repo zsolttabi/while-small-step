@@ -11,8 +11,8 @@ public class StatementConfiguration extends Configuration {
     }
 
     @Override
-    public IStatement getNode() {
-        return (IStatement) super.getNode();
+    public IStatement getElement() {
+        return (IStatement) super.getElement();
     }
 
 }
