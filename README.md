@@ -6,8 +6,8 @@ It only serves educational purposes.
 ## Install
 
 ```
-$ git clone https://github.com/zsolttabi/while_small_step.git
-$ cd while_small_step
+$ git clone https://github.com/zsolttabi/while-small-step.git
+$ cd while-small-step
 $ mvn clean package
 ```
 

@@ -128,20 +128,24 @@ public class CodeWriter implements INodeVisitor<String> {
     @Override
     public String visit(BinOp element) {
         return new CodePrinter()
+                .print("(")
                 .print(element.getLhs().accept(this))
                 .print(" ")
                 .print(element.getOperator())
                 .print(" ")
                 .print(element.getRhs().accept(this))
+                .print(")")
                 .toString();
     }
 
     @Override
     public String visit(UnOp element) {
         return new CodePrinter()
+                .print("(")
                 .print(element.getOperator())
                 .print(" ")
                 .print(element.getOperand().accept(this))
+                .print(")")
                 .toString();
     }
 

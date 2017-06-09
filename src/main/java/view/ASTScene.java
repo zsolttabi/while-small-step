@@ -220,7 +220,7 @@ public class ASTScene extends Scene {
     }
 
     private static void customEditorBehavior(TextArea codeEditorTextArea, KeyEvent e) {
-        int tabWidth = 2;
+        int tabWidth = CodeWriter.BASE_INDENT.length();
 
         if (e.getCode() == KeyCode.TAB) {
             for (int i = 0; i < tabWidth; ++i) {
