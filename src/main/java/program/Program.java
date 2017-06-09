@@ -39,6 +39,10 @@ public class Program implements IVisitableNode {
         return getReductionChain().get(index);
     }
 
+    public int currentStep() {
+        return index;
+    }
+
     public Set<Configuration> peek() {
         return current().peek();
     }

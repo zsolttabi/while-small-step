@@ -43,7 +43,7 @@ public class ASTScene extends Scene {
     private static final String BORDER_COLOR = "#b8bbc1";
     private static final String LIGHT_BACK_COLOR = "#686c6d";
     private static final String LIGHT_GRAY_COLOR = "#bec0c4";
-    private static final int DEFAULT_ALLOWED_PREFIX = 100;
+    private static final int DEFAULT_ALLOWED_PREFIX = 1000;
     private static final Font REGULAR_BOLD = Font.font("System Regular", FontWeight.BOLD, 14);
     private static final Font REGULAR_FONT = Font.font("System Regular", 13);
 
@@ -62,11 +62,13 @@ public class ASTScene extends Scene {
 
     private TableView<Variable> variableTable = new TableView<>();
     private int allowedPrefix = DEFAULT_ALLOWED_PREFIX;
+    private TextArea codeEditorTextArea;
+    private Label steps;
 
     public ASTScene(String initialInput) {
         super(new BorderPane());
         mainPane = (BorderPane) getRoot();
-        refreshLeft(initialInput);
+        createLeft(initialInput);
         clearCenter();
 
         URL style = getClass().getClassLoader().getResource("style.css");
@@ -99,17 +101,24 @@ public class ASTScene extends Scene {
         mainPane.setCenter(vbox);
     }
 
-    private void refreshLeft(String input) {
+    private void createLeft(String input) {
 
         Font codeEditorFont = Font.font("Courier New", FontWeight.BOLD, 14);
 
-        TextArea codeEditorTextArea = new TextArea();
+        codeEditorTextArea = new TextArea();
         codeEditorTextArea.setFont(codeEditorFont);
         codeEditorTextArea.setWrapText(false);
         codeEditorTextArea.setPrefColumnCount(30);
         codeEditorTextArea.setPrefRowCount(35);
         codeEditorTextArea.setText(input);
         codeEditorTextArea.addEventFilter(KeyEvent.KEY_PRESSED, e -> customEditorBehavior(codeEditorTextArea, e));
+
+        Label stepsLabel = makeLabel("Current steps: ");
+        steps = makeLabel("");
+        HBox stepsBox = new HBox();
+        stepsBox.getChildren().addAll(stepsLabel, steps);
+        stepsBox.setPadding(new Insets(5, 10, 5, 20));
+        stepsBox.setSpacing(15);
 
         Button startButton = makeButton("Start", null);
         Button stopButton = makeButton("Stop", null);
@@ -120,49 +129,44 @@ public class ASTScene extends Scene {
         startStopButtons.getChildren().addAll(startButton, stopButton);
 
         Button firstButton = makeButton("First", e -> {
-            program.first();
-            codeEditorTextArea.setText(new CodeWriter().write(program));
-            setCenter();
-            updateVariableTable();
+            if (program.hasPrev()) {
+                program.first();
+                updateScene();
+            }
         });
-        Button stepButton = makeButton("Next", e -> {
+        Button nextButton = makeButton("Next", e -> {
             if (program.hasNext()) {
                 program.next();
-                codeEditorTextArea.setText(new CodeWriter().write(program));
+                updateScene();
             }
-            setCenter();
-            updateVariableTable();
         });
-        Button stepBackButton = makeButton("Prev", e -> {
+        Button prevButton = makeButton("Prev", e -> {
             if (program.hasPrev()) {
                 program.prev();
-                codeEditorTextArea.setText(new CodeWriter().write(program));
+                updateScene();
             }
-            setCenter();
-            updateVariableTable();
         });
-        Button reduceButton = makeButton("Last", e -> {
-            program.last();
-            codeEditorTextArea.setText(new CodeWriter().write(program));
-            setCenter();
-            updateVariableTable();
+        Button lastButton = makeButton("Last", e -> {
+            if (program.hasNext()) {
+                program.last();
+                updateScene();
+            }
         });
 
         HBox stepButtons = new HBox();
         stepButtons.setPadding(new Insets(5, 15, 10, 15));
         stepButtons.setSpacing(10);
-        stepButtons.getChildren().addAll(firstButton, stepBackButton, stepButton, reduceButton);
+        stepButtons.getChildren().addAll(firstButton, prevButton, nextButton, lastButton);
 
         codeEditorTextArea.setEditable(true);
         stopButton.setDisable(true);
         stepButtons.setDisable(true);
 
-
         Spinner<Integer> spinner = new Spinner<>(1, 1000, DEFAULT_ALLOWED_PREFIX);
         spinner.setEditable(true);
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> setAllowedPrefix(newValue));
         spinner.setMaxWidth(100);
-        Label spinnerCaption = makeLabel("Allowed prefix:");
+        Label spinnerCaption = makeLabel("Allowed steps:");
 
         HBox spinnerBox = new HBox();
         spinnerBox.getChildren().addAll(spinnerCaption, spinner);
@@ -176,6 +180,7 @@ public class ASTScene extends Scene {
             stepButtons.setDisable(false);
             spinner.setDisable(true);
             createProgram(codeEditorTextArea.getText());
+            steps.setText("" + program.currentStep());
             setCenter();
         });
 
@@ -207,9 +212,16 @@ public class ASTScene extends Scene {
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         vbox.setStyle("-fx-background-color: " + BACK_COLOR + "; -fx-border-width: 0 0 0 0; ");
-        vbox.getChildren().addAll(spinnerBox, startStopButtons, stepButtons, codeEditorTextArea, /*tableLabel,*/ variableTable);
+        vbox.getChildren().addAll(spinnerBox, stepsBox, startStopButtons, stepButtons, codeEditorTextArea, /*tableLabel,*/ variableTable);
 
         mainPane.setLeft(vbox);
+    }
+
+    private void updateScene() {
+        codeEditorTextArea.setText(new CodeWriter().write(program));
+        steps.setText("" + program.currentStep());
+        setCenter();
+        updateVariableTable();
     }
 
     private static Label makeLabel(String text) {
