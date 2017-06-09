@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface IStatement extends IProgramElement {
 
-    StatementConfiguration step(State state);
+    Configuration step(State state);
 
     Set<Configuration> peek(State state);
 

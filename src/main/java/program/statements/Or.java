@@ -24,7 +24,7 @@ public class Or implements IStatement {
     private final IStatement s2;
 
     @Override
-    public StatementConfiguration step(State state) {
+    public Configuration step(State state) {
         return choose(s1, s2).step(state);
     }
 
