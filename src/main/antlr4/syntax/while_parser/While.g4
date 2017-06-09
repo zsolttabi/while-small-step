@@ -29,8 +29,8 @@ expr
 
 atom
  : '(' expr ')'        # Parenthesis
- | Integer             # Integer
- | tf=('true'|'false') # Bool
+ | Integer             # IntegerLiteral
+ | ('true'|'false')    # BooleanLiteral
  | Identifier          # Identifier
  ;
 

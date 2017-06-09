@@ -56,6 +56,10 @@ public class WhileProgramVisitor extends WhileBaseVisitor<IProgramElement> {
         return ctx == null || ctx.getStart().getStartIndex() > ctx.getStop().getStopIndex();
     }
 
+    private static boolean containsPartialError(ParserRuleContext ctx) {
+        return ctx.exception != null || ctx.getText().contains(MISSING) || ctx.getText().contains("extraneous input");
+    }
+
     private static String getErrorText(ParserRuleContext ctx) {
         return ctx.getStart().getInputStream().getText(new Interval(ctx.getStart().getStartIndex(), ctx.getStop().getStopIndex()));
     }
@@ -68,10 +72,6 @@ public class WhileProgramVisitor extends WhileBaseVisitor<IProgramElement> {
             return errorCtor.apply(getErrorText(ctx));
         }
         return supplier.get();
-    }
-
-    private static boolean containsPartialError(ParserRuleContext ctx) {
-        return ctx.exception != null || ctx.getText().contains(MISSING);
     }
 
     private static IStatement handleStmVisit(ParserRuleContext ctx, Supplier<IStatement> supplier) {
@@ -167,14 +167,15 @@ public class WhileProgramVisitor extends WhileBaseVisitor<IProgramElement> {
         return visit(ctx.expr());
     }
 
+
     @Override
-    public IProgramElement visitInteger(WhileParser.IntegerContext ctx) {
-        return handleExprVisit(ctx, () -> new Value<>(new BigInteger(ctx.getText())));
+    public IProgramElement visitIntegerLiteral(WhileParser.IntegerLiteralContext ctx) {
+        return handleExprVisit(ctx, () -> new IntegerLiteral(ctx.getText()));
     }
 
     @Override
-    public IProgramElement visitBool(WhileParser.BoolContext ctx) {
-        return handleExprVisit(ctx, () -> new Value<>(ctx.tf.getType() == WhileParser.TRUE));
+    public IProgramElement visitBooleanLiteral(WhileParser.BooleanLiteralContext ctx) {
+        return handleExprVisit(ctx, () -> new BooleanLiteral(ctx.getText()));
     }
 
     @Override

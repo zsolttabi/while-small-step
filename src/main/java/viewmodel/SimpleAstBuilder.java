@@ -6,10 +6,7 @@ import program.Configuration.ConfigType;
 import program.IProgramElement;
 import program.Program;
 import program.SyntaxError;
-import program.expressions.BinOp;
-import program.expressions.Identifier;
-import program.expressions.UnOp;
-import program.expressions.Value;
+import program.expressions.*;
 import program.statements.*;
 import utils.Tree;
 import utils.Tree.Node;
@@ -176,6 +173,11 @@ public class SimpleAstBuilder implements INodeVisitor<Node<SimpleAstNode>> {
     @Override
     public Node<SimpleAstNode> visit(SyntaxError element) {
         return new Node<>(new SimpleAstNode(element.getText(), SYNTAX_ERROR), null);
+    }
+
+    @Override
+    public Node<SimpleAstNode> visit(Literal element) {
+        return createNode(element.getValue(), element);
     }
 
 }

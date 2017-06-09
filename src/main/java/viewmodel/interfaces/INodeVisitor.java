@@ -3,10 +3,7 @@ package viewmodel.interfaces;
 import program.Configuration;
 import program.Program;
 import program.SyntaxError;
-import program.expressions.BinOp;
-import program.expressions.Identifier;
-import program.expressions.UnOp;
-import program.expressions.Value;
+import program.expressions.*;
 import program.statements.*;
 
 public interface INodeVisitor<T> {
@@ -26,5 +23,6 @@ public interface INodeVisitor<T> {
     T visit(Or element);
     T visit(Par element);
     T visit(SyntaxError element);
+    T visit(Literal element);
 
 }

@@ -3,10 +3,7 @@ package viewmodel;
 import program.Configuration;
 import program.Program;
 import program.SyntaxError;
-import program.expressions.BinOp;
-import program.expressions.Identifier;
-import program.expressions.UnOp;
-import program.expressions.Value;
+import program.expressions.*;
 import program.statements.*;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -21,7 +18,7 @@ public class CodeWriter implements INodeVisitor<String> {
 
     private static class CodePrinter {
 
-        private StringBuilder builder = new StringBuilder();
+        private final StringBuilder builder = new StringBuilder();
 
         CodePrinter print(String str) {
             builder.append(str);
@@ -192,6 +189,13 @@ public class CodeWriter implements INodeVisitor<String> {
     public String visit(SyntaxError element) {
         return new CodePrinter()
                 .print(element.getText())
+                .toString();
+    }
+
+    @Override
+    public String visit(Literal element) {
+        return new CodePrinter()
+                .print(element.getValue())
                 .toString();
     }
 
