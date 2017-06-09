@@ -12,7 +12,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class Configuration implements IVisitableNode {
+public class Configuration implements IVisitableNode {
 
     public enum ConfigType {
         INTERMEDIATE, STUCK, TERMINATED

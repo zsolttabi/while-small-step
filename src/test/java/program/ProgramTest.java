@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import parser.WhileProgramParser;
 import program.Configuration.ConfigType;
-import program.expressions.BooleanLiteral;
 import program.expressions.Identifier;
-import program.expressions.IntegerLiteral;
+import program.expressions.literals.BooleanLiteral;
+import program.expressions.literals.IntegerLiteral;
 import program.statements.*;
 
 import java.util.logging.Logger;

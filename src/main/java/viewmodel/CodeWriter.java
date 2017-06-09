@@ -3,7 +3,11 @@ package viewmodel;
 import program.Configuration;
 import program.Program;
 import program.SyntaxError;
-import program.expressions.*;
+import program.expressions.BinOp;
+import program.expressions.Identifier;
+import program.expressions.UnOp;
+import program.expressions.Value;
+import program.expressions.literals.Literal;
 import program.statements.*;
 import viewmodel.interfaces.INodeVisitor;
 

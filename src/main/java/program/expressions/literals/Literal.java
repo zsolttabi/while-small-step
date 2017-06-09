@@ -1,4 +1,4 @@
-package program.expressions;
+package program.expressions.literals;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.State;
+import program.expressions.ExpressionConfiguration;
+import program.expressions.IExpression;
+import program.expressions.Value;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Function;
 
 import static program.Configuration.ConfigType.INTERMEDIATE;
 import static program.Configuration.ConfigType.TERMINATED;
@@ -37,7 +39,7 @@ public abstract class Literal implements IExpression {
 
     @Override
     public Set<Configuration> peek(State state) {
-        return Collections.singleton(new ExpressionConfiguration(this, state, INTERMEDIATE));
+        return Collections.singleton(new Configuration(copy(), state, INTERMEDIATE));
     }
 
 }

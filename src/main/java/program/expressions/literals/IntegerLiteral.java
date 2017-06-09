@@ -1,4 +1,7 @@
-package program.expressions;
+package program.expressions.literals;
+
+import program.expressions.IExpression;
+import program.expressions.Value;
 
 import java.math.BigInteger;
 

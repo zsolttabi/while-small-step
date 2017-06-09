@@ -18,4 +18,6 @@ public interface IProgramElement extends IVisitableNode {
 
     Set<Configuration> peek(State state);
 
+    IProgramElement copy();
+
 }
