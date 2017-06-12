@@ -1,7 +1,7 @@
 package viewmodel;
 
 import program.Configuration;
-import program.Exception;
+import program.PException;
 import program.Program;
 import program.SyntaxError;
 import program.expressions.BinOp;
@@ -205,7 +205,7 @@ public class CodeWriter implements INodeVisitor<String> {
     }
 
     @Override
-    public String visit(Exception element) {
+    public String visit(PException element) {
         return new CodePrinter()
                 .print(element.getName())
                 .toString();

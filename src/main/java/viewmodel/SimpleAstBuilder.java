@@ -3,7 +3,7 @@ package viewmodel;
 import lombok.val;
 import program.*;
 import program.Configuration.ConfigType;
-import program.Exception;
+import program.PException;
 import program.expressions.BinOp;
 import program.expressions.Identifier;
 import program.expressions.UnOp;
@@ -183,7 +183,7 @@ public class SimpleAstBuilder implements INodeVisitor<Node<SimpleAstNode>> {
     }
 
     @Override
-    public Node<SimpleAstNode> visit(Exception element) {
+    public Node<SimpleAstNode> visit(PException element) {
         return createNode(element.getName(), element);
     }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.IProgramElement;
+import program.PException;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -24,7 +25,7 @@ public class TryCatch implements IProgramElement {
     @Getter
     private final IProgramElement s2;
     @Getter
-    private final program.Exception e;
+    private final PException e;
 
     @Override
     public <V> V accept(INodeVisitor<V> visitor) {
@@ -39,7 +40,7 @@ public class TryCatch implements IProgramElement {
             return s1Conf;
         }
 
-        if (s1Conf.getElement() instanceof program.Exception) {
+        if (s1Conf.getElement() instanceof PException) {
             if (s1Conf.getElement().equals(e)) {
                 return new Configuration(s2, s1Conf.getState(), INTERMEDIATE);
             }

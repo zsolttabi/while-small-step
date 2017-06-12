@@ -7,6 +7,7 @@ import lombok.ToString;
 import program.Configuration;
 import program.Configuration.ConfigType;
 import program.IProgramElement;
+import program.PException;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -26,7 +27,7 @@ public class Sequence implements IProgramElement {
     public Configuration step(State state) {
 
         Configuration s1Conf = s1.step(state);
-        if (s1Conf.getElement() instanceof Exception) {
+        if (s1Conf.getElement() instanceof PException) {
             return s1Conf;
         }
 

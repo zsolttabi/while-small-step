@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.IProgramElement;
+import program.PException;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -20,7 +21,7 @@ import static program.Configuration.ConfigType.INTERMEDIATE;
 public class Throw implements IProgramElement {
 
     @Getter
-    private final program.Exception e;
+    private final PException e;
 
     @Override
     public <V> V accept(INodeVisitor<V> visitor) {

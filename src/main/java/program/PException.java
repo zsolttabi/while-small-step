@@ -12,7 +12,7 @@ import static program.Configuration.ConfigType.STUCK;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Exception implements IProgramElement {
+public class PException implements IProgramElement {
 
     @Getter
     private final String name;
@@ -28,8 +28,8 @@ public class Exception implements IProgramElement {
     }
 
     @Override
-    public Exception copy() {
-        return new Exception(getName());
+    public PException copy() {
+        return new PException(getName());
     }
 
 }
