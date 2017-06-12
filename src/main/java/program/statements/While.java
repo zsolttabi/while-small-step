@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.Configuration.ConfigType;
+import program.IProgramElement;
 import program.State;
-import program.expressions.IExpression;
 import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Collections;
@@ -16,12 +16,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class While implements IStatement {
+public class While implements IProgramElement {
 
     @Getter
-    private final IExpression condition;
+    private final IProgramElement condition;
     @Getter
-    private final IStatement stm;
+    private final IProgramElement stm;
 
     @Override
     public Configuration step(State state) {
@@ -34,7 +34,7 @@ public class While implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new While(condition.copy(), stm.copy());
     }
 

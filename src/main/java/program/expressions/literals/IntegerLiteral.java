@@ -1,6 +1,6 @@
 package program.expressions.literals;
 
-import program.expressions.IExpression;
+import program.IProgramElement;
 import program.expressions.Value;
 
 import java.math.BigInteger;
@@ -12,7 +12,7 @@ public class IntegerLiteral extends Literal {
     }
 
     @Override
-    public IExpression copy() {
+    public IProgramElement copy() {
         return new IntegerLiteral(getValue());
     }
 

@@ -2,7 +2,6 @@ package program;
 
 import org.junit.Assert;
 import org.junit.Test;
-import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
 import program.statements.*;
@@ -19,7 +18,7 @@ public class StatementTests {
     @Test
     public void When_SkipStmSteps_Then_ConfigIsTerminated() {
 
-        IStatement underTest = new Skip();
+        IProgramElement underTest = new Skip();
         State state = new State();
 
         Configuration result = underTest.step(state);
@@ -36,7 +35,7 @@ public class StatementTests {
         State state = new State();
         State expectedState = new State();
         expectedState.set(identifier, value);
-        IStatement underTest = new Assignment(identifier, value);
+        IProgramElement underTest = new Assignment(identifier, value);
 
         Configuration result = underTest.step(state);
 
@@ -55,7 +54,7 @@ public class StatementTests {
         State expectedState = new State();
         expectedState.set(identifier, value);
 
-        IStatement underTest = new Assignment(identifier, value);
+        IProgramElement underTest = new Assignment(identifier, value);
 
         Configuration result = underTest.step(state);
 
@@ -65,13 +64,13 @@ public class StatementTests {
     @Test
     public void Given_UninitializedVar_When_VarIsReadByAssignStm_Then_ConfigIsStuck() {
 
-        IExpression x = new Identifier("x");
-        IExpression y = new Identifier("y");
-        IStatement underTest = new Assignment(x, y);
+        IProgramElement x = new Identifier("x");
+        IProgramElement y = new Identifier("y");
+        IProgramElement underTest = new Assignment(x, y);
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new Configuration(new Assignment(x, (IExpression) y.step(new State()).getElement()),
+        Assert.assertEquals(new Configuration(new Assignment(x, y.step(new State()).getElement()),
                 new State(),
                 STUCK), result);
     }
@@ -79,9 +78,9 @@ public class StatementTests {
     @Test
     public void Given_StuckExpr_When_ExprIsReadByAssignStm_Then_ConfigIsStuck() {
 
-        IExpression x = new Identifier("x");
-        IExpression stuckVal = (IExpression) ADD.of(new Value<>(true), new Value<>(new BigInteger("1"))).step(new State()).getElement();
-        IStatement underTest = new Assignment(x, stuckVal);
+        IProgramElement x = new Identifier("x");
+        IProgramElement stuckVal = ADD.of(new Value<>(true), new Value<>(new BigInteger("1"))).step(new State()).getElement();
+        IProgramElement underTest = new Assignment(x, stuckVal);
 
         Configuration result = underTest.step(new State());
 
@@ -92,10 +91,10 @@ public class StatementTests {
     @Test
     public void Given_SeqStmWithSkipAsS1_When_SeqStmSteps_Then_ConfigIsIntermediateWithS2() {
 
-        IStatement s1 = new Skip();
-        IStatement s2 = new If(null, null, null);
+        IProgramElement s1 = new Skip();
+        IProgramElement s2 = new If(null, null, null);
         State state = new State();
-        IStatement underTest = new Sequence(s1, s2);
+        IProgramElement underTest = new Sequence(s1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -105,10 +104,10 @@ public class StatementTests {
     @Test
     public void Given_S1IsStuck_When_SeqStmSteps_Then_ConfigIsStuckWithSeqStm() {
 
-        IStatement stuckS1 = (IStatement) new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getElement();
-        IStatement s2 = new Skip();
+        IProgramElement stuckS1 = new Assignment(new Identifier("x"), new Identifier("y")).step(new State()).getElement();
+        IProgramElement s2 = new Skip();
         State state = new State();
-        IStatement underTest = new Sequence(stuckS1, s2);
+        IProgramElement underTest = new Sequence(stuckS1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -119,10 +118,10 @@ public class StatementTests {
     @Test
     public void Given_FalseCond_When_IfSamSteps_Then_ConfigIsIntermediateWithS1() {
 
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
+        IProgramElement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IProgramElement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         State state = new State();
-        IStatement underTest = new If(new Value<>(true), s1, s2);
+        IProgramElement underTest = new If(new Value<>(true), s1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -132,10 +131,10 @@ public class StatementTests {
     @Test
     public void Given_FalseCond_When_IfSamSteps_Then_ConfigIsIntermediateWithS2() {
 
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
+        IProgramElement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IProgramElement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
         State state = new State();
-        IStatement underTest = new If(new Value<>(false), s1, s2);
+        IProgramElement underTest = new If(new Value<>(false), s1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -145,11 +144,11 @@ public class StatementTests {
     @Test
     public void Given_StuckIfStmWithExpr_When_StmSteps_Then_ConfigIsStuck() {
 
-        IExpression stuckExpr = (IExpression) AND.of(new Value<>(new BigInteger("1")), new Value<>(true)).step(new State()).getElement();
+        IProgramElement stuckExpr = AND.of(new Value<>(new BigInteger("1")), new Value<>(true)).step(new State()).getElement();
         State state = new State();
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
-        IStatement underTest = new If(stuckExpr, s1, s2);
+        IProgramElement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IProgramElement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
+        IProgramElement underTest = new If(stuckExpr, s1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -159,11 +158,11 @@ public class StatementTests {
     @Test
     public void Given_IfStmWithWrongTypeExpr_When_StmSteps_Then_ConfigIsStuck() {
 
-        IExpression intExpr = new Value<>(4);
+        IProgramElement intExpr = new Value<>(4);
         State state = new State();
-        IStatement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
-        IStatement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
-        IStatement underTest = new If(intExpr, s1, s2);
+        IProgramElement s1 = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IProgramElement s2 = new Assignment(new Identifier("y"), new Value<>(new BigInteger("2")));
+        IProgramElement underTest = new If(intExpr, s1, s2);
 
         Configuration result = underTest.step(state);
 
@@ -174,9 +173,9 @@ public class StatementTests {
     @Test
     public void Given_WhileStm_When_StmSteps_Then_ConfigWithIfStmIsCreated() {
 
-        IExpression cond = new Value<>(true);
-        IStatement s = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
-        IStatement underTest = new While(cond, s);
+        IProgramElement cond = new Value<>(true);
+        IProgramElement s = new Assignment(new Identifier("x"), new Value<>(new BigInteger("1")));
+        IProgramElement underTest = new While(cond, s);
 
         Configuration result = underTest.step(new State());
 
@@ -186,7 +185,7 @@ public class StatementTests {
     @Test
     public void Given_AbortStm_When_StmSteps_Then_ConfigIsStuck() {
 
-        IStatement underTest = new Abort();
+        IProgramElement underTest = new Abort();
 
         Configuration result = underTest.step(new State());
 
@@ -197,9 +196,9 @@ public class StatementTests {
     @Test
     public void Given_SomeS1S2_When_OrStmSteps_Then_EitherS1OrS2Steps() {
 
-        IStatement s1 = new If(new Value<>(true), new Skip(), new Skip());
-        IStatement s2 = new While(new Value<>(false), new Skip());
-        IStatement underTest = new Or(s1, s2);
+        IProgramElement s1 = new If(new Value<>(true), new Skip(), new Skip());
+        IProgramElement s2 = new While(new Value<>(false), new Skip());
+        IProgramElement underTest = new Or(s1, s2);
 
         State state = new State();
         Configuration result = underTest.step(state);
@@ -212,24 +211,24 @@ public class StatementTests {
     @Test
     public void Given_IntermediateS1_And_IntermediateS2_When_ParStmSteps_Then_ConfigIsIntermediateWithParStm() {
 
-        IStatement s1 = new If(new Value<>(true), new Skip(), new Skip());
-        IStatement s2 = new While(new Value<>(false), new Skip());
-        IStatement underTest = new Par(s1, s2);
+        IProgramElement s1 = new If(new Value<>(true), new Skip(), new Skip());
+        IProgramElement s2 = new While(new Value<>(false), new Skip());
+        IProgramElement underTest = new Par(s1, s2);
 
         Configuration result = underTest.step(new State());
         Assert.assertThat(result.getElement(), instanceOf(Par.class));
         Assert.assertThat(result.getConfigType(), equalTo(INTERMEDIATE));
         Assert.assertThat((Par) result.getElement(),
-                either(equalTo(new Par((IStatement) s1.step(new State()).getElement(), s2)))
-                        .or(equalTo(new Par(s1, (IStatement) s2.step(new State()).getElement()))));
+                either(equalTo(new Par(s1.step(new State()).getElement(), s2)))
+                        .or(equalTo(new Par(s1, s2.step(new State()).getElement()))));
     }
 
     @Test
     public void Given_TerminatedS1_And_TerminatedS2_When_ParSteps_Then_ConfigIsIntermediateWithEitherS1OrS2() {
 
-        IStatement s1 = new Skip();
-        IStatement s2 = new Skip();
-        IStatement underTest = new Par(s1, s2);
+        IProgramElement s1 = new Skip();
+        IProgramElement s2 = new Skip();
+        IProgramElement underTest = new Par(s1, s2);
 
         Configuration result = underTest.step(new State());
 
@@ -242,9 +241,9 @@ public class StatementTests {
     @Test
     public void Given_StuckS1_And_StuckS2_When_ParSteps_Then_ConfigIsIntermediateWithPar() {
 
-        IStatement s1 = new Abort();
-        IStatement s2 = new Abort();
-        IStatement underTest = new Par(s1, s2);
+        IProgramElement s1 = new Abort();
+        IProgramElement s2 = new Abort();
+        IProgramElement underTest = new Par(s1, s2);
 
         Configuration result = underTest.step(new State());
 
@@ -256,9 +255,9 @@ public class StatementTests {
     @Test
     public void Given_StuckS1_And_StuckS2_When_ParStepsTwice_Then_ConfigIsStuckWithPar() {
 
-        IStatement s1 = new Abort();
-        IStatement s2 = new Abort();
-        IStatement underTest = new Par(s1, s2);
+        IProgramElement s1 = new Abort();
+        IProgramElement s2 = new Abort();
+        IProgramElement underTest = new Par(s1, s2);
 
         Configuration result = underTest.step(new State()).getElement().step(new State());
 

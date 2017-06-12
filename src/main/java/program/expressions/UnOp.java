@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -18,24 +19,24 @@ import static program.Configuration.ConfigType.*;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class UnOp<T, R> implements IExpression {
+public class UnOp<T, R> implements IProgramElement {
 
     @Getter
     private final String operator;
     @Getter
-    private final IExpression operand;
+    private final IProgramElement operand;
     private final Class<T> operandClass;
     private final Function<T, R> operatorFunction;
 
-    public static <T, R> UnOp<T, R> of(String operator, IExpression operand, Class<T> operandClass, Function<T, R> operatorFunction) {
+    public static <T, R> UnOp<T, R> of(String operator, IProgramElement operand, Class<T> operandClass, Function<T, R> operatorFunction) {
         return new UnOp<>(operator, operand, operandClass, operatorFunction);
     }
 
-    public static UnOp<BigInteger, BigInteger> arithmetic(String operator, IExpression operand, Function<BigInteger, BigInteger> operatorFunction) {
+    public static UnOp<BigInteger, BigInteger> arithmetic(String operator, IProgramElement operand, Function<BigInteger, BigInteger> operatorFunction) {
         return UnOp.of(operator, operand, BigInteger.class, operatorFunction);
     }
 
-    public static UnOp<Boolean, Boolean> logical(String operator, IExpression operand, Function<Boolean, Boolean> operatorFunction) {
+    public static UnOp<Boolean, Boolean> logical(String operator, IProgramElement operand, Function<Boolean, Boolean> operatorFunction) {
         return UnOp.of(operator, operand, Boolean.class, operatorFunction);
     }
 
@@ -45,7 +46,7 @@ public class UnOp<T, R> implements IExpression {
         if (!(operand instanceof Value)) {
             Configuration operandConf = operand.step(state);
             return new Configuration(new UnOp<>(operator,
-                    (IExpression) operandConf.getElement(),
+                    operandConf.getElement(),
                     operandClass,
                     operatorFunction), operandConf.getState(), operandConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
@@ -69,7 +70,7 @@ public class UnOp<T, R> implements IExpression {
     }
 
     @Override
-    public IExpression copy() {
+    public IProgramElement copy() {
         return new UnOp<>(operator, operand.copy(), operandClass, operatorFunction);
     }
 
@@ -82,13 +83,13 @@ public class UnOp<T, R> implements IExpression {
 
         NEG(o -> UnOp.arithmetic("-", o, BigInteger::negate));
 
-        private final Function<IExpression, UnOp<BigInteger, BigInteger>> operationProvider;
+        private final Function<IProgramElement, UnOp<BigInteger, BigInteger>> operationProvider;
 
-        Arithmetic(Function<IExpression, UnOp<BigInteger, BigInteger>> operationProvider) {
+        Arithmetic(Function<IProgramElement, UnOp<BigInteger, BigInteger>> operationProvider) {
             this.operationProvider = operationProvider;
         }
 
-        public UnOp<BigInteger, BigInteger> of(IExpression operand) {
+        public UnOp<BigInteger, BigInteger> of(IProgramElement operand) {
             return operationProvider.apply(operand);
         }
     }
@@ -97,13 +98,13 @@ public class UnOp<T, R> implements IExpression {
 
         NOT(o -> UnOp.logical("!", o, a -> !a));
 
-        private final Function<IExpression, UnOp<Boolean, Boolean>> operationProvider;
+        private final Function<IProgramElement, UnOp<Boolean, Boolean>> operationProvider;
 
-        Logical(Function<IExpression, UnOp<Boolean, Boolean>> operationProvider) {
+        Logical(Function<IProgramElement, UnOp<Boolean, Boolean>> operationProvider) {
             this.operationProvider = operationProvider;
         }
 
-        public UnOp<Boolean, Boolean> of(IExpression operand) {
+        public UnOp<Boolean, Boolean> of(IProgramElement operand) {
             return operationProvider.apply(operand);
         }
     }

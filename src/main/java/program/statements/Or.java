@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -16,12 +17,12 @@ import static program.IProgramElement.choose;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Or implements IStatement {
+public class Or implements IProgramElement {
 
     @Getter
-    private final IStatement s1;
+    private final IProgramElement s1;
     @Getter
-    private final IStatement s2;
+    private final IProgramElement s2;
 
     @Override
     public Configuration step(State state) {
@@ -37,7 +38,7 @@ public class Or implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new Or(s1.copy(), s2.copy());
     }
 

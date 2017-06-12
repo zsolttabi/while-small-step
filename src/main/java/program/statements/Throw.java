@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -16,7 +17,7 @@ import static program.Configuration.ConfigType.INTERMEDIATE;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Throw implements IStatement {
+public class Throw implements IProgramElement {
 
     @Getter
     private final program.Exception e;
@@ -37,7 +38,7 @@ public class Throw implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new Throw(e);
     }
 

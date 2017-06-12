@@ -4,12 +4,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import program.Configuration;
 import program.Configuration.ConfigType;
+import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
 @EqualsAndHashCode
 @ToString
-public class Skip implements IStatement {
+public class Skip implements IProgramElement {
 
     @Override
     public Configuration step(State state) {
@@ -17,7 +18,7 @@ public class Skip implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new Skip();
     }
 

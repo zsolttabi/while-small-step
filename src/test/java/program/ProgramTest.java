@@ -86,7 +86,7 @@ public class ProgramTest {
 
     @Test
     @UseDataProvider("correctCodeProvider")
-    public void Given_SyntacticallyCorrectCode_When_CodeIsParsed_Then_ParsedProgramMatchesExpectedProgram(String code, IStatement expectedProgram, ConfigType expectedOutcome) {
+    public void Given_SyntacticallyCorrectCode_When_CodeIsParsed_Then_ParsedProgramMatchesExpectedProgram(String code, IProgramElement expectedProgram, ConfigType expectedOutcome) {
 
         Program parsed = new Program(WhileProgramParser.parse(code), MAX_PREFIX);
         Assert.assertEquals(expectedProgram, parsed.current().getElement());
@@ -94,7 +94,7 @@ public class ProgramTest {
 
     @Test
     @UseDataProvider("correctCodeProvider")
-    public void Given_SyntacticallyCorrectCode_When_CodeIsRun_Then_ConfigTypeMatchesExpectedOutcome(String code, IStatement expectedProgram, ConfigType expectedOutcome) {
+    public void Given_SyntacticallyCorrectCode_When_CodeIsRun_Then_ConfigTypeMatchesExpectedOutcome(String code, IProgramElement expectedProgram, ConfigType expectedOutcome) {
 
         Program parsed = new Program(WhileProgramParser.parse(code), MAX_PREFIX);
         parsed.last();

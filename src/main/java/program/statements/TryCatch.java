@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -16,12 +17,12 @@ import static program.Configuration.ConfigType.TERMINATED;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class TryCatch implements IStatement {
+public class TryCatch implements IProgramElement {
 
     @Getter
-    private final IStatement s1;
+    private final IProgramElement s1;
     @Getter
-    private final IStatement s2;
+    private final IProgramElement s2;
     @Getter
     private final program.Exception e;
 
@@ -45,7 +46,7 @@ public class TryCatch implements IStatement {
             return s1Conf;
         }
 
-        return new Configuration(new TryCatch((IStatement) s1Conf.getElement(), s2, e), s1Conf.getState(), INTERMEDIATE);
+        return new Configuration(new TryCatch(s1Conf.getElement(), s2, e), s1Conf.getState(), INTERMEDIATE);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class TryCatch implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new TryCatch(s1.copy(), s2.copy(), e.copy());
     }
 }

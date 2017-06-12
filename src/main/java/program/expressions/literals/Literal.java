@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
-import program.expressions.IExpression;
 import program.expressions.Value;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -19,7 +19,7 @@ import static program.Configuration.ConfigType.TERMINATED;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class Literal implements IExpression {
+public abstract class Literal implements IProgramElement {
 
     @Getter
     private final String value;

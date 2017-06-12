@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
+import program.IProgramElement;
 import program.State;
-import program.expressions.IExpression;
 import program.expressions.Value;
 import viewmodel.interfaces.INodeVisitor;
 
@@ -18,21 +18,21 @@ import static program.Configuration.ConfigType.STUCK;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class If implements IStatement {
+public class If implements IProgramElement {
 
     @Getter
-    private final IExpression condition;
+    private final IProgramElement condition;
     @Getter
-    private final IStatement s1;
+    private final IProgramElement s1;
     @Getter
-    private final IStatement s2;
+    private final IProgramElement s2;
 
     @Override
     public Configuration step(State state) {
 
         if (!(condition instanceof Value)) {
             Configuration condConf = condition.step(state);
-            return new Configuration(new If((IExpression) condConf.getElement(), s1, s2),
+            return new Configuration(new If(condConf.getElement(), s1, s2),
                     condConf.getState(),
                     condConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
@@ -52,7 +52,7 @@ public class If implements IStatement {
     }
 
     @Override
-    public IStatement copy() {
+    public IProgramElement copy() {
         return new If(condition.copy(), s1.copy(), s2.copy());
     }
 

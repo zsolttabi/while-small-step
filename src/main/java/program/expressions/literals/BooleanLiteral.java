@@ -1,6 +1,6 @@
 package program.expressions.literals;
 
-import program.expressions.IExpression;
+import program.IProgramElement;
 import program.expressions.Value;
 
 public class BooleanLiteral extends Literal {
@@ -10,7 +10,7 @@ public class BooleanLiteral extends Literal {
     }
 
     @Override
-    public IExpression copy() {
+    public IProgramElement copy() {
         return new BooleanLiteral(getValue());
     }
 
