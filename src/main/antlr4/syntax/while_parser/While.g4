@@ -13,6 +13,12 @@ stm
  | 'if' expr 'then' stm 'else' stm 'fi' # If
  | 'skip'                               # Skip
  | 'abort'                              # Abort
+ | 'throw' exception                    # Throw
+ | 'try' stm 'catch' exception ':' stm  # TryCatch
+ ;
+
+exception
+ : Identifier
  ;
 
 expr
@@ -47,6 +53,9 @@ Skip: 'skip';
 ABORT: 'abort';
 NDET: 'or';
 PAR: 'par';
+THROW: 'throw';
+TRY: 'try';
+CATCH: 'catch';
 
 TRUE: 'true';
 FALSE: 'false';

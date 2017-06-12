@@ -10,33 +10,51 @@ import viewmodel.interfaces.INodeVisitor;
 
 import java.util.Set;
 
+import static program.Configuration.ConfigType.INTERMEDIATE;
+import static program.Configuration.ConfigType.TERMINATED;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class TryCatch implements IStatement {
 
     @Getter
-    private final IStatement s;
+    private final IStatement s1;
     @Getter
-    private final Exception e;
+    private final IStatement s2;
+    @Getter
+    private final program.Exception e;
 
     @Override
     public <V> V accept(INodeVisitor<V> visitor) {
-        return null;
+        return visitor.visit(this);
     }
 
     @Override
-    public StatementConfiguration step(State state) {
-        return null;
+    public Configuration step(State state) {
+
+        Configuration s1Conf = s1.step(state);
+        if (s1Conf.getConfigType() == TERMINATED) {
+            return s1Conf;
+        }
+
+        if (s1Conf.getElement() instanceof program.Exception) {
+            if (s1Conf.getElement().equals(e)) {
+                return new Configuration(s2, s1Conf.getState(), INTERMEDIATE);
+            }
+            return s1Conf;
+        }
+
+        return new Configuration(new TryCatch((IStatement) s1Conf.getElement(), s2, e), s1Conf.getState(), INTERMEDIATE);
     }
 
     @Override
     public Set<Configuration> peek(State state) {
-        return null;
+        return s1.peek(state);
     }
 
     @Override
     public IStatement copy() {
-        return null;
+        return new TryCatch(s1.copy(), s2.copy(), e.copy());
     }
 }

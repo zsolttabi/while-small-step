@@ -22,13 +22,16 @@ public class Sequence implements IStatement {
     private final IStatement s2;
 
     @Override
-    public StatementConfiguration step(State state) {
+    public Configuration step(State state) {
 
-        StatementConfiguration s1Conf = s1.step(state);
+        Configuration s1Conf = s1.step(state);
+        if (s1Conf.getElement() instanceof Exception) {
+            return s1Conf;
+        }
 
         return s1Conf.getConfigType() == ConfigType.TERMINATED ?
-                new StatementConfiguration(s2, s1Conf.getState(), ConfigType.INTERMEDIATE) :
-                new StatementConfiguration(new Sequence(s1Conf.getElement(), s2), s1Conf.getState(), s1Conf.getConfigType());
+                new Configuration(s2, s1Conf.getState(), ConfigType.INTERMEDIATE) :
+                new Configuration(new Sequence((IStatement) s1Conf.getElement(), s2), s1Conf.getState(), s1Conf.getConfigType());
     }
 
     @Override

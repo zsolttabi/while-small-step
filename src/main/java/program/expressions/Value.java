@@ -21,8 +21,8 @@ public class Value<T> implements IExpression {
     private final T value;
 
     @Override
-    public ExpressionConfiguration step(State state) {
-        return new ExpressionConfiguration(this, state, ConfigType.TERMINATED);
+    public Configuration step(State state) {
+        return new Configuration(this, state, ConfigType.TERMINATED);
     }
 
     @Override

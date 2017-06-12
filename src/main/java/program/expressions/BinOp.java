@@ -50,22 +50,22 @@ public class BinOp<T, R> implements IExpression {
     }
 
     @Override
-    public ExpressionConfiguration step(State state) {
+    public Configuration step(State state) {
 
         if (!(lhs instanceof Value)) {
-            ExpressionConfiguration lhsConf = lhs.step(state);
-            return new ExpressionConfiguration(BinOp.of(operator,
-                    lhsConf.getElement(),
+            Configuration lhsConf = lhs.step(state);
+            return new Configuration(BinOp.of(operator,
+                    (IExpression) lhsConf.getElement(),
                     rhs,
                     operandClass,
                     operatorFunction), lhsConf.getState(), lhsConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
 
         if (!(rhs instanceof Value)) {
-            ExpressionConfiguration rhsConf = rhs.step(state);
-            return new ExpressionConfiguration(BinOp.of(operator,
+            Configuration rhsConf = rhs.step(state);
+            return new Configuration(BinOp.of(operator,
                     lhs,
-                    rhsConf.getElement(),
+                    (IExpression) rhsConf.getElement(),
                     operandClass,
                     operatorFunction), rhsConf.getState(), rhsConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
@@ -74,13 +74,13 @@ public class BinOp<T, R> implements IExpression {
         Object rhsValue = ((Value) rhs).getValue();
 
         if (!lhsValue.getClass().equals(operandClass) || !rhsValue.getClass().equals(operandClass)) {
-            return new ExpressionConfiguration(new BinOp<>(operator, lhs, rhs, operandClass, operatorFunction),
+            return new Configuration(new BinOp<>(operator, lhs, rhs, operandClass, operatorFunction),
                     state,
                     STUCK);
         }
 
 
-        return new ExpressionConfiguration(new Value<>(operatorFunction.apply(operandClass.cast(lhsValue),
+        return new Configuration(new Value<>(operatorFunction.apply(operandClass.cast(lhsValue),
                 operandClass.cast(rhsValue))),
                 state,
                 TERMINATED);
@@ -94,7 +94,7 @@ public class BinOp<T, R> implements IExpression {
         if (!(rhs instanceof Value)) {
             return rhs.peek(state);
         }
-        return Collections.singleton(new ExpressionConfiguration(this, state, INTERMEDIATE));
+        return Collections.singleton(new Configuration(this, state, INTERMEDIATE));
     }
 
     @Override

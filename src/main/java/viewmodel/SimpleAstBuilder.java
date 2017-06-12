@@ -1,11 +1,9 @@
 package viewmodel;
 
 import lombok.val;
-import program.Configuration;
+import program.*;
 import program.Configuration.ConfigType;
-import program.IProgramElement;
-import program.Program;
-import program.SyntaxError;
+import program.Exception;
 import program.expressions.BinOp;
 import program.expressions.Identifier;
 import program.expressions.UnOp;
@@ -182,6 +180,27 @@ public class SimpleAstBuilder implements INodeVisitor<Node<SimpleAstNode>> {
     @Override
     public Node<SimpleAstNode> visit(Literal element) {
         return createNode(element.getValue(), element);
+    }
+
+    @Override
+    public Node<SimpleAstNode> visit(Exception element) {
+        return createNode(element.getName(), element);
+    }
+
+    @Override
+    public Node<SimpleAstNode> visit(Throw element) {
+        val node = createNode("throw", element);
+        node.addChild(element.getE().accept(this));
+        return node;
+    }
+
+    @Override
+    public Node<SimpleAstNode> visit(TryCatch element) {
+        val node = createNode("try", element);
+        node.addChild(element.getS1().accept(this));
+        node.addChild(element.getE().accept(this));
+        node.addChild(element.getS2().accept(this));
+        return node;
     }
 
 }

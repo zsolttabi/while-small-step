@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import program.Exception;
 import program.IProgramElement;
 import program.SyntaxError;
 import program.expressions.BinOp;
@@ -187,6 +188,21 @@ public class WhileProgramVisitor extends WhileBaseVisitor<IProgramElement> {
     @Override
     public IProgramElement visitAtomExpr(WhileParser.AtomExprContext ctx) {
         return handleVisit(ctx, () -> visit(ctx.atom()));
+    }
+
+    @Override
+    public IProgramElement visitTryCatch(WhileParser.TryCatchContext ctx) {
+        return handleVisit(ctx, () -> new TryCatch((IStatement) visit(ctx.stm(0)), (IStatement) visit(ctx.stm(1)), (program.Exception) visit(ctx.exception())));
+    }
+
+    @Override
+    public IProgramElement visitThrow(WhileParser.ThrowContext ctx) {
+        return handleVisit(ctx, () -> new Throw((Exception) visit(ctx.exception())));
+    }
+
+    @Override
+    public IProgramElement visitException(WhileParser.ExceptionContext ctx) {
+        return handleVisit(ctx, () -> new Exception(ctx.getText()));
     }
 
     @Override

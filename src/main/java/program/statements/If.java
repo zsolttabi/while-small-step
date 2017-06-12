@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.State;
-import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Value;
 import viewmodel.interfaces.INodeVisitor;
@@ -29,11 +28,11 @@ public class If implements IStatement {
     private final IStatement s2;
 
     @Override
-    public StatementConfiguration step(State state) {
+    public Configuration step(State state) {
 
         if (!(condition instanceof Value)) {
-            ExpressionConfiguration condConf = condition.step(state);
-            return new StatementConfiguration(new If(condConf.getElement(), s1, s2),
+            Configuration condConf = condition.step(state);
+            return new Configuration(new If((IExpression) condConf.getElement(), s1, s2),
                     condConf.getState(),
                     condConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
@@ -41,10 +40,10 @@ public class If implements IStatement {
         Object condValue = ((Value) condition).getValue();
 
         if (!(condValue instanceof Boolean)) {
-            return new StatementConfiguration(this, state, STUCK);
+            return new Configuration(this, state, STUCK);
         }
 
-        return new StatementConfiguration((Boolean) condValue ? s1 : s2, state, INTERMEDIATE);
+        return new Configuration((Boolean) condValue ? s1 : s2, state, INTERMEDIATE);
     }
 
     @Override

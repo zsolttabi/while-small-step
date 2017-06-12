@@ -40,22 +40,22 @@ public class UnOp<T, R> implements IExpression {
     }
 
     @Override
-    public ExpressionConfiguration step(State state) {
+    public Configuration step(State state) {
 
         if (!(operand instanceof Value)) {
-            ExpressionConfiguration operandConf = operand.step(state);
-            return new ExpressionConfiguration(new UnOp<>(operator,
-                    operandConf.getElement(),
+            Configuration operandConf = operand.step(state);
+            return new Configuration(new UnOp<>(operator,
+                    (IExpression) operandConf.getElement(),
                     operandClass,
                     operatorFunction), operandConf.getState(), operandConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
 
         Object operandValue = ((Value) operand).getValue();
         if (!operandValue.getClass().equals(operandClass)) {
-            return new ExpressionConfiguration(this, state, STUCK);
+            return new Configuration(this, state, STUCK);
         }
 
-        return new ExpressionConfiguration(new Value<>(operatorFunction.apply(operandClass.cast(operandValue))),
+        return new Configuration(new Value<>(operatorFunction.apply(operandClass.cast(operandValue))),
                 state,
                 TERMINATED);
     }
@@ -65,7 +65,7 @@ public class UnOp<T, R> implements IExpression {
         if (!(operand instanceof Value)) {
             return operand.peek(state);
         }
-        return Collections.singleton(new ExpressionConfiguration(this, state, INTERMEDIATE));
+        return Collections.singleton(new Configuration(this, state, INTERMEDIATE));
     }
 
     @Override

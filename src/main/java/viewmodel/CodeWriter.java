@@ -1,6 +1,7 @@
 package viewmodel;
 
 import program.Configuration;
+import program.Exception;
 import program.Program;
 import program.SyntaxError;
 import program.expressions.BinOp;
@@ -200,6 +201,33 @@ public class CodeWriter implements INodeVisitor<String> {
     public String visit(Literal element) {
         return new CodePrinter()
                 .print(element.getValue())
+                .toString();
+    }
+
+    @Override
+    public String visit(Exception element) {
+        return new CodePrinter()
+                .print(element.getName())
+                .toString();
+    }
+
+    @Override
+    public String visit(Throw element) {
+        return new CodePrinter()
+                .print("throw ")
+                .print(element.getE().accept(this))
+                .toString();
+    }
+
+    @Override
+    public String visit(TryCatch element) {
+        return new CodePrinter()
+                .printLn("try")
+                .printLinesWithIndent(element.getS1().accept(this))
+                .print("catch ")
+                .print(element.getE().accept(this))
+                .printLn(" :")
+                .printLinesWithIndent(element.getS2().accept(this))
                 .toString();
     }
 

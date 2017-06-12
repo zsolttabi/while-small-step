@@ -1,6 +1,7 @@
 package viewmodel.interfaces;
 
 import program.Configuration;
+import program.Exception;
 import program.Program;
 import program.SyntaxError;
 import program.expressions.BinOp;
@@ -28,5 +29,8 @@ public interface INodeVisitor<T> {
     T visit(Par element);
     T visit(SyntaxError element);
     T visit(Literal element);
+    T visit(Exception element);
+    T visit(Throw element);
+    T visit(TryCatch element);
 
 }

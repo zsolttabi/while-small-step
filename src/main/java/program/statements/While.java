@@ -24,13 +24,13 @@ public class While implements IStatement {
     private final IStatement stm;
 
     @Override
-    public StatementConfiguration step(State state) {
-        return new StatementConfiguration(new If(condition, new Sequence(stm, copy()), new Skip()), state, ConfigType.INTERMEDIATE);
+    public Configuration step(State state) {
+        return new Configuration(new If(condition, new Sequence(stm, copy()), new Skip()), state, ConfigType.INTERMEDIATE);
     }
 
     @Override
     public Set<Configuration> peek(State state) {
-        return Collections.singleton(new StatementConfiguration(this, state, ConfigType.INTERMEDIATE));
+        return Collections.singleton(new Configuration(this, state, ConfigType.INTERMEDIATE));
     }
 
     @Override

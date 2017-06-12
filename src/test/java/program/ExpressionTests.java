@@ -2,7 +2,6 @@ package program;
 
 import org.junit.Assert;
 import org.junit.Test;
-import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
@@ -28,7 +27,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(state);
 
-        Assert.assertEquals(new ExpressionConfiguration(value, state, TERMINATED), result);
+        Assert.assertEquals(new Configuration(value, state, TERMINATED), result);
     }
 
     @Test
@@ -39,7 +38,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(state);
 
-        Assert.assertEquals(new ExpressionConfiguration(underTest, new State(), STUCK), result);
+        Assert.assertEquals(new Configuration(underTest, new State(), STUCK), result);
     }
 
     @Test
@@ -51,7 +50,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(new Value<>(new BigInteger("2")), new State(), TERMINATED), result);
+        Assert.assertEquals(new Configuration(new Value<>(new BigInteger("2")), new State(), TERMINATED), result);
     }
 
     @Test
@@ -63,7 +62,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(ADD.of(lhs, rhs), new State(), STUCK), result);
+        Assert.assertEquals(new Configuration(ADD.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
@@ -75,7 +74,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(ADD.of(lhs, rhs), new State(), STUCK), result);
+        Assert.assertEquals(new Configuration(ADD.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
@@ -87,7 +86,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(AND.of(lhs, rhs), new State(), STUCK), result);
+        Assert.assertEquals(new Configuration(AND.of(lhs, rhs), new State(), STUCK), result);
     }
 
     @Test
@@ -98,7 +97,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(new Value<>(new BigInteger("-1")), new State(), TERMINATED), result);
+        Assert.assertEquals(new Configuration(new Value<>(new BigInteger("-1")), new State(), TERMINATED), result);
     }
 
     @Test
@@ -109,7 +108,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(NEG.of(operand.step(new State()).getElement()),
+        Assert.assertEquals(new Configuration(NEG.of((IExpression) operand.step(new State()).getElement()),
                 new State(),
                 STUCK), result);
     }
@@ -122,7 +121,7 @@ public class ExpressionTests {
 
         Configuration result = underTest.step(new State());
 
-        Assert.assertEquals(new ExpressionConfiguration(NOT.of(operand), new State(), STUCK), result);
+        Assert.assertEquals(new Configuration(NOT.of(operand), new State(), STUCK), result);
     }
 
 }

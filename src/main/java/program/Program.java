@@ -2,8 +2,6 @@ package program;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import program.statements.IStatement;
-import program.statements.StatementConfiguration;
 import viewmodel.interfaces.INodeVisitor;
 import viewmodel.interfaces.IVisitableNode;
 
@@ -31,8 +29,8 @@ public class Program implements IVisitableNode {
         this.index = 0;
     }
 
-    public Program(IStatement statement, int maxPrefix) {
-        this(new StatementConfiguration(statement, new State(), INTERMEDIATE), maxPrefix);
+    public Program(IProgramElement statement, int maxPrefix) {
+        this(new Configuration(statement, new State(), INTERMEDIATE), maxPrefix);
     }
 
     public Configuration current() {

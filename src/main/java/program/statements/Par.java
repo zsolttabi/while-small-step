@@ -36,22 +36,26 @@ public class Par implements IStatement {
         this.stuck = stuck;
     }
 
-    private static IStatement getS(IStatement chosen, StatementConfiguration chosenConf, IStatement s) {
-        return s == chosen ? chosenConf.getElement() : s;
+    private static IStatement getS(IStatement chosen, Configuration chosenConf, IStatement s) {
+        return s == chosen ? (IStatement) chosenConf.getElement() : s;
     }
 
     @Override
-    public StatementConfiguration step(State state) {
+    public Configuration step(State state) {
 
         IStatement chosen = stuck != null ? (stuck == s1 ? s2 : s1) : choose(s1, s2);
 
-        StatementConfiguration chosenConf = chosen.step(state);
+        Configuration chosenConf = chosen.step(state);
 
-        if (chosenConf.getConfigType() == Configuration.ConfigType.TERMINATED) {
-            return new StatementConfiguration(s1 == chosen ? s2 : s1, chosenConf.getState(), INTERMEDIATE);
+        if (chosenConf.getElement() instanceof Exception) {
+            return chosenConf;
         }
 
-        return new StatementConfiguration(
+        if (chosenConf.getConfigType() == Configuration.ConfigType.TERMINATED) {
+            return new Configuration(s1 == chosen ? s2 : s1, chosenConf.getState(), INTERMEDIATE);
+        }
+
+        return new Configuration(
                 new Par(getS(chosen, chosenConf, s1), getS(chosen, chosenConf, s2),
                         chosenConf.getConfigType() == STUCK ? chosen : null),
                 chosenConf.getState(),

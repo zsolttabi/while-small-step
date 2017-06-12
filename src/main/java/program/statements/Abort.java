@@ -7,21 +7,13 @@ import program.Configuration.ConfigType;
 import program.State;
 import viewmodel.interfaces.INodeVisitor;
 
-import java.util.Collections;
-import java.util.Set;
-
 @EqualsAndHashCode
 @ToString
 public class Abort implements IStatement {
 
     @Override
-    public StatementConfiguration step(State state) {
-        return new StatementConfiguration(this, state, ConfigType.STUCK);
-    }
-
-    @Override
-    public Set<Configuration> peek(State state) {
-        return Collections.singleton(step(state));
+    public Configuration step(State state) {
+        return new Configuration(this, state, ConfigType.STUCK);
     }
 
     @Override

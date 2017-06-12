@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.State;
-import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Identifier;
 import program.expressions.Value;
@@ -28,15 +27,15 @@ public class Assignment implements IStatement {
     private final IExpression value;
 
     @Override
-    public StatementConfiguration step(State state) {
+    public Configuration step(State state) {
 
         if (!(identifier instanceof Identifier)) {
-            return new StatementConfiguration(this, state, STUCK);
+            return new Configuration(this, state, STUCK);
         }
 
         if (!(value instanceof Value)) {
-            ExpressionConfiguration valueConf = value.step(state);
-            return new StatementConfiguration(new Assignment(identifier, valueConf.getElement()),
+            Configuration valueConf = value.step(state);
+            return new Configuration(new Assignment(identifier, (IExpression) valueConf.getElement()),
                     valueConf.getState(),
                     valueConf.getConfigType() == STUCK ? STUCK : INTERMEDIATE);
         }
@@ -46,12 +45,12 @@ public class Assignment implements IStatement {
 
         Value currentValue = state.get(id);
         if (currentValue != null && currentValue.getValue().getClass() != val.getValue().getClass()) {
-            return new StatementConfiguration(this, state, STUCK);
+            return new Configuration(this, state, STUCK);
         }
 
         State newState = state.copy();
         newState.set(id, val);
-        return new StatementConfiguration(this, newState, TERMINATED);
+        return new Configuration(this, newState, TERMINATED);
     }
 
     @Override
@@ -59,8 +58,8 @@ public class Assignment implements IStatement {
         if (!(value instanceof Value)) {
             return value.peek(state);
         }
-        StatementConfiguration stepConfiguration = step(state);
-        return Collections.singleton(new StatementConfiguration(this,
+        Configuration stepConfiguration = step(state);
+        return Collections.singleton(new Configuration(this,
                 stepConfiguration.getState(),
                 stepConfiguration.getConfigType()));
     }

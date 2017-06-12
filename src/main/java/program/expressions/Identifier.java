@@ -22,18 +22,18 @@ public class Identifier implements IExpression {
     private final String identifier;
 
     @Override
-    public ExpressionConfiguration step(State state) {
+    public Configuration step(State state) {
         Value<?> value = state.get(this);
         if (value == null) {
-            return new ExpressionConfiguration(this, state, ConfigType.STUCK);
+            return new Configuration(this, state, ConfigType.STUCK);
         } else {
-            return new ExpressionConfiguration(value, state, ConfigType.TERMINATED);
+            return new Configuration(value, state, ConfigType.TERMINATED);
         }
     }
 
     @Override
     public Set<Configuration> peek(State state) {
-        return Collections.singleton(new ExpressionConfiguration(this, state, ConfigType.INTERMEDIATE));
+        return Collections.singleton(new Configuration(this, state, ConfigType.INTERMEDIATE));
     }
 
     @Override

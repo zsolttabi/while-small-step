@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import program.Configuration;
 import program.State;
-import program.expressions.ExpressionConfiguration;
 import program.expressions.IExpression;
 import program.expressions.Value;
 import viewmodel.interfaces.INodeVisitor;
@@ -33,8 +32,8 @@ public abstract class Literal implements IExpression {
     }
 
     @Override
-    public ExpressionConfiguration step(State state) {
-        return new ExpressionConfiguration(convertToValue(), state, TERMINATED);
+    public Configuration step(State state) {
+        return new Configuration(convertToValue(), state, TERMINATED);
     }
 
     @Override
